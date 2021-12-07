@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Talabiya</string>
+    <string name="menu_item_setting">Settings</string>
+
+    <string name="open_drawer">افتح</string>
+    <string name="close_drawer">اغلق</string>
+
+    <string name="date_hint">التاريخ</string>
+    <string name="time_hint">الوقت</string>
+    <string name="total_hint">المجموع</string>
+    <string name="payer_hint">الدافع</string>
+    <string name="status_hint">الحالة</string>
+    <string name="note_hint">ملاحظة</string>
+
+
+    <string name="note_updated">تم الحفظ</string>
+
+    <string name="confirm">تأكيد</string>
+
+    <string name="status_to_not_payed">تغير الحالة الى "غير مدفوع"؟ سيتم حذف تاريخ الدفع ايضاً</string>
+
+    <string name="not_payed">غير مدفوع</string>
+
+    <string name="edit">تعديل</string>
+
+    <string name="delete">حذف</string>
+
+    <string name="delete_receipt_picture">حذف الفاتورة؟</string>
+
+    <string-array name="food_categories">
+        <item>معجنات</item>
+        <item>مشويات</item>
+        <item>سندويشات</item>
+        <item>برجر</item>
+        <item>مقبلات</item>
+        <item>عصيرات</item>
+
+    </string-array>
+
+    <string name="food_name_hint">الاسم</string>
+    <string name="price_hint">السعر</string>
+
+    <string name="this_already_added">%1$s مضاف سابقا</string>
+
+    <string name="change_order_status">تغير الحالة</string>
+
+    <string name="delete_all_these">سيتم حذف %1$s سجلات</string>
+
+    <string name="edit_only_one">اختر سجل واحد فقط</string>
+
+    <string name="menu">القائمة</string>
+
+    <string name="select_retaurant_first">لم يتم اختيار مطعم</string>
+
+    <string name="incorrect_number">السعر غير صالح</string>
+
+    <string name="info">التفاصيل</string>
+
+    <string name="suborders">الطلبات</string>
+
+    <string name="full_order">الطلب كامل</string>
+
+
+    <string name="from">من</string>
+    <string name="to">إلى</string>
+
+    <string name="no_orders_payed_for">الدافع في</string>
+    <string name="no_of_orders">عدد الطلبات</string>
+
+    <string name="total_paid">المدفوع</string>
+    <string name="total_owed">المطلوب</string>
+
+    <string name="grand_total">المجموع الكلي</string>
+
+    <string name="cancel">إلغاء</string>
+    <string name="note">ملاحظة</string>
+
+    <string name="enter_note">ادخل الملاحظة</string>
+
+    <string name="debit">%.2f عليه</string>
+
+    <string name="credit">%.2f له</string>
+
+
+    <string name="mark_paid">Mark orders paid</string>
+
+    <string name="settings">Settings</string>
+
+
+    <string name="no_unpaid_suborders">There are no unpaid suborders</string>
+
+    <string name="all_orders_marked">Orders have been marked</string>
+
+
+
+
+
+
+</resources>

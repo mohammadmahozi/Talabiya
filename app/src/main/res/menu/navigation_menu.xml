@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/menu_top"
+        >
+
+    <item android:id="@+id/order_navigation_menu"
+        android:title="Orders"/>
+
+    <item android:id="@+id/restaurant_navigation_menu"
+        android:title="Restaurants"/>
+
+    <item android:id="@+id/person_navigation_menu"
+        android:title="People"/>
+
+    </group>
+
+    <group
+        android:id="@+id/menu_bottom"
+        >
+
+        <item android:id="@+id/setting_navigation_menu"
+            android:title="@string/settings"/>
+
+
+
+    </group>
+
+
+
+</menu>

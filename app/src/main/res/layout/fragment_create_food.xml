@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        style="@style/text_view"
+        android:hint="@string/food_name_hint"
+        android:id="@+id/fragment_create_food_name_edit_text"/>
+
+
+
+    <EditText
+        style="@style/text_view"
+        android:hint="@string/price_hint"
+        android:id="@+id/fragment_create_food_price_edit_text"/>
+
+
+    <Spinner
+        android:id="@+id/fragment_create_food_category_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:spinnerMode="dialog"
+
+        >
+
+
+    </Spinner>
+
+</LinearLayout>

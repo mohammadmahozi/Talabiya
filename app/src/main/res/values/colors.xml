@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#A30505</color>
+    <color name="colorPrimaryDark">#680606</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorRipple">#E7E3E3</color>
+    <color name="header_ripple">#E7E3E3</color>
+    <color name="default_color">#FAFAFA</color>
+
+    <color name="suborder_footer_background">#f7f7f7</color>
+
+    <color name="suborder_background">#EBEBEB</color>
+
+
+</resources>

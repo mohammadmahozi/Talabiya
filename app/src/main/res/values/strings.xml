@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">Talabiya</string>
+
+
+    <string name="menu_item_setting">Settings</string>
+    <string name="open_drawer">Open</string>
+    <string name="close_drawer">Close</string>
+
+    <string name="date_hint">Date</string>
+    <string name="time_hint">Time</string>
+    <string name="total_hint">Total</string>
+    <string name="payer_hint">Payer</string>
+    <string name="status_hint">Status</string>
+    <string name="note_hint">Note</string>
+
+    <string name="note_updated">Note updated</string>
+
+    <string name="confirm">Confirm</string>
+
+    <string name="status_to_not_payed">Change status to not paid? This will delete the payment date.</string>
+
+    <string name="not_payed">Not paid</string>
+
+    <string name="edit">Edit</string>
+
+    <string name="delete">Delete</string>
+
+    <string name="delete_receipt_picture">Delete receipt picture?</string>
+
+    <string-array name="food_categories">
+        <item>Pastry</item>
+        <item>Grills</item>
+        <item>Sandwich</item>
+        <item>Burger</item>
+        <item>Appetizer</item>
+        <item>Drinks</item>
+
+    </string-array>
+
+    <string name="food_name_hint">Name</string>
+    <string name="price_hint">price</string>
+
+    <string name="this_already_added">%1$s is already added</string>
+
+    <string name="change_order_status">Change Status</string>
+
+    <string name="delete_all_these">This will delete %1$s entries</string>
+
+    <string name="edit_only_one">Select one entry only</string>
+
+    <string name="menu">Menu</string>
+
+    <string name="select_retaurant_first">Restaurant not selected</string>
+
+    <string name="incorrect_number">Price is not valid</string>
+
+    <string name="info">Info</string>
+
+    <string name="suborders">Suborders</string>
+
+    <string name="full_order">Full order</string>
+
+
+    <string name="from">From</string>
+    <string name="to">To</string>
+
+    <string name="no_orders_payed_for">Payer in</string>
+    <string name="no_of_orders">No. of orders</string>
+
+    <string name="total_paid">Total paid</string>
+    <string name="total_owed">Total owed</string>
+
+    <string name="grand_total">Grand total</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="note">Note</string>
+
+    <string name="enter_note">Enter a note</string>
+
+    <string name="debit">%.2f Debit</string>
+    
+    <string name="credit">%.2f Credit</string>
+
+
+    <string name="mark_paid">Mark orders paid</string>
+
+    <string name="settings">Settings</string>
+
+
+    <string name="no_unpaid_suborders">There are no unpaid suborders</string>
+
+    <string name="all_orders_marked">Orders have been marked</string>
+    
+
+</resources>
