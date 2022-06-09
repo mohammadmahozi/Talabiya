@@ -23,7 +23,8 @@
         <item android:id="@+id/setting_navigation_menu"
             android:title="@string/settings"/>
 
-
+        <item android:id="@+id/export_database"
+            android:title="@string/export_database"/>
 
     </group>
 

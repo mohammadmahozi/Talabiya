@@ -2,4 +2,8 @@
 
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-path name="my_images" path="Android/data/com.mahozi.sayed.talabiya/files/Pictures" />
+
+    <files-path
+        name="databases"
+        path="../" />
 </paths>

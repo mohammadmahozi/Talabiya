@@ -1,23 +1,27 @@
 package com.mahozi.sayed.talabiya.Feature.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.mahozi.sayed.talabiya.Feature.ui.order.OrderActivity;
 import com.mahozi.sayed.talabiya.Feature.ui.person.PersonActivity;
 import com.mahozi.sayed.talabiya.Feature.ui.resturant.view.RestaurantActivity;
 import com.mahozi.sayed.talabiya.R;
+import com.mahozi.sayed.talabiya.StorageH;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
+import java.io.File;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -88,14 +92,18 @@ public class BaseActivity extends AppCompatActivity {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                         }
-
                         else {
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
                         }
 
                         intent.putExtra("","");//to prevent null when starting the activity from somewhere else with extras
                         BaseActivity.this.startActivity(intent);
+                        break;
+
+                    case R.id.export_database:
+                        new StorageH().backUp(BaseActivity.this);
+                        break;
+
 
                     default:
                         return true;
@@ -103,6 +111,21 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+    }
+
+
+
+    static class DBFileProvider extends FileProvider {
+
+        Uri getDatabaseURI(Context c, String dbName) {
+            File file = c.getDatabasePath(dbName);
+            return getFileUri(c, file);
+    }
+
+        private Uri getFileUri(Context context, File file) {
+        return getUriForFile(context, "com.android.example.provider", file);
+    }
 
     }
 
