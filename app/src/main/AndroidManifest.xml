@@ -17,7 +17,7 @@
         >
 
         <activity
-            android:name=".Feature.ui.order.OrderActivity"
+            android:name=".order.OrderActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="true">
             <intent-filter>
@@ -28,7 +28,7 @@
         </activity>
 
         <activity
-            android:name=".Feature.ui.resturant.view.RestaurantActivity"
+            android:name=".resturant.view.RestaurantActivity"
             android:label="Restaurants"
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="false">
@@ -39,7 +39,7 @@
         </activity>
 
         <activity
-        android:name=".Feature.ui.person.PersonActivity"
+        android:name=".person.PersonActivity"
         android:label="People"
         android:theme="@style/AppTheme.NoActionBar"
             android:exported="false">
