@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.mahozi.sayed.talabiya.order.view.orderitem.CreateSubOrderItemFragment;
 import com.mahozi.sayed.talabiya.resturant.view.RestaurantViewModel;
 import com.mahozi.sayed.talabiya.R;
 import com.mahozi.sayed.talabiya.resturant.store.MenuItemEntity;
@@ -34,6 +35,7 @@ public class CreateFoodFragment extends Fragment {
     protected final int BURGER = 3;
     protected final int APPETIZER = 4;
     protected final int DRINKS = 5;
+    public CreateSubOrderItemFragment t1;
 
     private EditText mNameEditText;
     private EditText mPriceEditText;
@@ -168,12 +170,8 @@ public class CreateFoodFragment extends Fragment {
 
                         viewModel.updateMenuItem(menuItemEntity);
                     }
-
                     else {
-
                         viewModel.insertFood(new MenuItemEntity(restaurantName, foodName, foodPrice, mCategorySpinner.getSelectedItemPosition()));
-
-
                     }
 
                     boolean createMenuItem = getActivity().getIntent().getBooleanExtra("createMenuItem", false)
@@ -181,42 +179,29 @@ public class CreateFoodFragment extends Fragment {
 
                     if (createMenuItem){
 
-                        Intent returnIntent = new Intent();
-                        returnIntent.putExtra("menuItemName", foodName);
-                        returnIntent.putExtra("menuItemPrice", foodPrice);
-                        returnIntent.putExtra("oldMenuItemName", oldMenuItemName);
+                        if (getActivity().getIntent().getBooleanExtra("createMenuItem", false)) {
+                            t1.lis.onCreateMenuItem(foodName, "", foodPrice);
 
-                        getActivity().setResult(Activity.RESULT_OK, returnIntent);
+                        } else {
+                            t1.lis.onCreateMenuItem(foodName, oldMenuItemName, foodPrice);
 
-                        getActivity().finish();
-
-
-                    }
-
-                    else {
+                        }
+                    } else {
                         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                         getActivity().getSupportFragmentManager().popBackStack();
                     }
-
                 }
 
                 catch (NumberFormatException e){
                     Toast.makeText(getContext(), getString(R.string.incorrect_number), Toast.LENGTH_LONG).show();
-
                 }
 
                 catch (SQLiteConstraintException e1){
-
                     Toast.makeText(getContext(), getString(R.string.this_already_added, foodName), Toast.LENGTH_LONG).show();
-
                 }
-
-
                 return true;
-
         }
-
         return false;
     }
 }

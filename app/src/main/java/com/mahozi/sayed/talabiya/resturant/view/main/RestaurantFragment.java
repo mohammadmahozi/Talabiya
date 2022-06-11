@@ -131,7 +131,7 @@ public class RestaurantFragment extends Fragment {
         createRestaurantFragment.setArguments(bundle);
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.restaurant_container, createRestaurantFragment, "CreateRestaurantFragment")
+                .replace(R.id.order_container, createRestaurantFragment, "CreateRestaurantFragment")
                 .addToBackStack(null)
                 .commit();
     }
@@ -142,7 +142,7 @@ public class RestaurantFragment extends Fragment {
         RestaurantDetailsFragment restaurantDetailsFragment = new RestaurantDetailsFragment();
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.restaurant_container, restaurantDetailsFragment, "RestaurantDetailsFragment")
+                .replace(R.id.order_container, restaurantDetailsFragment, "RestaurantDetailsFragment")
                 .addToBackStack(null)
                 .commit();
 

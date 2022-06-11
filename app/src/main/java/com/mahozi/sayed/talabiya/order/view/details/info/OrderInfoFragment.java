@@ -30,12 +30,12 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.mahozi.sayed.talabiya.R;
 import com.mahozi.sayed.talabiya.order.OrderViewModel;
+import com.mahozi.sayed.talabiya.order.store.OrderEntity;
 import com.mahozi.sayed.talabiya.order.view.create.DatePickerPopUp;
 import com.mahozi.sayed.talabiya.order.view.create.TimePickerPopUp;
-import com.mahozi.sayed.talabiya.person.PersonActivity;
-import com.mahozi.sayed.talabiya.R;
-import com.mahozi.sayed.talabiya.order.store.OrderEntity;
+import com.mahozi.sayed.talabiya.person.PersonFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,6 +63,7 @@ public class OrderInfoFragment extends Fragment {
     private String currentPath;
 
     OrderEntity currentOrder;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,7 +74,6 @@ public class OrderInfoFragment extends Fragment {
         orderViewModel = ViewModelProviders.of(getActivity()).get(OrderViewModel.class);
 
         currentOrder = orderViewModel.getCurrentOrder();
-
 
 
         dateEditText = view.findViewById(R.id.fragment_order_details_date);
@@ -97,7 +97,6 @@ public class OrderInfoFragment extends Fragment {
         });
 
 
-
         timeEditText = view.findViewById(R.id.fragment_order_details_time);
         timeEditText.setText(currentOrder.time);
         timeEditText.setOnClickListener(new View.OnClickListener() {
@@ -118,11 +117,8 @@ public class OrderInfoFragment extends Fragment {
         });
 
 
-
-
         totalEditText = view.findViewById(R.id.fragment_order_details_total);
         totalEditText.setText(String.valueOf(currentOrder.total));
-
 
 
         payerEditText = view.findViewById(R.id.fragment_order_details_payer);
@@ -136,9 +132,8 @@ public class OrderInfoFragment extends Fragment {
         });
 
 
-
         statusEditText = view.findViewById(R.id.fragment_order_details_status);
-        statusEditText.setText(currentOrder.clearance_date == null? getResources().getString(R.string.not_payed): currentOrder.clearance_date);
+        statusEditText.setText(currentOrder.clearance_date == null ? getResources().getString(R.string.not_payed) : currentOrder.clearance_date);
 
         statusCheckBox = view.findViewById(R.id.fragment_order_details_status_check_box);
         statusCheckBox.setChecked(currentOrder.status);
@@ -147,7 +142,7 @@ public class OrderInfoFragment extends Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     onStatusCheckBoxClick();
 
                     return true;
@@ -155,8 +150,6 @@ public class OrderInfoFragment extends Fragment {
                 return false;
             }
         });
-
-
 
 
         noteEditText = view.findViewById(R.id.fragment_order_details_note);
@@ -175,7 +168,7 @@ public class OrderInfoFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                if (actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
 
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -193,9 +186,8 @@ public class OrderInfoFragment extends Fragment {
         });
 
 
-
         receiptImageButton = view.findViewById(R.id.receipt_image_button);
-        if (currentOrder.receiptPath != null){
+        if (currentOrder.receiptPath != null) {
 
             int height = getResources().getDimensionPixelSize(R.dimen.thumbnail_height);
             int width = getResources().getDimensionPixelSize(R.dimen.thumbnail_width);
@@ -210,12 +202,10 @@ public class OrderInfoFragment extends Fragment {
             public void onClick(View v) {
 
 
-                if (currentOrder.receiptPath == null){
+                if (currentOrder.receiptPath == null) {
 
                     currentPath = dispatchTakePictureIntent();
-                }
-
-                else {
+                } else {
 
                     showImageInGallery();
                 }
@@ -235,44 +225,40 @@ public class OrderInfoFragment extends Fragment {
         });
 
 
-
-
         return view;
 
     }
 
 
+    private void startPersonFragment() {
 
-    private void startPersonFragment(){
-
-        Intent intent = new Intent(getActivity(), PersonActivity.class);
-        intent.putExtra("getPerson", true);
-        startActivityForResult(intent, 1);
-
+        PersonFragment personFragment = new PersonFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("getPerson", true);
+        personFragment.target = this;
+        personFragment.setArguments(bundle);
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.order_container, personFragment)
+                .commit();
     }
+
+    public Listener listener = new Listener() {
+        @Override
+        public void onName(@NonNull String name) {
+            currentOrder.payer = name;
+            orderViewModel.updateOrder(currentOrder);
+
+            payerEditText.setText(name);
+        }
+    };
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK) {
-                String personName = data.getStringExtra("personName");
-
-                currentOrder.payer = personName;
-                orderViewModel.updateOrder(currentOrder);
-
-                payerEditText.setText(personName);
-
-            }
-
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
-        }
-
-        if (requestCode == REQUEST_TAKE_PHOTO ) {
-            if (resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            if (resultCode == Activity.RESULT_OK) {
 
 
                 if (currentOrder.receiptPath != null)
@@ -293,7 +279,7 @@ public class OrderInfoFragment extends Fragment {
 
             if (resultCode == Activity.RESULT_CANCELED) {
 
-                if (currentOrder.receiptPath == null){
+                if (currentOrder.receiptPath == null) {
 
                     new File(currentPath).delete();
 
@@ -306,9 +292,9 @@ public class OrderInfoFragment extends Fragment {
         }
     }
 
-    private void onStatusCheckBoxClick(){
+    private void onStatusCheckBoxClick() {
         //if it was checked and got unchecked. the condition happens after the click and the chnage
-        if (statusCheckBox.isChecked()){
+        if (statusCheckBox.isChecked()) {
 
 
             new AlertDialog.Builder(getActivity())
@@ -327,16 +313,12 @@ public class OrderInfoFragment extends Fragment {
                             statusCheckBox.setChecked(false);
 
 
-
-                        }})
+                        }
+                    })
                     .setNegativeButton(android.R.string.no, null).show();
 
 
-
-
-        }
-
-        else {
+        } else {
 
             DatePickerPopUp datePick = new DatePickerPopUp(new DatePickerPopUp.OnDateReceived() {
                 @Override
@@ -350,7 +332,6 @@ public class OrderInfoFragment extends Fragment {
                     statusEditText.setText(date);
 
 
-
                 }
             });
 
@@ -359,8 +340,6 @@ public class OrderInfoFragment extends Fragment {
 
         }
     }
-
-
 
 
     private File createImageFile() throws IOException {
@@ -386,9 +365,7 @@ public class OrderInfoFragment extends Fragment {
 
             try {
                 photoFile = createImageFile();
-            }
-
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 // Error occurred while creating the File
 
             }
@@ -408,7 +385,7 @@ public class OrderInfoFragment extends Fragment {
     }
 
 
-    private void showImageInGallery(){
+    private void showImageInGallery() {
 
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
@@ -423,17 +400,16 @@ public class OrderInfoFragment extends Fragment {
     }
 
 
+    private void onReceiptImageButtonLongClick() {
 
-    private void onReceiptImageButtonLongClick(){
-
-        if (currentOrder.receiptPath != null){
+        if (currentOrder.receiptPath != null) {
 
             showContextMenuForImage();
 
         }
     }
 
-    private void showContextMenuForImage(){
+    private void showContextMenuForImage() {
 
         final CharSequence[] items = {getResources().getString(R.string.edit), getResources().getString(R.string.delete)};
 
@@ -443,11 +419,9 @@ public class OrderInfoFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int item) {
 
-                if (item == 0){
+                if (item == 0) {
                     currentPath = dispatchTakePictureIntent();
-                }
-
-                else if (item == 1){
+                } else if (item == 1) {
 
                     new AlertDialog.Builder(getActivity())
                             .setTitle(R.string.confirm).setMessage(R.string.delete_receipt_picture)
@@ -464,9 +438,8 @@ public class OrderInfoFragment extends Fragment {
                                     orderViewModel.updateOrder(currentOrder);
 
 
-
-
-                                }})
+                                }
+                            })
                             .setNegativeButton(android.R.string.no, null).show();
                 }
 

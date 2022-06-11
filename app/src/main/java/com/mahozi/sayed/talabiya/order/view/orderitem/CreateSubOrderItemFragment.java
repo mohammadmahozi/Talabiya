@@ -1,10 +1,8 @@
 package com.mahozi.sayed.talabiya.order.view.orderitem;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.DigitsKeyListener;
 import android.util.Log;
@@ -20,11 +18,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.SearchView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,15 +30,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.mahozi.sayed.talabiya.order.OrderViewModel;
-import com.mahozi.sayed.talabiya.resturant.view.RestaurantActivity;
 import com.mahozi.sayed.talabiya.R;
-import com.mahozi.sayed.talabiya.resturant.store.MenuItemEntity;
+import com.mahozi.sayed.talabiya.order.OrderViewModel;
 import com.mahozi.sayed.talabiya.order.store.OrderEntity;
 import com.mahozi.sayed.talabiya.order.store.OrderItemEntity;
 import com.mahozi.sayed.talabiya.order.store.SubOrderEntity;
 import com.mahozi.sayed.talabiya.order.store.SuborderAndorderItem;
-
+import com.mahozi.sayed.talabiya.resturant.store.MenuItemEntity;
+import com.mahozi.sayed.talabiya.resturant.view.detail.CreateFoodFragment;
+import com.mahozi.sayed.talabiya.resturant.view.detail.FoodLis;
 
 import java.util.List;
 
@@ -388,67 +385,45 @@ public class CreateSubOrderItemFragment extends Fragment {
 
     public void startCreateFoodFragment(){
 
-        Intent intent = new Intent(getActivity(), RestaurantActivity.class);
-        intent.putExtra("createMenuItem", true);
-        intent.putExtra("restaurantName", orderViewModel.getCurrentOrder().restaurantName);
 
-        startActivityForResult(intent, CREATE_MENU_ITEM_REQUEST_CODE);
-
+        CreateFoodFragment createFoodFragment = new CreateFoodFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("createMenuItem", true);
+        bundle.putString("restaurantName", orderViewModel.getCurrentOrder().restaurantName);
+        createFoodFragment.t1 = this;
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.order_container, createFoodFragment)
+                .commit();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
-        if (requestCode == CREATE_MENU_ITEM_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-
-                String menuItemName = data.getStringExtra("menuItemName");
-                double menuItemPrice = data.getDoubleExtra("menuItemPrice", 0);
-
-
-                menuSection.selectedItem = new MenuItemEntity("", menuItemName, menuItemPrice, 0);
+    public FoodLis lis = new FoodLis() {
+        @Override
+        public void onCreateMenuItem(@NonNull String name, @NonNull String oldName, double price) {
+            if (oldName.equals("")) {
+                menuSection.selectedItem = new MenuItemEntity("", name, price, 0);
                 showQuantityDialog(1, "", 0);
-
-            }
-        }
-
-
-        if (requestCode == EDIT_MENU_ITEM_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-
-                String newMenuItemName = data.getStringExtra("menuItemName");
-                String oldMenuItemName = data.getStringExtra("oldMenuItemName");
-                double menuItemPrice = data.getDoubleExtra("menuItemPrice", 0);
-
-
-
+            } else {
 
                 OrderEntity orderEntity = orderViewModel.getCurrentOrder();
 
-
                 List<SuborderAndorderItem> subOrderAndOrderItems = orderViewModel
-                        .selectSubordersAndOrderItemsWithOrderIdAndName(oldMenuItemName, orderEntity.id);
-
+                        .selectSubordersAndOrderItemsWithOrderIdAndName(oldName, orderEntity.id);
 
                 String updatedSubordersNames = "";
 
                 for (SuborderAndorderItem subOrderAndOrderItem: subOrderAndOrderItems){
-
-
                     SubOrderEntity subOrderEntity = subOrderAndOrderItem.subOrderEntity;
-
-
                     OrderItemEntity orderItemEntity = subOrderAndOrderItem.orderItemEntity;
-
 
                     //remove the old price of the order item from the order and suborder totals
                     subOrderEntity.total = subOrderEntity.total - orderItemEntity.total;
                     orderEntity.total = orderEntity.total - orderItemEntity.total;
 
-
                     //update order item with the new price
-                    orderItemEntity.menuItemName = newMenuItemName;
-                    orderItemEntity.total = orderItemEntity.quantity * menuItemPrice;
+                    orderItemEntity.menuItemName = name;
+                    orderItemEntity.total = orderItemEntity.quantity * price;
 
                     //add the new price of the order item from the order and suborder totals
                     subOrderEntity.total = subOrderEntity.total + orderItemEntity.total;
@@ -459,28 +434,22 @@ public class CreateSubOrderItemFragment extends Fragment {
                     orderViewModel.updateSuborder(subOrderEntity);
                     orderViewModel.updateOrder(orderEntity);
 
-
                     updatedSubordersNames = updatedSubordersNames + subOrderEntity.personName + ", ";
                 }
 
-
                 if (!updatedSubordersNames.equals("")){
-                    updatedSubordersNames = newMenuItemName + " name and price updated in "
+                    updatedSubordersNames = name + " name and price updated in "
                             + updatedSubordersNames.substring(0, updatedSubordersNames.length()-1) + " orders and menu";
-
+                } else {
+                    updatedSubordersNames = name + " price updated in menu";
                 }
-
-
-                else {
-                    updatedSubordersNames = newMenuItemName + " price updated in menu";
-                }
-
 
                 Toast.makeText(getContext(), updatedSubordersNames, Toast.LENGTH_LONG).show();
-
             }
-        }
-    }
+            }
+
+
+    };
 
 
     private void showContextMenu(int type, int position){
@@ -602,15 +571,20 @@ public class CreateSubOrderItemFragment extends Fragment {
     int EDIT_MENU_ITEM_REQUEST_CODE = 2;
     public void editMenuItem(MenuItemEntity menuItemEntity){
 
-        Intent intent = new Intent(getActivity(), RestaurantActivity.class);
-        intent.putExtra("editMenuItem", true);
-        intent.putExtra("restaurantName", orderViewModel.getCurrentOrder().restaurantName);
-        intent.putExtra("id", menuItemEntity.id);
-        intent.putExtra("menuItem", menuItemEntity.itemName);
-        intent.putExtra("price", menuItemEntity.price);
-        intent.putExtra("category", menuItemEntity.category);
-
-        startActivityForResult(intent, EDIT_MENU_ITEM_REQUEST_CODE);
+        CreateFoodFragment createFoodFragment = new CreateFoodFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("editMenuItem", true);
+        bundle.putString("restaurantName", orderViewModel.getCurrentOrder().restaurantName);
+        bundle.putLong("id", menuItemEntity.id);
+        bundle.putString("menuItem", menuItemEntity.itemName);
+        bundle.putDouble("price", menuItemEntity.price);
+        bundle.putInt("category", menuItemEntity.category);
+        createFoodFragment.t1 = this;
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.order_container, createFoodFragment)
+                .commit();
     }
 
 

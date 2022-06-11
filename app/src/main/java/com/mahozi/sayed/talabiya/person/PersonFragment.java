@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mahozi.sayed.talabiya.order.view.details.info.OrderInfoFragment;
+import com.mahozi.sayed.talabiya.order.view.details.suborder.SubordersFragment;
 import com.mahozi.sayed.talabiya.person.details.PersonDetailsFragment;
 import com.mahozi.sayed.talabiya.R;
 import com.mahozi.sayed.talabiya.person.store.PersonEntity;
@@ -30,6 +32,9 @@ import java.util.List;
 
 public class PersonFragment extends Fragment {
 
+
+    public OrderInfoFragment target;
+    public SubordersFragment subTarget;
 
     private RecyclerView mRecyclerView;
     private PersonAdapter mPersonAdapter;
@@ -54,8 +59,7 @@ public class PersonFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-
-        boolean getPerson = getActivity().getIntent().getExtras().getBoolean("getPerson", false);
+        boolean getPerson = getArguments().getBoolean("getPerson", false);
 
         personViewModel = ViewModelProviders.of(getActivity()).get(PersonViewModel.class);
 
@@ -76,12 +80,11 @@ public class PersonFragment extends Fragment {
             public void onClick(PersonEntity personEntity) {
 
                 if (getPerson){
-
-                    //personViewModel.setSelectedPerson(personEntity);
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("personName", personEntity.name);
-                    getActivity().setResult(Activity.RESULT_OK, returnIntent);
-                    getActivity().finish();
+                    if (target != null){
+                        target.listener.onName(personEntity.name);
+                    } else if (subTarget != null){
+                        subTarget.listener.onName(personEntity.name);
+                    }
                 }
 
                 else {
@@ -152,7 +155,7 @@ public class PersonFragment extends Fragment {
 
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.person_container, createPersonFragment, "CreatePersonFragment")
+                .replace(R.id.order_container, createPersonFragment, "CreatePersonFragment")
                 .addToBackStack(null)
                 .commit();
 
@@ -209,7 +212,7 @@ public class PersonFragment extends Fragment {
         PersonDetailsFragment personDetailsFragment = new PersonDetailsFragment();
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.person_container, personDetailsFragment, "PersonDetailsFragment")
+                .replace(R.id.order_container, personDetailsFragment, "PersonDetailsFragment")
                 .addToBackStack(null)
                 .commit();
 

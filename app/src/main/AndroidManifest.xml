@@ -17,7 +17,7 @@
         >
 
         <activity
-            android:name=".order.OrderActivity"
+            android:name=".core.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="true">
             <intent-filter>
@@ -26,28 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".resturant.view.RestaurantActivity"
-            android:label="Restaurants"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="false">
-
-            <intent-filter>
-                <action android:name="android.intent.action.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
-        android:name=".person.PersonActivity"
-        android:label="People"
-        android:theme="@style/AppTheme.NoActionBar"
-            android:exported="false">
-
-        <intent-filter>
-            <action android:name="android.intent.action.DEFAULT" />
-        </intent-filter>
-    </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

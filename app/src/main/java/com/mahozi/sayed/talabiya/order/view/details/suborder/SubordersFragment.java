@@ -21,14 +21,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.mahozi.sayed.talabiya.order.OrderViewModel;
-import com.mahozi.sayed.talabiya.order.view.create.DatePickerPopUp;
-import com.mahozi.sayed.talabiya.order.view.orderitem.CreateSubOrderItemFragment;
-import com.mahozi.sayed.talabiya.person.PersonActivity;
 import com.mahozi.sayed.talabiya.R;
+import com.mahozi.sayed.talabiya.order.OrderViewModel;
 import com.mahozi.sayed.talabiya.order.store.OrderEntity;
 import com.mahozi.sayed.talabiya.order.store.SubOrderAndOrderItems;
 import com.mahozi.sayed.talabiya.order.store.SubOrderEntity;
+import com.mahozi.sayed.talabiya.order.view.create.DatePickerPopUp;
+import com.mahozi.sayed.talabiya.order.view.details.info.Listener;
+import com.mahozi.sayed.talabiya.order.view.orderitem.CreateSubOrderItemFragment;
+import com.mahozi.sayed.talabiya.person.PersonFragment;
 
 import java.util.List;
 
@@ -192,11 +193,34 @@ public class SubordersFragment extends Fragment {
         orderDetailsAdapter.notifyItemInserted(sectionPos);
     }
 
-    public void startPersonFragment(){
-        Intent intent = new Intent(getActivity(), PersonActivity.class);
-        intent.putExtra("getPerson", true);
-        startActivityForResult(intent, 1);
+    private void startPersonFragment(){
+
+        PersonFragment personFragment = new PersonFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("getPerson", true);
+        personFragment.subTarget = this;
+        personFragment.setArguments(bundle);
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.order_container, personFragment)
+                .commit();
     }
+
+    public Listener listener = new Listener() {
+        @Override
+        public void onName(@NonNull String name) {
+            if (orderDetailsAdapter.getSection(name) == null){
+
+                SubOrderEntity subOrderEntity = new SubOrderEntity(orderViewModel.getCurrentOrder().id, name);
+                orderViewModel.insertSubOrder(subOrderEntity);
+            }
+
+            else {
+                Toast.makeText(getActivity(), name + "is already added", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    };
 
 
     public void startCreateSubOrderItemFragment(SubOrderEntity subOrderEntity){
