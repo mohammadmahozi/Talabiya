@@ -2,7 +2,6 @@ package com.mahozi.sayed.talabiya.core
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
