@@ -85,9 +85,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
         }
 
         holder.itemView.setTag(position);
-        //Log.v("vvvvpos", position + "");
-        //Log.v("vvvvsize", mDataList.size() + "");
-
         onBindViewHolder(holder, mDataList.get(position));
 
     }
@@ -103,7 +100,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     public void setDataList(List<T> mDataList) {
         this.mDataList = mDataList;
         notifyDataSetChanged();
-
     }
 
     private View.OnLongClickListener mOnLongClickListener  = new View.OnLongClickListener() {
@@ -115,8 +111,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
 
            onItemLongClick(view);
             return true;
-
-
         }
     };
 
