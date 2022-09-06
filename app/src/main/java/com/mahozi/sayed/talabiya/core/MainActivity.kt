@@ -12,7 +12,7 @@ import com.google.android.material.navigation.NavigationView
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.StorageH
 import com.mahozi.sayed.talabiya.databinding.ActivityMainBinding
-import com.mahozi.sayed.talabiya.order.view.main.OrderFragment
+import com.mahozi.sayed.talabiya.order.list.ui.OrderFragment
 import com.mahozi.sayed.talabiya.order.view.orderitem.CreateSubOrderItemFragment
 import com.mahozi.sayed.talabiya.person.PersonFragment
 import com.mahozi.sayed.talabiya.resturant.view.main.RestaurantFragment

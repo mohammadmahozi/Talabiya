@@ -1,4 +1,4 @@
-package com.mahozi.sayed.talabiya.order.view.main
+package com.mahozi.sayed.talabiya.order.list.ui
 
 import android.os.Bundle
 import android.view.ActionMode
@@ -48,30 +48,34 @@ class OrderFragment : Fragment() {
         )
         layoutManager = LinearLayoutManager(context)
         mRecyclerView.setLayoutManager(layoutManager)
-        mOrderAdapter = OrderAdapter(object : OrderRecyclerViewListener {
-            override fun onClick(orderEntity: OrderEntity) {
-                orderViewModel.setCurrentOrderEntity(orderEntity)
-                startOrderDetailsFragment()
-            }
+        mOrderAdapter =
+            OrderAdapter(object :
+                OrderRecyclerViewListener {
+                override fun onClick(orderEntity: OrderEntity) {
+                    orderViewModel.setCurrentOrderEntity(orderEntity)
+                    startOrderDetailsFragment()
+                }
 
-            override fun onLongClick(orderEntity: OrderEntity) {
-                val orderActionMode =
-                    OrderActionMode(object : OrderActionMode.OnSelectionActionMode {
-                        override fun finished() {
-                            mOrderAdapter.finishSelectionSession()
-                        }
+                override fun onLongClick(orderEntity: OrderEntity) {
+                    val orderActionMode =
+                        OrderActionMode(
+                            object :
+                                OrderActionMode.OnSelectionActionMode {
+                                override fun finished() {
+                                    mOrderAdapter.finishSelectionSession()
+                                }
 
-                        override fun delete(actionMode: ActionMode) {
-                            deleteOrder(actionMode)
-                        }
+                                override fun delete(actionMode: ActionMode) {
+                                    deleteOrder(actionMode)
+                                }
 
-                        override fun changeStatus(mode: ActionMode) {
-                            changeOrderStatus(mode)
-                        }
-                    })
-                requireActivity().startActionMode(orderActionMode)
-            }
-        })
+                                override fun changeStatus(mode: ActionMode) {
+                                    changeOrderStatus(mode)
+                                }
+                            })
+                    requireActivity().startActionMode(orderActionMode)
+                }
+            })
         mRecyclerView.setAdapter(mOrderAdapter)
         orderViewModel.allOrderEntities.observe(this) { orderEntities ->
             mOrderAdapter.setDataList(

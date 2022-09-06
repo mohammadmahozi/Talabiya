@@ -1,4 +1,4 @@
-package com.mahozi.sayed.talabiya.order.view.main;
+package com.mahozi.sayed.talabiya.order.list.ui;
 
 import android.view.View;
 import android.widget.CheckBox;
