@@ -19,18 +19,24 @@ import com.mahozi.sayed.talabiya.order.view.create.CreateOrderFragment
 import com.mahozi.sayed.talabiya.order.view.details.OrderDetailsFragment
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.mahozi.sayed.talabiya.core.di.appGraph
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.colors
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class OrdersFragment : Fragment() {
 
     private var _binding: FragmentOrderBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var orderViewModel: OrdersVM
+    private lateinit var viewModel: OrdersVM
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +44,8 @@ class OrdersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentOrderBinding.inflate(inflater, container, false)
-        orderViewModel = OrdersVM()
+
+        viewModel = OrdersVM(appGraph.ordersRepository, CoroutineScope(Dispatchers.Main.immediate))
         return binding.root
     }
 
@@ -53,9 +60,12 @@ class OrdersFragment : Fragment() {
                     }
                 ) {
                     Box(
-                        modifier = Modifier.padding(it)
+                        modifier = Modifier
+                            .padding(it)
+                            .padding(horizontal = 16.dp)
                     ) {
-                        Orders(emptyList())
+                        val model = remember { viewModel.start() }.collectAsState().value
+                        Orders(model.orders)
                     }
                 }
             }
@@ -89,8 +99,8 @@ class OrdersFragment : Fragment() {
         ) {
             Text(
                 text = order.id.toString(),
-                Modifier
-                    .padding( end = 48.dp)
+                modifier = Modifier
+                    .padding(end = 48.dp)
             )
             Column {
                 Text(
@@ -100,7 +110,8 @@ class OrdersFragment : Fragment() {
 
                 Text(
                     text = order.date,
-                    color = colors.secondaryText
+                    color = colors.secondaryText,
+                    fontSize = 12.sp,
                 )
             }
 

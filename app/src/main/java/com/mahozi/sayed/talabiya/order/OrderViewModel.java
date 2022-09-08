@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.mahozi.sayed.talabiya.core.TalabiyaDatabase;
 import com.mahozi.sayed.talabiya.resturant.store.MenuItemEntity;
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantRepository;
 import com.mahozi.sayed.talabiya.order.store.FullOrderEntity;
@@ -29,24 +30,19 @@ public class OrderViewModel extends AndroidViewModel {
     private String currentRestaurantName;
     private SubOrderEntity currentSubOrderEntity;
 
-
-
-
-
     private OrderRepository mOrderRepository;
     private RestaurantRepository mRestaurantRepository;
 
     public OrderViewModel(@NonNull Application application) {
         super(application);
 
-        mOrderRepository = OrderRepository.getInstance();
-        mOrderRepository.init(application);
+        mOrderRepository = new OrderRepository(TalabiyaDatabase.getDatabase(application).orderDao());
 
 
         mRestaurantRepository = RestaurantRepository.getInstance();
         mRestaurantRepository.init(application);
 
-        mAllOrderEntities = mOrderRepository.selectAllOrders();
+        //mAllOrderEntities = mOrderRepository.selectAllOrders();
     }
 
     public OrderEntity getCurrentOrder() {

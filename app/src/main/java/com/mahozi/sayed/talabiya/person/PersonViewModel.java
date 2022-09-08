@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.mahozi.sayed.talabiya.core.TalabiyaDatabase;
 import com.mahozi.sayed.talabiya.person.store.PersonEntity;
 import com.mahozi.sayed.talabiya.person.store.PersonRepository;
 import com.mahozi.sayed.talabiya.order.store.OrderRepository;
@@ -32,8 +33,8 @@ public class PersonViewModel extends AndroidViewModel {
         mPersonRepository.init(application);
 
 
-        mOrderRepository = OrderRepository.getInstance();
-        mOrderRepository.init(application);
+        mOrderRepository = new OrderRepository(TalabiyaDatabase.getDatabase(application).orderDao());
+
 
         mAllPersonEntities = mPersonRepository.selectAllPeople();
     }

@@ -14,6 +14,8 @@ import androidx.sqlite.db.SupportSQLiteQuery;
 
 import java.util.List;
 
+import kotlinx.coroutines.flow.Flow;
+
 @Dao
 public interface OrderDao {
 
@@ -24,7 +26,7 @@ public interface OrderDao {
     long insertOrderItem(OrderItemEntity orderItemEntity);
 
     @Query("SELECT * FROM OrderEntity ORDER BY date DESC")
-    LiveData<List<OrderEntity>> selectAllOrders();
+    Flow<List<OrderEntity>> selectAllOrders();
 
 
 

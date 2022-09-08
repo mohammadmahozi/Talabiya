@@ -6,7 +6,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.mahozi.sayed.talabiya.R
@@ -44,14 +43,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onCreateDrawer() {
-        val myToolbar = findViewById<View>(R.id.toolbar_main) as Toolbar
-        setSupportActionBar(myToolbar)
-
-
-
         drawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
-
 
         navigationView = findViewById<View>(R.id.navigation_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(

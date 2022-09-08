@@ -1,133 +1,95 @@
-package com.mahozi.sayed.talabiya.order.store;
+package com.mahozi.sayed.talabiya.order.store
 
-import android.app.Application;
+import androidx.lifecycle.LiveData
+import androidx.sqlite.db.SimpleSQLiteQuery
+import kotlinx.coroutines.flow.Flow
 
-import androidx.lifecycle.LiveData;
-import androidx.sqlite.db.SimpleSQLiteQuery;
-
-import com.mahozi.sayed.talabiya.core.TalabiyaDatabase;
-
-import java.util.List;
-
-public class OrderRepository {
-
-    private static volatile OrderRepository morderRepository;
-
-    private OrderDao morderDao;
-
-
-    private OrderRepository(){
-
-
-
+class OrderRepository constructor(
+    private val orderDao: OrderDao
+) {
+    fun insert(orderEntity: OrderEntity?) {
+        orderDao.insertOrder(orderEntity)
     }
 
-    public static OrderRepository getInstance(){
-
-        if(morderRepository == null)
-            morderRepository = new OrderRepository();
-
-        return morderRepository;
+    fun selectAllOrders(): Flow<List<OrderEntity>> {
+        return orderDao.selectAllOrders()
     }
 
-    public void init(Application application){
-        TalabiyaDatabase talabiyaDatabase = TalabiyaDatabase.getDatabase(application);
-        morderDao = talabiyaDatabase.orderDao();
-
+    fun insertSubOrder(subOrderEntity: SubOrderEntity?) {
+        orderDao.insertSubOrder(subOrderEntity)
     }
 
-    public void insert(OrderEntity orderEntity){
-        morderDao.insertOrder(orderEntity);
+    fun insertOrderItem(orderItemEntity: OrderItemEntity?): Long {
+        return orderDao.insertOrderItem(orderItemEntity)
     }
 
-    public LiveData<List<OrderEntity>> selectAllOrders(){
-        return morderDao.selectAllOrders();
+    fun selectOrderItemsWithOrderIdAndPerson(
+        orderId: Int,
+        personName: String?
+    ): LiveData<List<OrderItemEntity>> {
+        return orderDao.selectOrderItemsWithOrderIdAndPerson(orderId, personName)
     }
 
-    public void insertSubOrder(SubOrderEntity subOrderEntity){
-        morderDao.insertSubOrder(subOrderEntity);
+    fun selectSubOrdersAndOrderItems(orderId: Int): LiveData<List<SubOrderAndOrderItems>> {
+        return orderDao.selectSubOrdersAndOrderItems(orderId)
     }
 
-
-
-    public long insertOrderItem(OrderItemEntity orderItemEntity){
-        return morderDao.insertOrderItem(orderItemEntity);
+    fun updateSuborder(subOrderEntity: SubOrderEntity?) {
+        orderDao.updateSuborder(subOrderEntity)
     }
 
-
-    public LiveData<List<OrderItemEntity>> selectOrderItemsWithOrderIdAndPerson(int orderId, String personName){
-
-        return morderDao.selectOrderItemsWithOrderIdAndPerson(orderId, personName);
+    fun deleteSuborder(subOrderEntity: SubOrderEntity?) {
+        orderDao.deleteSuborder(subOrderEntity)
     }
 
-    public LiveData<List<SubOrderAndOrderItems>> selectSubOrdersAndOrderItems(int orderId){
-        return morderDao.selectSubOrdersAndOrderItems(orderId);
+    fun deleteOrderItem(orderItemEntity: OrderItemEntity?) {
+        orderDao.deleteOrderItem(orderItemEntity)
     }
 
-    public void updateSuborder(SubOrderEntity subOrderEntity){
-        morderDao.updateSuborder(subOrderEntity);
+    fun deleteOrder(orderEntity: OrderEntity?) {
+        orderDao.deleteOrder(orderEntity)
     }
 
-    public void deleteSuborder(SubOrderEntity subOrderEntity){
-        morderDao.deleteSuborder(subOrderEntity);
+    fun updateOrder(orderEntity: OrderEntity?) {
+        orderDao.updateOrder(orderEntity)
     }
 
-
-    public void deleteOrderItem(OrderItemEntity orderItemEntity){
-        morderDao.deleteOrderItem(orderItemEntity);
+    fun selectFullOrder(orderId: Int): List<FullOrderEntity> {
+        val query = SimpleSQLiteQuery(
+            """
+    SELECT OrderItemEntity.menu_item_name, SUM(quantity) as quantity, note, category FROM OrderItemEntity 
+    LEFT outer JOIN MenuItemEntity ON OrderItemEntity.menu_item_name = MenuItemEntity.item_name 
+    AND MenuItemEntity.restaurant_name = OrderItemEntity.restaurant_name
+    WHERE OrderItemEntity.order_id = ? GROUP BY OrderItemEntity.menu_item_name, note ORDER BY category, menu_item_name ASC
+    """.trimIndent(), arrayOf<Any>(orderId)
+        )
+        return orderDao.selectFullOrder(query)
     }
 
-    public void deleteOrder(OrderEntity orderEntity){
-        morderDao.deleteOrder(orderEntity);
+    fun selectPersonInfo(personName: String?): List<OrderAndPersonSuborder> {
+        return orderDao.selectUnpaidPersonInfo(personName)
     }
 
-    public void updateOrder(OrderEntity orderEntity){
-        morderDao.updateOrder(orderEntity);
+    fun updateOrderItem(orderItemEntity: OrderItemEntity?) {
+        orderDao.updateOrderItem(orderItemEntity)
     }
 
-
-    public List<FullOrderEntity> selectFullOrder(int orderId){
-        SimpleSQLiteQuery query = new SimpleSQLiteQuery("SELECT OrderItemEntity.menu_item_name, SUM(quantity) as quantity, note, category FROM OrderItemEntity \n" +
-                "LEFT outer JOIN MenuItemEntity ON OrderItemEntity.menu_item_name = MenuItemEntity.item_name \n" +
-                "AND MenuItemEntity.restaurant_name = OrderItemEntity.restaurant_name\n" +
-                "WHERE OrderItemEntity.order_id = ? GROUP BY OrderItemEntity.menu_item_name, note ORDER BY category, menu_item_name ASC",
-                new Object[]{orderId});
-
-        return morderDao.selectFullOrder(query);
+    fun updateSuborderStatus(date: String?, status: Int, id: Long) {
+        orderDao.updateSuborderStatus(date, status, id)
     }
 
-    public List<OrderAndPersonSuborder> selectPersonInfo(String personName){
-        return morderDao.selectUnpaidPersonInfo(personName);
+    fun updateOrderStatus(date: String?, status: Int, id: Long) {
+        orderDao.updateOrderStatus(date, status, id)
     }
 
-    public void updateOrderItem(OrderItemEntity orderItemEntity){
-        morderDao.updateOrderItem(orderItemEntity);
+    fun selectAllPersonInfo(personName: String?): List<OrderAndPersonSuborder> {
+        return orderDao.selectAllPersonInfo(personName)
     }
 
-
-
-    public void updateSuborderStatus(String date, int status, long id){
-
-        morderDao.updateSuborderStatus(date, status, id);
+    fun selectSubordersAndOrderItemsWithOrderIdAndName(
+        menuItemName: String?,
+        orderId: Int
+    ): List<SuborderAndorderItem> {
+        return orderDao.selectSubordersAndOrderItemsWithOrderIdAndName(menuItemName, orderId)
     }
-
-    public void updateOrderStatus(String date, int status, long id){
-
-        morderDao.updateOrderStatus(date, status, id);
-    }
-
-
-    public List<OrderAndPersonSuborder>  selectAllPersonInfo(String personName){
-
-        return morderDao.selectAllPersonInfo(personName);
-    }
-
-    public List<SuborderAndorderItem> selectSubordersAndOrderItemsWithOrderIdAndName(String menuItemName, int orderId){
-
-        return morderDao.selectSubordersAndOrderItemsWithOrderIdAndName(menuItemName, orderId);
-    }
-
-
-
-
 }
