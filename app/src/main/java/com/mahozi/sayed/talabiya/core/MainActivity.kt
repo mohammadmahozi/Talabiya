@@ -12,7 +12,7 @@ import com.google.android.material.navigation.NavigationView
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.StorageH
 import com.mahozi.sayed.talabiya.databinding.ActivityMainBinding
-import com.mahozi.sayed.talabiya.order.list.ui.OrderFragment
+import com.mahozi.sayed.talabiya.order.list.ui.OrdersFragment
 import com.mahozi.sayed.talabiya.order.view.orderitem.CreateSubOrderItemFragment
 import com.mahozi.sayed.talabiya.person.PersonFragment
 import com.mahozi.sayed.talabiya.resturant.view.main.RestaurantFragment
@@ -37,9 +37,9 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val orderFragment = OrderFragment()
-        orderFragment.arguments = intent.extras
-        supportFragmentManager.beginTransaction().add(R.id.order_container, orderFragment).commit()
+        val ordersFragment = OrdersFragment()
+        ordersFragment.arguments = intent.extras
+        supportFragmentManager.beginTransaction().add(R.id.order_container, ordersFragment).commit()
         onCreateDrawer()
     }
 
@@ -58,9 +58,9 @@ class MainActivity : AppCompatActivity() {
             NavigationView.OnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.order_navigation_menu -> {
-                    val orderFragment = OrderFragment()
-                    orderFragment.arguments = intent.extras
-                    supportFragmentManager.beginTransaction().add(R.id.order_container, orderFragment).commit()
+                    val ordersFragment = OrdersFragment()
+                    ordersFragment.arguments = intent.extras
+                    supportFragmentManager.beginTransaction().add(R.id.order_container, ordersFragment).commit()
                 }
                 R.id.restaurant_navigation_menu -> {
                     val restaurantFragment = RestaurantFragment()
