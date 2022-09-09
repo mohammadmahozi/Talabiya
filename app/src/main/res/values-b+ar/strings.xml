@@ -92,6 +92,7 @@
 
     <string name="all_orders_marked">Orders have been marked</string>
     <string name="complete">Complete</string>
+    <string name="create_order">Create an order</string>
 
 
 </resources>

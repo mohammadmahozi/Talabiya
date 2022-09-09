@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
@@ -18,6 +19,7 @@ import com.mahozi.sayed.talabiya.order.store.OrderEntity
 import com.mahozi.sayed.talabiya.order.view.create.CreateOrderFragment
 import com.mahozi.sayed.talabiya.order.view.details.OrderDetailsFragment
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.FabPosition
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -26,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mahozi.sayed.talabiya.core.di.appGraph
+import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.colors
 import kotlinx.coroutines.CoroutineScope
@@ -57,7 +60,13 @@ class OrdersFragment : Fragment() {
                 Scaffold(
                     topBar = {
                         TalabiyaBar(title = R.string.app_name)
-                    }
+                    },
+                    floatingActionButton = {
+                        AddFab {
+                            viewModel.event(OrdersEvent.CreateOrderClicked)
+                        }
+                    },
+                    floatingActionButtonPosition = FabPosition.End
                 ) {
                     Box(
                         modifier = Modifier
@@ -95,6 +104,7 @@ class OrdersFragment : Fragment() {
         Row(
             Modifier
                 .background(colors.rowBackground)
+                .clickable { viewModel.event(OrdersEvent.OrderClicked(order)) }
                 .padding(vertical = 8.dp)
         ) {
             Text(
