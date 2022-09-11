@@ -1,4 +1,4 @@
-package com.mahozi.sayed.talabiya.order.view.details.suborder;
+package com.mahozi.sayed.talabiya.order.details.suborder;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -27,7 +27,7 @@ import com.mahozi.sayed.talabiya.order.store.OrderEntity;
 import com.mahozi.sayed.talabiya.order.store.SubOrderAndOrderItems;
 import com.mahozi.sayed.talabiya.order.store.SubOrderEntity;
 import com.mahozi.sayed.talabiya.order.view.create.DatePickerPopUp;
-import com.mahozi.sayed.talabiya.order.view.details.info.Listener;
+import com.mahozi.sayed.talabiya.order.details.info.Listener;
 import com.mahozi.sayed.talabiya.order.view.orderitem.CreateSubOrderItemFragment;
 import com.mahozi.sayed.talabiya.person.PersonFragment;
 

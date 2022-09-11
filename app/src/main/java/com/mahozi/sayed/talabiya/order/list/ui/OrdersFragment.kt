@@ -17,7 +17,7 @@ import com.mahozi.sayed.talabiya.core.ui.TalabiyaBar
 import com.mahozi.sayed.talabiya.databinding.FragmentOrderBinding
 import com.mahozi.sayed.talabiya.order.store.OrderEntity
 import com.mahozi.sayed.talabiya.order.view.create.CreateOrderFragment
-import com.mahozi.sayed.talabiya.order.view.details.OrderDetailsFragment
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsFragment
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Text
@@ -35,7 +35,6 @@ import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.colors
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class OrdersFragment : Fragment() {
 

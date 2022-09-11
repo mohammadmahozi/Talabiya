@@ -1,4 +1,4 @@
-package com.mahozi.sayed.talabiya.order.view.details;
+package com.mahozi.sayed.talabiya.order.details;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,9 +15,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.tabs.TabLayout;
 import com.mahozi.sayed.talabiya.order.OrderViewModel;
-import com.mahozi.sayed.talabiya.order.view.details.full.FullOrderFragment;
-import com.mahozi.sayed.talabiya.order.view.details.info.OrderInfoFragment;
-import com.mahozi.sayed.talabiya.order.view.details.suborder.SubordersFragment;
+import com.mahozi.sayed.talabiya.order.details.full.FullOrderFragment;
+import com.mahozi.sayed.talabiya.order.details.info.OrderInfoFragment;
+import com.mahozi.sayed.talabiya.order.details.suborder.SubordersFragment;
 import com.mahozi.sayed.talabiya.R;
 
 

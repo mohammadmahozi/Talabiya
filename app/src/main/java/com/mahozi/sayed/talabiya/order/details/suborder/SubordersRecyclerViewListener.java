@@ -1,4 +1,4 @@
-package com.mahozi.sayed.talabiya.order.view.details.suborder;
+package com.mahozi.sayed.talabiya.order.details.suborder;
 
 import android.widget.CheckBox;
 

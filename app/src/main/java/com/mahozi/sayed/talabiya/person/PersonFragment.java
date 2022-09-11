@@ -1,8 +1,6 @@
 package com.mahozi.sayed.talabiya.person;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -21,8 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.mahozi.sayed.talabiya.order.view.details.info.OrderInfoFragment;
-import com.mahozi.sayed.talabiya.order.view.details.suborder.SubordersFragment;
+import com.mahozi.sayed.talabiya.order.details.info.OrderInfoFragment;
+import com.mahozi.sayed.talabiya.order.details.suborder.SubordersFragment;
 import com.mahozi.sayed.talabiya.person.details.PersonDetailsFragment;
 import com.mahozi.sayed.talabiya.R;
 import com.mahozi.sayed.talabiya.person.store.PersonEntity;

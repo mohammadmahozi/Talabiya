@@ -1,4 +1,4 @@
-package com.mahozi.sayed.talabiya.order.view.details.info;
+package com.mahozi.sayed.talabiya.order.details.info;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,4 +1,4 @@
-package com.mahozi.sayed.talabiya.order.view.details.info;
+package com.mahozi.sayed.talabiya.order.details.info;
 
 import android.app.Activity;
 import android.content.DialogInterface;

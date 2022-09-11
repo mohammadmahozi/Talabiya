@@ -1,4 +1,4 @@
-package com.mahozi.sayed.talabiya.order.view.details.full;
+package com.mahozi.sayed.talabiya.order.details.full;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
