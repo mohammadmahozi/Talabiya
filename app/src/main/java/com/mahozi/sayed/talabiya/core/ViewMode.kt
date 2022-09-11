@@ -1,5 +1,6 @@
 package com.mahozi.sayed.talabiya.core
 
+import androidx.compose.runtime.Composable
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.onFailure
 import kotlinx.coroutines.flow.StateFlow
@@ -18,5 +19,5 @@ abstract class ViewModel<Model: Any, Event: Any> {
             }
     }
 
-    abstract fun start(): StateFlow<Model>
+    @Composable abstract fun start(): Model
 }

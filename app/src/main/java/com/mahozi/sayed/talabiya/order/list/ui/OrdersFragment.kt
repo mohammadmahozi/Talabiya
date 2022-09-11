@@ -22,11 +22,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Text
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
+import app.cash.molecule.AndroidUiDispatcher
+import app.cash.molecule.RecompositionClock
+import app.cash.molecule.launchMolecule
 import com.mahozi.sayed.talabiya.core.di.appGraph
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
@@ -48,12 +51,15 @@ class OrdersFragment : Fragment() {
     ): View {
         _binding = FragmentOrderBinding.inflate(inflater, container, false)
 
-        viewModel = OrdersVM(appGraph.ordersRepository, CoroutineScope(Dispatchers.Main.immediate))
+        viewModel = OrdersVM(appGraph.ordersRepository, CoroutineScope(AndroidUiDispatcher.Main))
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val scope = CoroutineScope(viewLifecycleOwner.lifecycleScope.coroutineContext + AndroidUiDispatcher.Main)
+        val models = scope.launchMolecule(clock = RecompositionClock.ContextClock) { viewModel.start() }
 
         binding.composeView.setContent {
             AppTheme {
@@ -73,7 +79,7 @@ class OrdersFragment : Fragment() {
                             .padding(it)
                             .padding(horizontal = 16.dp)
                     ) {
-                        val model = remember { viewModel.start() }.collectAsState().value
+                        val model = models.collectAsState().value
                         Orders(model.orders)
                     }
                 }

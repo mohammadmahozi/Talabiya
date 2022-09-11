@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'app.cash.molecule'
 
 android {
     compileSdkVersion 32
@@ -25,11 +26,6 @@ android {
 
     }
 
-
-}
-
-android {
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -43,6 +39,7 @@ android {
         kotlinCompilerExtensionVersion '1.3.0'
     }
 }
+
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
