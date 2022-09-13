@@ -1,29 +1,17 @@
 package com.mahozi.sayed.talabiya.order.list.ui
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.fragment.app.Fragment
-import com.mahozi.sayed.talabiya.R
-import com.mahozi.sayed.talabiya.core.ui.TalabiyaBar
-import com.mahozi.sayed.talabiya.databinding.FragmentOrderBinding
-import com.mahozi.sayed.talabiya.order.store.OrderEntity
-import com.mahozi.sayed.talabiya.order.view.create.CreateOrderFragment
-import com.mahozi.sayed.talabiya.order.details.OrderDetailsFragment
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
@@ -31,37 +19,24 @@ import androidx.lifecycle.lifecycleScope
 import app.cash.molecule.AndroidUiDispatcher
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.launchMolecule
-import com.mahozi.sayed.talabiya.core.di.appGraph
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.core.ui.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.colors
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsFragment
+import com.mahozi.sayed.talabiya.order.store.OrderEntity
+import com.mahozi.sayed.talabiya.order.view.create.CreateOrderFragment
 import kotlinx.coroutines.CoroutineScope
 
-class OrdersFragment : Fragment() {
+class OrdersNode(buildContext: BuildContext, private val viewModel: OrdersVM) : Node(buildContext) {
 
-    private var _binding: FragmentOrderBinding? = null
-    private val binding get() = _binding!!
+    private val scope = CoroutineScope(lifecycleScope.coroutineContext + AndroidUiDispatcher.Main)
+    private val models = scope.launchMolecule(clock = RecompositionClock.ContextClock) { viewModel.start() }
 
-    private lateinit var viewModel: OrdersVM
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentOrderBinding.inflate(inflater, container, false)
-
-        viewModel = OrdersVM(appGraph.ordersRepository, CoroutineScope(AndroidUiDispatcher.Main))
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val scope = CoroutineScope(viewLifecycleOwner.lifecycleScope.coroutineContext + AndroidUiDispatcher.Main)
-        val models = scope.launchMolecule(clock = RecompositionClock.ContextClock) { viewModel.start() }
-
-        binding.composeView.setContent {
+    @Composable override fun View(modifier: Modifier) {
             AppTheme {
                 Scaffold(
                     topBar = {
@@ -85,7 +60,6 @@ class OrdersFragment : Fragment() {
                     }
                 }
             }
-        }
     }
 
     @Composable
@@ -97,7 +71,6 @@ class OrdersFragment : Fragment() {
         }
     }
 
-    @Preview
     @Composable
     fun PreviewOrderRow() {
         OrderRow(order = OrderEntity("Tannoor", "200", "20").apply {
@@ -143,24 +116,19 @@ class OrdersFragment : Fragment() {
 
     private fun startCreateOrderFragment() {
         val createOrderFragment = CreateOrderFragment()
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.order_container, createOrderFragment, "CreateOrderFragment")
-            .addToBackStack(null)
-            .commit()
+//        requireActivity().supportFragmentManager.beginTransaction()
+//            .replace(R.id.order_container, createOrderFragment, "CreateOrderFragment")
+//            .addToBackStack(null)
+//            .commit()
     }
 
     private fun startOrderDetailsFragment(orderId: Int) {
         val orderDetailsFragment = OrderDetailsFragment().apply {
             arguments = bundleOf("orderId" to orderId)
         }
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.order_container, orderDetailsFragment, "OrderDetailsFragment")
-            .addToBackStack(null)
-            .commit()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+//        requireActivity().supportFragmentManager.beginTransaction()
+//            .replace(R.id.order_container, orderDetailsFragment, "OrderDetailsFragment")
+//            .addToBackStack(null)
+//            .commit()
     }
 }
