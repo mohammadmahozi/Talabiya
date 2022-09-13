@@ -29,59 +29,35 @@ public class OrderDetailsFragment extends Fragment {
     private final int SUBORDERS_TAB = 1;
     private final int FULL_ORDER_TAB = 2;
 
-
     private SharedPreferences.Editor editor;
-
-
     private TabLayout tabLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
         View view = inflater.inflate(R.layout.fragment_order_details, container, false);
-
 
         orderViewModel = ViewModelProviders.of(getActivity()).get(OrderViewModel.class);
 
-
         tabLayout = view.findViewById(R.id.order_details_tabs);
 
-
-
         orderViewModel.setSubOrders(orderViewModel.getCurrentOrder().id);
-
-
         editor = getActivity().getSharedPreferences("simple", Context.MODE_PRIVATE).edit();
-
-
-
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
                 setTab(tab);
-
-
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
                 setTab(tab);
             }
         });
-
-
-
-
 
         return view;
     }
@@ -89,8 +65,6 @@ public class OrderDetailsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-
         SharedPreferences prefs = getActivity().getSharedPreferences("simple", Context.MODE_PRIVATE);
         TabLayout.Tab tab = tabLayout.getTabAt(prefs.getInt("orderTab", 0));
         tab.select();
@@ -100,7 +74,6 @@ public class OrderDetailsFragment extends Fragment {
     }
 
     public void setTab(TabLayout.Tab tab){
-
         Fragment fragment;
         String tag = "";
 

@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import app.cash.molecule.AndroidUiDispatcher
 import app.cash.molecule.RecompositionClock
@@ -68,7 +69,8 @@ class OrdersFragment : Fragment() {
                     },
                     floatingActionButton = {
                         AddFab {
-                            viewModel.event(OrdersEvent.CreateOrderClicked)
+                            //viewModel.event(OrdersEvent.CreateOrderClicked)
+                            startCreateOrderFragment()
                         }
                     },
                     floatingActionButtonPosition = FabPosition.End
@@ -109,7 +111,7 @@ class OrdersFragment : Fragment() {
         Row(
             Modifier
                 .background(colors.rowBackground)
-                .clickable { viewModel.event(OrdersEvent.OrderClicked(order)) }
+                .clickable { startOrderDetailsFragment(order.id) /*viewModel.event(OrdersEvent.OrderClicked(order))*/ }
                 .padding(vertical = 8.dp)
         ) {
             Text(
@@ -139,12 +141,7 @@ class OrdersFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    fun startCreateOrderFragment() {
+    private fun startCreateOrderFragment() {
         val createOrderFragment = CreateOrderFragment()
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.order_container, createOrderFragment, "CreateOrderFragment")
@@ -152,11 +149,18 @@ class OrdersFragment : Fragment() {
             .commit()
     }
 
-    fun startOrderDetailsFragment() {
-        val orderDetailsFragment = OrderDetailsFragment()
+    private fun startOrderDetailsFragment(orderId: Int) {
+        val orderDetailsFragment = OrderDetailsFragment().apply {
+            arguments = bundleOf("orderId" to orderId)
+        }
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.order_container, orderDetailsFragment, "OrderDetailsFragment")
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
