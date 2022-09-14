@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import app.cash.molecule.AndroidUiDispatcher
 import app.cash.molecule.RecompositionClock
@@ -26,7 +25,6 @@ import com.mahozi.sayed.talabiya.core.ui.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.colors
-import com.mahozi.sayed.talabiya.order.details.OrderDetailsFragment
 import com.mahozi.sayed.talabiya.order.store.OrderEntity
 import com.mahozi.sayed.talabiya.order.view.create.CreateOrderFragment
 import kotlinx.coroutines.CoroutineScope
@@ -84,7 +82,7 @@ class OrdersNode(buildContext: BuildContext, private val viewModel: OrdersVM) : 
         Row(
             Modifier
                 .background(colors.rowBackground)
-                .clickable { startOrderDetailsFragment(order.id) /*viewModel.event(OrdersEvent.OrderClicked(order))*/ }
+                .clickable { viewModel.event(OrdersEvent.OrderClicked(order)) }
                 .padding(vertical = 8.dp)
         ) {
             Text(
@@ -118,16 +116,6 @@ class OrdersNode(buildContext: BuildContext, private val viewModel: OrdersVM) : 
         val createOrderFragment = CreateOrderFragment()
 //        requireActivity().supportFragmentManager.beginTransaction()
 //            .replace(R.id.order_container, createOrderFragment, "CreateOrderFragment")
-//            .addToBackStack(null)
-//            .commit()
-    }
-
-    private fun startOrderDetailsFragment(orderId: Int) {
-        val orderDetailsFragment = OrderDetailsFragment().apply {
-            arguments = bundleOf("orderId" to orderId)
-        }
-//        requireActivity().supportFragmentManager.beginTransaction()
-//            .replace(R.id.order_container, orderDetailsFragment, "OrderDetailsFragment")
 //            .addToBackStack(null)
 //            .commit()
     }
