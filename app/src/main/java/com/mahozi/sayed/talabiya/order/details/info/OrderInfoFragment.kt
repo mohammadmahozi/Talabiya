@@ -1,452 +1,303 @@
-package com.mahozi.sayed.talabiya.order.details.info;
+package com.mahozi.sayed.talabiya.order.details.info
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.app.Activity
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.media.ThumbnailUtils
+import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.View.OnLongClickListener
+import android.view.View.OnTouchListener
+import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.TextView.OnEditorActionListener
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.order.OrderViewModel
+import com.mahozi.sayed.talabiya.order.details.info.CustomEditText.CustomEditTextInterface
+import com.mahozi.sayed.talabiya.order.store.OrderEntity
+import com.mahozi.sayed.talabiya.order.view.create.DatePickerPopUp
+import com.mahozi.sayed.talabiya.order.view.create.TimePickerPopUp
+import com.mahozi.sayed.talabiya.person.PersonFragment
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-
-import com.mahozi.sayed.talabiya.R;
-import com.mahozi.sayed.talabiya.order.OrderViewModel;
-import com.mahozi.sayed.talabiya.order.store.OrderEntity;
-import com.mahozi.sayed.talabiya.order.view.create.DatePickerPopUp;
-import com.mahozi.sayed.talabiya.order.view.create.TimePickerPopUp;
-import com.mahozi.sayed.talabiya.person.PersonFragment;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-public class OrderInfoFragment extends Fragment {
-
-
-    private EditText dateEditText;
-    private EditText timeEditText;
-
-    private EditText totalEditText;
-    private EditText payerEditText;
-    private EditText statusEditText;
-
-    private CustomEditText noteEditText;
-
-    private CheckBox statusCheckBox;
-
-    private ImageButton receiptImageButton;
-
-    private OrderViewModel orderViewModel;
-
-    private String currentPath;
-
-    OrderEntity currentOrder;
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
-        View view = inflater.inflate(R.layout.fragment_order_info, container, false);
-
-        orderViewModel = ViewModelProviders.of(getActivity()).get(OrderViewModel.class);
-
-        currentOrder = orderViewModel.getCurrentOrder();
-
-
-        dateEditText = view.findViewById(R.id.fragment_order_details_date);
-        dateEditText.setText(currentOrder.date);
-        dateEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerPopUp datePick = new DatePickerPopUp(new DatePickerPopUp.OnDateReceived() {
-                    @Override
-                    public void getDate(String date) {
-                        dateEditText.setText(date);
-
-                        currentOrder.date = date;
-                        orderViewModel.updateOrder(currentOrder);
-                    }
-                });
-
-                datePick.show(getActivity().getSupportFragmentManager(), "DatePicker");
-
+class OrderInfoFragment : Fragment() {
+    private lateinit var dateEditText: EditText
+    private lateinit var timeEditText: EditText
+    private lateinit var totalEditText: EditText
+    private lateinit var payerEditText: EditText
+    private lateinit var statusEditText: EditText
+    private lateinit var noteEditText: CustomEditText
+    private lateinit var statusCheckBox: CheckBox
+    private lateinit var receiptImageButton: ImageButton
+    private lateinit var orderViewModel: OrderViewModel
+    private lateinit var currentPath: String
+    lateinit var currentOrder: OrderEntity
+    
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_order_info, container, false)
+        orderViewModel = ViewModelProviders.of(requireActivity())[OrderViewModel::class.java]
+        currentOrder = orderViewModel.currentOrder
+        dateEditText = view.findViewById(R.id.fragment_order_details_date)
+        dateEditText.setText(currentOrder.date)
+        dateEditText.setOnClickListener(View.OnClickListener {
+            val datePick = DatePickerPopUp { date ->
+                dateEditText.setText(date)
+                currentOrder.date = date
+                orderViewModel.updateOrder(currentOrder)
             }
-        });
-
-
-        timeEditText = view.findViewById(R.id.fragment_order_details_time);
-        timeEditText.setText(currentOrder.time);
-        timeEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerPopUp timePick = new TimePickerPopUp(new TimePickerPopUp.OnTimeReceived() {
-                    @Override
-                    public void getTime(String time) {
-                        timeEditText.setText(time);
-                        currentOrder.time = time;
-                        orderViewModel.updateOrder(currentOrder);
-                    }
-                });
-
-                timePick.show(getActivity().getSupportFragmentManager(), "TimePicker");
-
+            datePick.show(requireActivity().supportFragmentManager, "DatePicker")
+        })
+        timeEditText = view.findViewById(R.id.fragment_order_details_time)
+        timeEditText.setText(currentOrder.time)
+        timeEditText.setOnClickListener(View.OnClickListener {
+            val timePick = TimePickerPopUp { time ->
+                timeEditText.setText(time)
+                currentOrder.time = time
+                orderViewModel.updateOrder(currentOrder)
             }
-        });
-
-
-        totalEditText = view.findViewById(R.id.fragment_order_details_total);
-        totalEditText.setText(String.valueOf(currentOrder.total));
-
-
-        payerEditText = view.findViewById(R.id.fragment_order_details_payer);
-        payerEditText.setText(currentOrder.payer);
-        payerEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startPersonFragment();
-
+            timePick.show(requireActivity().supportFragmentManager, "TimePicker")
+        })
+        totalEditText = view.findViewById(R.id.fragment_order_details_total)
+        totalEditText.setText(currentOrder.total.toString())
+        payerEditText = view.findViewById(R.id.fragment_order_details_payer)
+        payerEditText.setText(currentOrder.payer)
+        payerEditText.setOnClickListener(View.OnClickListener { startPersonFragment() })
+        statusEditText = view.findViewById(R.id.fragment_order_details_status)
+        statusEditText.setText(if (currentOrder.clearance_date == null) resources.getString(R.string.not_payed) else currentOrder.clearance_date)
+        statusCheckBox = view.findViewById(R.id.fragment_order_details_status_check_box)
+        statusCheckBox.setChecked(currentOrder.status)
+        statusCheckBox.setOnTouchListener(OnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                onStatusCheckBoxClick()
+                return@OnTouchListener true
             }
-        });
-
-
-        statusEditText = view.findViewById(R.id.fragment_order_details_status);
-        statusEditText.setText(currentOrder.clearance_date == null ? getResources().getString(R.string.not_payed) : currentOrder.clearance_date);
-
-        statusCheckBox = view.findViewById(R.id.fragment_order_details_status_check_box);
-        statusCheckBox.setChecked(currentOrder.status);
-
-        statusCheckBox.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    onStatusCheckBoxClick();
-
-                    return true;
-                }
-                return false;
+            false
+        })
+        noteEditText = view.findViewById(R.id.fragment_order_details_note)
+        noteEditText.setText(currentOrder.note)
+        noteEditText.setCustomEditTextInterface(CustomEditTextInterface {
+            currentOrder.note = noteEditText.getText().toString().trim { it <= ' ' }
+            orderViewModel.updateOrder(currentOrder)
+            Toast.makeText(context, R.string.note_updated, Toast.LENGTH_LONG).show()
+            noteEditText.clearFocus()
+        })
+        noteEditText.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val imm =
+                    requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+                currentOrder.note = noteEditText.getText().toString().trim { it <= ' ' }
+                orderViewModel.updateOrder(currentOrder)
+                Toast.makeText(context, R.string.note_updated, Toast.LENGTH_LONG).show()
+                noteEditText.clearFocus()
+                return@OnEditorActionListener true
             }
-        });
-
-
-        noteEditText = view.findViewById(R.id.fragment_order_details_note);
-        noteEditText.setText(currentOrder.note);
-        noteEditText.setCustomEditTextInterface(new CustomEditText.CustomEditTextInterface() {
-            @Override
-            public void onBackButtonPressed() {
-                currentOrder.note = noteEditText.getText().toString().trim();
-                orderViewModel.updateOrder(currentOrder);
-                Toast.makeText(getContext(), R.string.note_updated, Toast.LENGTH_LONG).show();
-                noteEditText.clearFocus();
-            }
-        });
-
-        noteEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
-                    currentOrder.note = noteEditText.getText().toString().trim();
-                    orderViewModel.updateOrder(currentOrder);
-                    Toast.makeText(getContext(), R.string.note_updated, Toast.LENGTH_LONG).show();
-                    noteEditText.clearFocus();
-
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-
-        receiptImageButton = view.findViewById(R.id.receipt_image_button);
+            false
+        })
+        receiptImageButton = view.findViewById(R.id.receipt_image_button)
         if (currentOrder.receiptPath != null) {
-
-            int height = getResources().getDimensionPixelSize(R.dimen.thumbnail_height);
-            int width = getResources().getDimensionPixelSize(R.dimen.thumbnail_width);
-
-            Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(currentOrder.receiptPath), width, height);
-
-            receiptImageButton.setImageBitmap(thumbImage);
-
+            val height = resources.getDimensionPixelSize(R.dimen.thumbnail_height)
+            val width = resources.getDimensionPixelSize(R.dimen.thumbnail_width)
+            val thumbImage = ThumbnailUtils.extractThumbnail(
+                BitmapFactory.decodeFile(currentOrder.receiptPath),
+                width,
+                height
+            )
+            receiptImageButton.setImageBitmap(thumbImage)
         }
-        receiptImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                if (currentOrder.receiptPath == null) {
-
-                    currentPath = dispatchTakePictureIntent();
-                } else {
-
-                    showImageInGallery();
-                }
-
-
+        receiptImageButton.setOnClickListener(View.OnClickListener {
+            if (currentOrder.receiptPath == null) {
+                currentPath = dispatchTakePictureIntent()
+            } else {
+                showImageInGallery()
             }
-        });
-
-        receiptImageButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                onReceiptImageButtonLongClick();
-
-
-                return false;
-            }
-        });
-
-
-        return view;
-
+        })
+        receiptImageButton.setOnLongClickListener(OnLongClickListener {
+            onReceiptImageButtonLongClick()
+            false
+        })
+        return view
     }
 
-
-    private void startPersonFragment() {
-
-        PersonFragment personFragment = new PersonFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("getPerson", true);
-        personFragment.target = this;
-        personFragment.setArguments(bundle);
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.order_container, personFragment)
-                .commit();
+    private fun startPersonFragment() {
+        val personFragment = PersonFragment()
+        val bundle = Bundle()
+        bundle.putBoolean("getPerson", true)
+        personFragment.target = this
+        personFragment.arguments = bundle
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.order_container, personFragment)
+            .commit()
     }
 
-    public Listener listener = new Listener() {
-        @Override
-        public void onName(@NonNull String name) {
-            currentOrder.payer = name;
-            orderViewModel.updateOrder(currentOrder);
-
-            payerEditText.setText(name);
+    @JvmField
+    var listener: Listener = object : Listener {
+        override fun onName(name: String) {
+            currentOrder.payer = name
+            orderViewModel.updateOrder(currentOrder)
+            payerEditText.setText(name)
         }
-    };
+    }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
-
-
-                if (currentOrder.receiptPath != null)
-                    new File(currentOrder.receiptPath).delete();
-
-                currentOrder.receiptPath = currentPath;
+                if (currentOrder.receiptPath != null) File(currentOrder.receiptPath).delete()
+                currentOrder.receiptPath = currentPath
                 //update the path in the database if the picture is taken
-                orderViewModel.updateOrder(currentOrder);
-
-                int height = getResources().getDimensionPixelSize(R.dimen.thumbnail_height);
-                int width = getResources().getDimensionPixelSize(R.dimen.thumbnail_width);
-
-                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(currentPath), width, height);
-
-
-                receiptImageButton.setImageBitmap(thumbImage);
+                orderViewModel.updateOrder(currentOrder)
+                val height = resources.getDimensionPixelSize(R.dimen.thumbnail_height)
+                val width = resources.getDimensionPixelSize(R.dimen.thumbnail_width)
+                val thumbImage = ThumbnailUtils.extractThumbnail(
+                    BitmapFactory.decodeFile(currentPath),
+                    width,
+                    height
+                )
+                receiptImageButton.setImageBitmap(thumbImage)
             }
-
             if (resultCode == Activity.RESULT_CANCELED) {
-
                 if (currentOrder.receiptPath == null) {
-
-                    new File(currentPath).delete();
-
+                    File(currentPath).delete()
                 }
-
-
             }
-
-
         }
     }
 
-    private void onStatusCheckBoxClick() {
+    private fun onStatusCheckBoxClick() {
         //if it was checked and got unchecked. the condition happens after the click and the chnage
-        if (statusCheckBox.isChecked()) {
-
-
-            new AlertDialog.Builder(getActivity())
-                    .setTitle(R.string.confirm).setMessage(R.string.status_to_not_payed)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                            currentOrder.status = false;
-                            currentOrder.clearance_date = getResources().getString(R.string.not_payed);
-                            orderViewModel.updateOrder(currentOrder);
-
-
-                            statusEditText.setText(getResources().getString(R.string.not_payed));
-                            statusCheckBox.setChecked(false);
-
-
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, null).show();
-
-
-        } else {
-
-            DatePickerPopUp datePick = new DatePickerPopUp(new DatePickerPopUp.OnDateReceived() {
-                @Override
-                public void getDate(String date) {
-
-                    currentOrder.status = true;
-                    currentOrder.clearance_date = date;
-                    orderViewModel.updateOrder(currentOrder);
-
-                    statusCheckBox.setChecked(true);
-                    statusEditText.setText(date);
-
-
+        if (statusCheckBox.isChecked) {
+            AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.confirm).setMessage(R.string.status_to_not_payed)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes) { dialog, whichButton ->
+                    currentOrder.status = false
+                    currentOrder.clearance_date = resources.getString(R.string.not_payed)
+                    orderViewModel.updateOrder(currentOrder)
+                    statusEditText.setText(resources.getString(R.string.not_payed))
+                    statusCheckBox.isChecked = false
                 }
-            });
-
-            datePick.show(getActivity().getSupportFragmentManager(), "DatePicker");
-
-
+                .setNegativeButton(android.R.string.no, null).show()
+        } else {
+            val datePick = DatePickerPopUp { date ->
+                currentOrder.status = true
+                currentOrder.clearance_date = date
+                orderViewModel.updateOrder(currentOrder)
+                statusCheckBox.isChecked = true
+                statusEditText.setText(date)
+            }
+            datePick.show(requireActivity().supportFragmentManager, "DatePicker")
         }
     }
 
-
-    private File createImageFile() throws IOException {
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName,  /* prefix */".jpg",         /* suffix */storageDir      /* directory */);
+        val timeStamp =
+            SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "JPEG_" + timeStamp + "_"
+        val storageDir =
+            requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
         // Save a file: path for use with ACTION_VIEW intents
         //currentPhotoPath = image.getAbsolutePath();
-        return image;
+        return File.createTempFile(
+            imageFileName,  /* prefix */
+            ".jpg",  /* suffix */
+            storageDir /* directory */
+        )
     }
 
-    static final int REQUEST_TAKE_PHOTO = 2;
-
-    private String dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    private fun dispatchTakePictureIntent(): String {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(requireActivity().packageManager) != null) {
             // Create the File where the photo should go
-            File photoFile = null;
-
+            var photoFile: File? = null
             try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
+                photoFile = createImageFile()
+            } catch (ex: IOException) {
                 // Error occurred while creating the File
-
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getContext(), "com.mahozi.sayed.talabiya.FileProvider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-
-                return photoFile.getAbsolutePath();
-
+                val photoURI = FileProvider.getUriForFile(
+                    requireContext(),
+                    "com.mahozi.sayed.talabiya.FileProvider",
+                    photoFile
+                )
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+                return photoFile.absolutePath
             }
-
         }
-
-        return "";
+        return ""
     }
 
-
-    private void showImageInGallery() {
-
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        File f = new File(currentOrder.receiptPath);
-        Uri uri = FileProvider.getUriForFile(getContext(), "com.mahozi.sayed.talabiya.FileProvider", f);
-
-        intent.setDataAndType(uri, "image/*");
-
-        startActivity(intent);
+    private fun showImageInGallery() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_VIEW
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        val f = File(currentOrder.receiptPath)
+        val uri = FileProvider.getUriForFile(requireContext(), "com.mahozi.sayed.talabiya.FileProvider", f)
+        intent.setDataAndType(uri, "image/*")
+        startActivity(intent)
     }
 
-
-    private void onReceiptImageButtonLongClick() {
-
+    private fun onReceiptImageButtonLongClick() {
         if (currentOrder.receiptPath != null) {
-
-            showContextMenuForImage();
-
+            showContextMenuForImage()
         }
     }
 
-    private void showContextMenuForImage() {
-
-        final CharSequence[] items = {getResources().getString(R.string.edit), getResources().getString(R.string.delete)};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                if (item == 0) {
-                    currentPath = dispatchTakePictureIntent();
-                } else if (item == 1) {
-
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.confirm).setMessage(R.string.delete_receipt_picture)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                                public void onClick(DialogInterface dialog, int whichButton) {
-
-                                    receiptImageButton.setImageResource(R.mipmap.attach_icon);
-                                    new File(currentOrder.receiptPath).delete();
-
-
-                                    currentOrder.receiptPath = null;
-                                    orderViewModel.updateOrder(currentOrder);
-
-
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null).show();
-                }
-
+    private fun showContextMenuForImage() {
+        val items = arrayOf<CharSequence>(
+            resources.getString(R.string.edit),
+            resources.getString(R.string.delete)
+        )
+        val builder = AlertDialog.Builder(
+            requireActivity()
+        )
+        builder.setItems(items) { dialog, item ->
+            if (item == 0) {
+                currentPath = dispatchTakePictureIntent()
+            } else if (item == 1) {
+                AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.confirm).setMessage(R.string.delete_receipt_picture)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes) { dialog, whichButton ->
+                        receiptImageButton.setImageResource(R.mipmap.attach_icon)
+                        File(currentOrder.receiptPath).delete()
+                        currentOrder.receiptPath = null
+                        orderViewModel.updateOrder(currentOrder)
+                    }
+                    .setNegativeButton(android.R.string.no, null).show()
             }
-        });
-        builder.show();
+        }
+        builder.show()
     }
 
-
+    companion object {
+        const val REQUEST_TAKE_PHOTO = 2
+    }
 }

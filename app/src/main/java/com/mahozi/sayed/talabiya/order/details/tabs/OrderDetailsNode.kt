@@ -30,9 +30,9 @@ class OrderDetailsNode(
         }
 
         when(tab) {
-            OrderDetailsTab.INFO -> TODO()
-            OrderDetailsTab.SUBORDERS -> TODO()
-            OrderDetailsTab.FULL -> TODO()
+            OrderDetailsTab.INFO -> {}
+            OrderDetailsTab.SUBORDERS -> {}
+            OrderDetailsTab.FULL -> {}
         }
     }
 }
