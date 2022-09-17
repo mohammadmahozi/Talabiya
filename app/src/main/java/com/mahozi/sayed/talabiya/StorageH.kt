@@ -2,7 +2,6 @@ package com.mahozi.sayed.talabiya
 
 import android.content.Context
 import android.os.Environment
-import android.util.Log
 import android.widget.Toast
 import java.io.File
 import java.io.FileInputStream
@@ -20,7 +19,6 @@ class StorageH {
 
             val dbF = File(currentDBPath)
             val f = File(sd, "talabiya_database")
-            Log.d("gggg", "backUp: ${f.createNewFile()}")
 
             val src = FileInputStream(dbF).channel
             val dst = FileOutputStream(f).channel

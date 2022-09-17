@@ -9,23 +9,24 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.mahozi.sayed.talabiya.core.di.AppGraph
 import com.mahozi.sayed.talabiya.order.OrderRoot
+import javax.inject.Inject
+import javax.inject.Provider
 
-class RootNode(
+class RootNode @Inject constructor(
     private val buildContext: BuildContext,
     private val backStack: BackStack<RootRoute> = BackStack(
         initialElement = RootRoute.OrderRoot,
         savedStateMap = buildContext.savedStateMap
     ),
-    private val appGraph: AppGraph
+    private val orderRootProvider: Provider<OrderRoot>
 ) : ParentNode<RootRoute>(navModel = backStack, buildContext) {
 
     override fun resolve(routing: RootRoute, buildContext: BuildContext): Node = when (routing) {
-        is RootRoute.OrderRoot -> OrderRoot(buildContext, graph = appGraph)
+        is RootRoute.OrderRoot -> orderRootProvider.get() //OrderRoot(buildContext, graph = appGraph)
     }
 
     @Composable
     override fun View(modifier: Modifier) {
-        // Children composable will automatically render the currently active child
         Children(navModel = backStack)
     }
 

@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.mahozi.sayed.talabiya.core.TalabiyaDatabase;
+import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase;
 import com.mahozi.sayed.talabiya.resturant.store.MenuItemEntity;
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantRepository;
 import com.mahozi.sayed.talabiya.order.store.FullOrderEntity;

@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'app.cash.molecule'
 apply plugin: 'kotlin-parcelize'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 32
@@ -70,7 +71,7 @@ dependencies {
     def room_version = "2.2.3"
     implementation "androidx.room:room-runtime:$room_version"
     implementation 'androidx.room:room-ktx:2.2.3'
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
 
     implementation 'io.github.luizgrp.sectionedrecyclerviewadapter:sectionedrecyclerviewadapter:2.1.0'
@@ -78,4 +79,8 @@ dependencies {
     implementation 'commons-net:commons-net:3.6'
 
     implementation "com.bumble.appyx:core:1.0-alpha08"
+
+    implementation 'com.google.dagger:dagger:2.43.2'
+    kapt 'com.google.dagger:dagger-compiler:2.43.2'
+
 }

@@ -1,17 +1,22 @@
 package com.mahozi.sayed.talabiya.core.di
 
-import android.app.Application
-import androidx.fragment.app.Fragment
-import com.mahozi.sayed.talabiya.core.TalabiyaApp
-import com.mahozi.sayed.talabiya.core.TalabiyaDatabase
-import com.mahozi.sayed.talabiya.order.store.OrderRepository
+import android.content.Context
+import com.mahozi.sayed.talabiya.core.RootNode
+import com.mahozi.sayed.talabiya.core.data.DataModule
+import com.mahozi.sayed.talabiya.core.main.MainGraph
+import com.mahozi.sayed.talabiya.order.OrderModule
+import dagger.BindsInstance
+import dagger.Component
+import javax.inject.Singleton
 
-class AppGraph(
-    private val application: Application
-) {
+@Singleton
+@Component(modules = [AppModule::class, DataModule::class])
+interface AppGraph {
 
-    private val database = TalabiyaDatabase.getDatabase(application)
-    val ordersRepository = OrderRepository(database.orderDao())
+    @Component.Factory interface Factory {
+        fun create(@BindsInstance context: Context): AppGraph
+    }
+
+    fun mainGraph(): MainGraph.Factory
 }
 
-val Fragment.appGraph get() = (requireContext().applicationContext as TalabiyaApp).graph

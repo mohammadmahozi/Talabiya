@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.mahozi.sayed.talabiya.core.TalabiyaDatabase;
+import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase;
 
 import java.util.List;
 

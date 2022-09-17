@@ -9,11 +9,10 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import com.mahozi.sayed.talabiya.core.ViewModel
 import com.mahozi.sayed.talabiya.order.OrderRoute
 import com.mahozi.sayed.talabiya.order.store.OrderRepository
-import kotlinx.coroutines.CoroutineScope
+import javax.inject.Inject
 
-class OrdersVM(
+class OrdersVM @Inject constructor(
     private val ordersRepository: OrderRepository,
-    private val scope: CoroutineScope,
     private val backStack: BackStack<OrderRoute>
 ): ViewModel<OrdersModel, OrdersEvent>() {
 

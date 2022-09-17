@@ -1,4 +1,4 @@
-package com.mahozi.sayed.talabiya.core;
+package com.mahozi.sayed.talabiya.core.data;
 
 
 import android.content.Context;

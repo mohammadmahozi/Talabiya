@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.mahozi.sayed.talabiya.core.TalabiyaDatabase;
+import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase;
 import com.mahozi.sayed.talabiya.person.store.PersonEntity;
 import com.mahozi.sayed.talabiya.person.store.PersonRepository;
 import com.mahozi.sayed.talabiya.order.store.OrderRepository;

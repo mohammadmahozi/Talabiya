@@ -2,7 +2,7 @@ package com.mahozi.sayed.talabiya.resturant.store;
 
 import android.app.Application;
 
-import com.mahozi.sayed.talabiya.core.TalabiyaDatabase;
+import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase;
 
 import java.util.List;
 
