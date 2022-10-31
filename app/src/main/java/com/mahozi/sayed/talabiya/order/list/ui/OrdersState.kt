@@ -2,6 +2,6 @@ package com.mahozi.sayed.talabiya.order.list.ui
 
 import com.mahozi.sayed.talabiya.order.store.OrderEntity
 
-data class OrdersModel(
+data class OrdersState(
     val orders: List<OrderEntity>
 )

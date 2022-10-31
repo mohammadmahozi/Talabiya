@@ -27,7 +27,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="@string/time_hint"
+        android:hint="@string/time"
         android:inputType="time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/order_time_edit_text"
 
-        android:hint="@string/date_hint"
+        android:hint="@string/date"
         android:inputType="date"
         android:clickable="true"
         android:focusable="false"

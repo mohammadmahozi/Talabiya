@@ -8,6 +8,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 
 private val LocalColors = staticCompositionLocalOf { lightColors }
 
+
 val colors @Composable get() = LocalColors.current
 
 @Composable fun AppTheme(
@@ -16,7 +17,6 @@ val colors @Composable get() = LocalColors.current
 ) {
     val colors = if (darkTheme) darkColors else lightColors
 
-    MaterialTheme.colors.error
     CompositionLocalProvider(LocalColors provides colors) {
         MaterialTheme(
             content = content,

@@ -6,11 +6,11 @@
     <string name="open_drawer">افتح</string>
     <string name="close_drawer">اغلق</string>
 
-    <string name="date_hint">التاريخ</string>
-    <string name="time_hint">الوقت</string>
-    <string name="total_hint">المجموع</string>
-    <string name="payer_hint">الدافع</string>
-    <string name="status_hint">الحالة</string>
+    <string name="date">التاريخ</string>
+    <string name="time">الوقت</string>
+    <string name="total">المجموع</string>
+    <string name="payer">الدافع</string>
+    <string name="status">الحالة</string>
     <string name="note_hint">ملاحظة</string>
 
 

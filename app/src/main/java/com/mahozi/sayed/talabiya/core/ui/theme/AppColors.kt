@@ -10,9 +10,10 @@ data class AppColors(
     val primary: Color,
     val primaryDark: Color,
     val accent: Color,
-    val mainText: Color,
+    val primaryText: Color,
     val secondaryText: Color,
     val rowBackground: Color,
+    val lightBorder: Color
 )
 
 val lightColors = AppColors(
@@ -20,9 +21,10 @@ val lightColors = AppColors(
     primary = Color(0xFFA30505),
     primaryDark = Color(0xFF680606),
     accent = Color(0xFFD81B60),
-    mainText = Color.Black,
+    primaryText = Color.Black,
     secondaryText = Color(0xFF959595),
-    rowBackground = Color.White
+    rowBackground = Color.White,
+    lightBorder = Color(0xFFE4E4E4),
 )
 
 val darkColors = AppColors(
@@ -30,7 +32,8 @@ val darkColors = AppColors(
     primary = Color(0xFFA30505),
     primaryDark = Color(0xFF680606),
     accent = Color(0xFFD81B60),
-    mainText = Color.Black,
+    primaryText = Color.Black,
     secondaryText = Color(0xFF959595),
-    rowBackground = Color.Black
+    rowBackground = Color.Black,
+    lightBorder = Color(0xFFE4E4E4),
 )

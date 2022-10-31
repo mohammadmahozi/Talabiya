@@ -1,22 +1,22 @@
 package com.mahozi.sayed.talabiya.core.main
 
-import com.bumble.appyx.core.modality.BuildContext
-import com.mahozi.sayed.talabiya.core.RootNode
-import com.mahozi.sayed.talabiya.order.OrderModule
+import com.mahozi.sayed.talabiya.core.Presenters
+import com.mahozi.sayed.talabiya.core.navigation.Navigator
+import com.squareup.anvil.annotations.MergeSubcomponent
 import dagger.BindsInstance
 import dagger.Subcomponent
 import javax.inject.Scope
 
 @MainScope
-@Subcomponent(modules = [MainModule::class, OrderModule::class])
+@MergeSubcomponent(MainScope::class)
 interface MainGraph {
 
-    @Subcomponent.Factory interface Factory {
-        fun create(@BindsInstance buildContext: BuildContext): MainGraph
-    }
+  fun presenterFactories(): Presenters
 
-    fun root(): RootNode
-
+  @Subcomponent.Factory
+  interface Factory {
+    fun create(@BindsInstance navigator: Navigator): MainGraph
+  }
 }
 
 @Scope

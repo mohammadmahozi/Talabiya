@@ -1,5 +1,6 @@
 package com.mahozi.sayed.talabiya.order.details.tabs
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
@@ -7,44 +8,47 @@ import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
 import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.colors
+import com.mahozi.sayed.talabiya.order.details.info.OrderInfoScreen
+import kotlinx.parcelize.Parcelize
 
-class OrderDetailsNode(
-    buildContext: BuildContext,
-    private val orderDetailsVM: OrderDetailsVM
-) : Node(buildContext = buildContext) {
+@Parcelize
+data class OrderDetailsScreen(val orderId: Int): Screen
 
-    @Composable
-    override fun View(modifier: Modifier) {
-        var selectedTabIndex by remember { mutableStateOf(0)}
-        val tab = OrderDetailsTab.tab(selectedTabIndex)
+@Composable fun OrderDetailsUi(state: OrderDetailsState, onEvent: (OrderDetailsEvent) -> Unit) {
+    var selectedTabIndex by remember { mutableStateOf(0) }
+    val tab = OrderDetailsTab.tab(selectedTabIndex)
 
+    Column {
         Tabs(
-            selectedTabIndex,
-        ){
-            selectedTabIndex = it
-        }
+            selectedTabIndex = selectedTabIndex,
+            onTabSelected = { selectedTabIndex = it }
+        )
 
-        when(tab) {
-            OrderDetailsTab.INFO -> {}
+        when (tab) {
+            OrderDetailsTab.INFO -> OrderInfoScreen(
+                state.info,
+                onEvent
+            )
             OrderDetailsTab.SUBORDERS -> {}
             OrderDetailsTab.FULL -> {}
         }
     }
+
 }
 
 @Composable fun Tabs(
     selectedTabIndex: Int,
-    onTabSelected: (index: Int) -> Unit) {
+    onTabSelected: (index: Int) -> Unit
+) {
     TabRow(
         selectedTabIndex = selectedTabIndex,
         backgroundColor = colors.rowBackground,
-        contentColor = colors.mainText,
-        indicator =  @Composable { tabPositions ->
+        contentColor = colors.primaryText,
+        indicator = @Composable { tabPositions ->
             TabRowDefaults.Indicator(
                 Modifier
                     .tabIndicatorOffset(tabPositions[selectedTabIndex]),
