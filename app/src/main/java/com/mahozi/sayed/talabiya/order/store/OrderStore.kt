@@ -1,13 +1,11 @@
 package com.mahozi.sayed.talabiya.order.store
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-class OrderRepository @Inject constructor(
+class OrderStore @Inject constructor(
     private val orderDao: OrderDao
 ) {
     fun insert(orderEntity: OrderEntity?) {

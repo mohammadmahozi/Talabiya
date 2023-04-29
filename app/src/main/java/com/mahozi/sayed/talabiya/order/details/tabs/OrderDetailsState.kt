@@ -13,5 +13,6 @@ data class OrderInfoState(
     val time: LocalTime,
     val total: Double,
     val payer: String,
-    val status: OrderStatus
+    val status: OrderStatus,
+    val note: String,
 )

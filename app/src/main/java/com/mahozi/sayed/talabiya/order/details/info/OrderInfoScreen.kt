@@ -16,11 +16,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.colors
 import com.mahozi.sayed.talabiya.order.OrderStatus
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent
+import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent.OrderInfoEvent
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderInfoState
+import com.mahozi.sayed.talabiya.order.title
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -33,7 +35,8 @@ fun PreviewOrderInfoScreen() {
           LocalTime.now(),
           60.0,
           "mmm",
-          OrderStatus.COMPLETE
+          OrderStatus.COMPLETE,
+        "Note"
       ),
       onEvent = { }
   )
@@ -41,56 +44,59 @@ fun PreviewOrderInfoScreen() {
 
 @Composable
 fun OrderInfoScreen(
-    model: OrderInfoState,
-    onEvent: (OrderDetailsEvent.OrderInfoEvent) -> Unit,
+  model: OrderInfoState,
+  onEvent: (OrderInfoEvent) -> Unit,
 ) {
+
+  val formatter = LocalDateTimeFormatter.current
+
   Column(
       verticalArrangement = Arrangement.spacedBy(8.dp),
       modifier = Modifier.padding(16.dp)
   ) {
     InfoTextRow(
-        text = "date",
+        text = formatter.formatShortDateWithDay(model.date),
         icon = R.drawable.ic_date,
         iconDescription = R.string.date,
-    ) {}
+    ) { onEvent(OrderInfoEvent.DateClicked) }
 
     InfoTextRow(
-        text = "time",
+        text = formatter.formatTime(model.time),
         icon = R.drawable.ic_time,
         iconDescription = R.string.time
-    ) {}
+    ) { onEvent(OrderInfoEvent.TimeClicked) }
 
     Divider(color = colors.lightBorder)
 
     InfoTextRow(
-        text = "300",
+        text = model.total.toString(),
         icon = R.drawable.ic_money,
         iconDescription = R.string.total
     ) {}
 
     InfoTextRow(
-        text = "Not selected",
+        text = model.payer,
         icon = R.drawable.ic_payer,
         iconDescription = R.string.payer
-    ) {}
+    ) { onEvent(OrderInfoEvent.PayerClicked) }
 
     InfoTextRow(
-        text = "in progress",
+        text = string(model.status.title),
         icon = R.drawable.ic_hourglass,
         iconDescription = R.string.status
-    ) {
+    ) { onEvent(OrderInfoEvent.StatusClicked) }
 
-    }
     Divider(color = colors.lightBorder)
 
     InfoRow(
         icon = R.drawable.ic_baseline_notes_24,
         iconDescription = R.string.note,
-        onclick = {}) {
+        onclick = {}
+    ) {
 
       BasicTextField(
-          value = "note",
-          onValueChange = {}
+          value = model.payer,
+          onValueChange = { note -> onEvent(OrderInfoEvent.NoteChanged(note)) }
       )
     }
   }

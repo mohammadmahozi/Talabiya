@@ -93,6 +93,7 @@
     <string name="export_database">Export database</string>
     <string name="complete">Complete</string>
     <string name="create_order">Create an order</string>
+    <string name="new_">New</string>
 
 
 </resources>

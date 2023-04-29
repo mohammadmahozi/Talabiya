@@ -4,14 +4,14 @@ import androidx.compose.runtime.*
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsScreen
-import com.mahozi.sayed.talabiya.order.store.OrderRepository
+import com.mahozi.sayed.talabiya.order.store.OrderStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class OrdersPresenter @Inject constructor(
-    private val ordersRepository: OrderRepository,
+    private val ordersRepository: OrderStore,
     private val navigator: Navigator,
 ) : Presenter<OrdersEvent, OrdersState> {
 

@@ -12,7 +12,7 @@ import com.mahozi.sayed.talabiya.resturant.store.RestaurantRepository;
 import com.mahozi.sayed.talabiya.order.store.FullOrderEntity;
 import com.mahozi.sayed.talabiya.order.store.OrderEntity;
 import com.mahozi.sayed.talabiya.order.store.OrderItemEntity;
-import com.mahozi.sayed.talabiya.order.store.OrderRepository;
+import com.mahozi.sayed.talabiya.order.store.OrderStore;
 import com.mahozi.sayed.talabiya.order.store.SubOrderAndOrderItems;
 import com.mahozi.sayed.talabiya.order.store.SubOrderEntity;
 import com.mahozi.sayed.talabiya.order.store.SuborderAndorderItem;
@@ -30,13 +30,13 @@ public class OrderViewModel extends AndroidViewModel {
     private String currentRestaurantName;
     private SubOrderEntity currentSubOrderEntity;
 
-    private OrderRepository mOrderRepository;
+    private OrderStore mOrderStore;
     private RestaurantRepository mRestaurantRepository;
 
     public OrderViewModel(@NonNull Application application) {
         super(application);
 
-        mOrderRepository = new OrderRepository(TalabiyaDatabase.getDatabase(application).orderDao());
+        mOrderStore = new OrderStore(TalabiyaDatabase.getDatabase(application).orderDao());
 
 
         mRestaurantRepository = RestaurantRepository.getInstance();
@@ -66,7 +66,7 @@ public class OrderViewModel extends AndroidViewModel {
     }
 
     public void insertOrder(OrderEntity orderEntity){
-        mOrderRepository.insert(orderEntity);
+        mOrderStore.insert(orderEntity);
     }
 
     public List<String> selectRestaurantsNames(){
@@ -75,12 +75,12 @@ public class OrderViewModel extends AndroidViewModel {
 
     public void insertSubOrder(SubOrderEntity subOrderEntity){
 
-        mOrderRepository.insertSubOrder(subOrderEntity);
+        mOrderStore.insertSubOrder(subOrderEntity);
 
     }
 
     public void setSubOrders(int orderId) {
-        mSubOrders = mOrderRepository.selectSubOrdersAndOrderItems(orderId);
+        mSubOrders = mOrderStore.selectSubOrdersAndOrderItems(orderId);
     }
 
     public LiveData<List<SubOrderAndOrderItems>> getSubOrders() {
@@ -88,7 +88,7 @@ public class OrderViewModel extends AndroidViewModel {
     }
 
     public void setOrderItems(int orderId) {
-        mOrderItems = mOrderRepository.selectOrderItemsWithOrderIdAndPerson(orderId, "");
+        mOrderItems = mOrderStore.selectOrderItemsWithOrderIdAndPerson(orderId, "");
     }
 
     public LiveData<List<OrderItemEntity>> getOrderItems() {
@@ -104,7 +104,7 @@ public class OrderViewModel extends AndroidViewModel {
     }
 
     public long insertOrderItem(OrderItemEntity orderItemEntity){
-        return mOrderRepository.insertOrderItem(orderItemEntity);
+        return mOrderStore.insertOrderItem(orderItemEntity);
     }
 
     public LiveData<List<MenuItemEntity>> selectAllMenuItemsForCurrentRestaurant(){
@@ -113,19 +113,19 @@ public class OrderViewModel extends AndroidViewModel {
 
     public LiveData<List<OrderItemEntity>> selectOrderItemsWithOrderIdAndPerson(int orderId, String personName){
 
-        return mOrderRepository.selectOrderItemsWithOrderIdAndPerson(orderId, personName);
+        return mOrderStore.selectOrderItemsWithOrderIdAndPerson(orderId, personName);
     }
 
     public LiveData<List<SubOrderAndOrderItems>> selectSubOrdersAndOrderItems(int orderId){
-        return mOrderRepository.selectSubOrdersAndOrderItems(orderId);
+        return mOrderStore.selectSubOrdersAndOrderItems(orderId);
     }
 
     public void updateSuborder(SubOrderEntity subOrderEntity){
-        mOrderRepository.updateSuborder(subOrderEntity);
+        mOrderStore.updateSuborder(subOrderEntity);
     }
 
     public void deleteSuborder(SubOrderEntity subOrderEntity){
-        mOrderRepository.deleteSuborder(subOrderEntity);
+        mOrderStore.deleteSuborder(subOrderEntity);
     }
 
     public void deleteMenuItem(MenuItemEntity menuItemEntity){
@@ -133,28 +133,28 @@ public class OrderViewModel extends AndroidViewModel {
     }
 
     public void deleteOrderItem(OrderItemEntity orderItemEntity){
-        mOrderRepository.deleteOrderItem(orderItemEntity);
+        mOrderStore.deleteOrderItem(orderItemEntity);
     }
 
     public void deleteOrder(OrderEntity orderEntity){
-        mOrderRepository.deleteOrder(orderEntity);
+        mOrderStore.deleteOrder(orderEntity);
     }
 
     public void updateOrder(OrderEntity orderEntity){
-        mOrderRepository.updateOrder(orderEntity);
+        mOrderStore.updateOrder(orderEntity);
     }
 
     public List<FullOrderEntity> selectFullOrder(int orderId){
 
-        return mOrderRepository.selectFullOrder(orderId);
+        return mOrderStore.selectFullOrder(orderId);
 
     }
 
     public void updateOrderItem(OrderItemEntity orderItemEntity){
-        mOrderRepository.updateOrderItem(orderItemEntity);
+        mOrderStore.updateOrderItem(orderItemEntity);
     }
 
     public List<SuborderAndorderItem> selectSubordersAndOrderItemsWithOrderIdAndName(String menuItemName, int orderId){
-        return mOrderRepository.selectSubordersAndOrderItemsWithOrderIdAndName(menuItemName, orderId);
+        return mOrderStore.selectSubordersAndOrderItemsWithOrderIdAndName(menuItemName, orderId);
     }
 }

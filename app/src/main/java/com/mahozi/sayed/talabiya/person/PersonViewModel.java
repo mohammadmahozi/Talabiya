@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase;
 import com.mahozi.sayed.talabiya.person.store.PersonEntity;
 import com.mahozi.sayed.talabiya.person.store.PersonRepository;
-import com.mahozi.sayed.talabiya.order.store.OrderRepository;
+import com.mahozi.sayed.talabiya.order.store.OrderStore;
 import com.mahozi.sayed.talabiya.order.store.OrderAndPersonSuborder;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class PersonViewModel extends AndroidViewModel {
 
     private PersonRepository mPersonRepository;
 
-    private OrderRepository mOrderRepository;
+    private OrderStore mOrderStore;
 
 
     public PersonViewModel(@NonNull Application application) {
@@ -33,7 +33,7 @@ public class PersonViewModel extends AndroidViewModel {
         mPersonRepository.init(application);
 
 
-        mOrderRepository = new OrderRepository(TalabiyaDatabase.getDatabase(application).orderDao());
+        mOrderStore = new OrderStore(TalabiyaDatabase.getDatabase(application).orderDao());
 
 
         mAllPersonEntities = mPersonRepository.selectAllPeople();
@@ -68,21 +68,21 @@ public class PersonViewModel extends AndroidViewModel {
 
     public List<OrderAndPersonSuborder> selectPersonInfo(String personName){
 
-        return mOrderRepository.selectPersonInfo(personName);
+        return mOrderStore.selectPersonInfo(personName);
     }
 
     public void updateSuborderStatus(String date, int status, long id){
 
-        mOrderRepository.updateSuborderStatus(date, status, id);
+        mOrderStore.updateSuborderStatus(date, status, id);
     }
 
     public void updateOrderStatus(String date, int status, long id){
 
-        mOrderRepository.updateOrderStatus(date, status, id);
+        mOrderStore.updateOrderStatus(date, status, id);
     }
 
     public List<OrderAndPersonSuborder>  selectAllPersonInfo(String personName){
 
-        return mOrderRepository.selectAllPersonInfo(personName);
+        return mOrderStore.selectAllPersonInfo(personName);
     }
 }
