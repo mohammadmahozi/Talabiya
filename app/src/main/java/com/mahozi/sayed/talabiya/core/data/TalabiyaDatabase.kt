@@ -37,19 +37,17 @@ abstract class TalabiyaDatabase : RoomDatabase() {
 
     @JvmStatic
     fun getDatabase(context: Context): TalabiyaDatabase {
-      if (INSTANCE == null) {
-        synchronized(TalabiyaDatabase::class.java) {
-          if (INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(
-              context.applicationContext,
-              TalabiyaDatabase::class.java,
-              "talabiya_database"
-            )
-              .createFromAsset("talabiya_database").allowMainThreadQueries().build()
-          }
-        }
+      return INSTANCE ?: synchronized(this) {
+        val instance = Room.databaseBuilder(
+          context.applicationContext,
+          TalabiyaDatabase::class.java,
+          "talabiya_database"
+        ).createFromAsset("talabiya_database")
+          .allowMainThreadQueries()
+          .build()
+        INSTANCE = instance
+        instance
       }
-      return INSTANCE!!
     }
   }
 }
