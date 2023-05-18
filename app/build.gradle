@@ -88,4 +88,6 @@ dependencies {
     implementation "cafe.adriel.voyager:voyager-navigator:1.0.0-rc03"
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+
+    lintChecks("com.slack.lint.compose:compose-lint-checks:1.2.0")
 }
