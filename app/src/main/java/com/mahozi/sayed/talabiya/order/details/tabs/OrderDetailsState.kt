@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 data class OrderDetailsState(
-    val info: OrderInfoState,
+    val info: OrderInfoState?,
 )
 
 data class OrderInfoState(

@@ -1,6 +1,6 @@
 package com.mahozi.sayed.talabiya.order.details.tabs
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.order.OrderStatus
 import com.mahozi.sayed.talabiya.order.store.OrderStore
@@ -14,20 +14,28 @@ import java.time.LocalTime
 class OrderDetailsPresenter @AssistedInject constructor(
   @Assisted private val orderId: Int,
   private val orderStore: OrderStore,
-  ) : Presenter<OrderDetailsEvent, OrderDetailsState> {
+) : Presenter<OrderDetailsEvent, OrderDetailsState> {
+
+
 
   @Composable
   override fun start(events: Flow<OrderDetailsEvent>): OrderDetailsState {
-    return OrderDetailsState(
-      OrderInfoState(
-        LocalDate.now(),
-        LocalTime.now(),
-        60.0,
-        "mmm",
-        OrderStatus.COMPLETE,
-        "Note"
+    val orderState by remember { orderStore.getOrder(orderId) }.collectAsState(initial = null)
+
+    val order = orderState
+    return when (order) {
+      null -> OrderDetailsState(null)
+      else -> OrderDetailsState(
+        OrderInfoState(
+          LocalDate.parse(order.date),
+          LocalTime.parse(order.time),
+          order.total,
+          order.payer,
+          OrderStatus.COMPLETE,
+          order.note
+        )
       )
-    )
+    }
   }
 
   @AssistedFactory
