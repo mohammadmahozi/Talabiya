@@ -16,8 +16,6 @@ class OrderDetailsPresenter @AssistedInject constructor(
   private val orderStore: OrderStore,
 ) : Presenter<OrderDetailsEvent, OrderDetailsState> {
 
-
-
   @Composable
   override fun start(events: Flow<OrderDetailsEvent>): OrderDetailsState {
     val orderState by remember { orderStore.getOrder(orderId) }.collectAsState(initial = null)

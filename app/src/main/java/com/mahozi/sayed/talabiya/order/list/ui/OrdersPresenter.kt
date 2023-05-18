@@ -11,28 +11,30 @@ import javax.inject.Inject
 
 
 class OrdersPresenter @Inject constructor(
-    private val ordersRepository: OrderStore,
-    private val navigator: Navigator,
+  private val ordersRepository: OrderStore,
+  private val navigator: Navigator,
 ) : Presenter<OrdersEvent, OrdersState> {
 
-    @Composable override fun start(events: Flow<OrdersEvent>): OrdersState {
-        val orders by remember { ordersRepository.selectAllOrders() }.collectAsState(initial = emptyList())
 
-        LaunchedEffect(Unit) {
-            launch {
-                events.collect {
-                    when (it) {
-                        OrdersEvent.CreateOrderClicked -> TODO()
-                        is OrdersEvent.DeleteOrderClicked -> TODO()
-                        is OrdersEvent.OrderClicked -> {
-                           navigator.goto(OrderDetailsScreen(it.order.id))
-                        }
-                    }
-                }
+  @Composable
+  override fun start(events: Flow<OrdersEvent>): OrdersState {
+    val orders by remember { ordersRepository.selectAllOrders() }.collectAsState(initial = emptyList())
+
+    LaunchedEffect(Unit) {
+      launch {
+        events.collect {
+          when (it) {
+            OrdersEvent.CreateOrderClicked -> TODO()
+            is OrdersEvent.DeleteOrderClicked -> TODO()
+            is OrdersEvent.OrderClicked -> {
+              navigator.goto(OrderDetailsScreen(it.order.id))
             }
+          }
         }
-
-        return OrdersState(orders)
+      }
     }
+
+    return OrdersState(orders)
+  }
 }
 
