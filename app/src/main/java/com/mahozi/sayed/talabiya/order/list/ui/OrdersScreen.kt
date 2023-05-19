@@ -29,25 +29,23 @@ object OrdersScreen : Screen
 
 @Composable
 fun OrdersUi(state: OrdersState, onEvent: (OrdersEvent) -> Unit) {
-  AppTheme {
-    Scaffold(
-      topBar = {
-        TalabiyaBar(title = R.string.app_name)
-      },
-      floatingActionButton = {
-        AddFab {
-          onEvent(OrdersEvent.CreateOrderClicked)
-        }
-      }, floatingActionButtonPosition = FabPosition.End
+  Scaffold(
+    topBar = {
+      TalabiyaBar(title = R.string.app_name)
+    },
+    floatingActionButton = {
+      AddFab {
+        onEvent(OrdersEvent.CreateOrderClicked)
+      }
+    }, floatingActionButtonPosition = FabPosition.End
+  ) {
+    Box(
+      modifier = Modifier
+        .padding(it)
+        .padding(horizontal = 16.dp)
     ) {
-      Box(
-        modifier = Modifier
-          .padding(it)
-          .padding(horizontal = 16.dp)
-      ) {
-        Orders(state.orders) { order ->
-          onEvent(OrdersEvent.OrderClicked(order))
-        }
+      Orders(state.orders) { order ->
+        onEvent(OrdersEvent.OrderClicked(order))
       }
     }
   }
