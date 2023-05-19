@@ -23,16 +23,14 @@ import com.mahozi.sayed.talabiya.order.OrderStatus
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent.OrderInfoEvent
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderInfoState
 import com.mahozi.sayed.talabiya.order.title
-import java.time.LocalDate
-import java.time.LocalTime
+import java.time.Instant
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewOrderInfoScreen() {
   OrderInfoScreen(
       model = OrderInfoState(
-          LocalDate.now(),
-          LocalTime.now(),
+          Instant.now(),
           60.0,
           "mmm",
           OrderStatus.COMPLETE,
@@ -55,13 +53,13 @@ fun OrderInfoScreen(
       modifier = Modifier.padding(16.dp)
   ) {
     InfoTextRow(
-        text = formatter.formatShortDateWithDay(model.date),
+        text = formatter.formatShortDateWithDay(model.datetime),
         icon = R.drawable.ic_date,
         iconDescription = R.string.date,
     ) { onEvent(OrderInfoEvent.DateClicked) }
 
     InfoTextRow(
-        text = formatter.formatTime(model.time),
+        text = formatter.formatTime(model.datetime),
         icon = R.drawable.ic_time,
         iconDescription = R.string.time
     ) { onEvent(OrderInfoEvent.TimeClicked) }

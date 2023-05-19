@@ -8,8 +8,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
-import java.time.LocalTime
 
 class OrderDetailsPresenter @AssistedInject constructor(
   @Assisted private val orderId: Int,
@@ -25,8 +23,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
       null -> OrderDetailsState(null)
       else -> OrderDetailsState(
         OrderInfoState(
-          LocalDate.parse(order.date),
-          LocalTime.parse(order.time),
+          order.instant,
           order.total,
           order.payer,
           OrderStatus.COMPLETE,
