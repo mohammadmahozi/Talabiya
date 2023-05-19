@@ -5,6 +5,7 @@ import com.mahozi.sayed.talabiya.person.store.PersonEntity;
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantEntity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -43,6 +44,7 @@ public class OrderEntity {
     @ColumnInfo(name = "time")
     public String time;
 
+    @Nullable
     @ColumnInfo(name = "payer")
     public String payer;
 
@@ -52,6 +54,7 @@ public class OrderEntity {
     @ColumnInfo(name = "status")
     public boolean status;
 
+    @Nullable
     @ColumnInfo(name = "note")
     public String note;
 

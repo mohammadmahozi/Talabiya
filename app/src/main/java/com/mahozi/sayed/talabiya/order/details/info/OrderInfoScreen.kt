@@ -73,7 +73,7 @@ fun OrderInfoScreen(
     ) {}
 
     InfoTextRow(
-        text = model.payer,
+        text = model.payer ?: string(R.string.select_payer),
         icon = R.drawable.ic_payer,
         iconDescription = R.string.payer
     ) { onEvent(OrderInfoEvent.PayerClicked) }
@@ -93,7 +93,7 @@ fun OrderInfoScreen(
     ) {
 
       BasicTextField(
-          value = model.payer,
+          value = model.note,
           onValueChange = { note -> onEvent(OrderInfoEvent.NoteChanged(note)) }
       )
     }
@@ -139,9 +139,9 @@ fun InfoRow(
 ) {
   Row(
       modifier = Modifier
-          .fillMaxWidth()
-          .clickable { onclick() }
-          .padding(vertical = 8.dp),
+        .fillMaxWidth()
+        .clickable { onclick() }
+        .padding(vertical = 8.dp),
       verticalAlignment = Alignment.CenterVertically
   ) {
     Image(

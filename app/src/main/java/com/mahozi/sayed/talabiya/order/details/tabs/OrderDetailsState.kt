@@ -10,7 +10,7 @@ data class OrderDetailsState(
 data class OrderInfoState(
     val datetime: Instant,
     val total: Double,
-    val payer: String,
+    val payer: String?,
     val status: OrderStatus,
     val note: String,
 )

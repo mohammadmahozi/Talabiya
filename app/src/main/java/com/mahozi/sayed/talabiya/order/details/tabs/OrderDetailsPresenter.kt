@@ -27,7 +27,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
           order.total,
           order.payer,
           OrderStatus.COMPLETE,
-          order.note
+          order.note ?: ""
         )
       )
     }
