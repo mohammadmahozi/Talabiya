@@ -32,6 +32,7 @@ class Migrations {
   @Throws(IOException::class)
   fun migrate1To2() {
     var db = helper.createDatabase(dbName, 1)
+
     val values = arrayOf(1, "2019/10/25, Fri", "21:56", 0, false)
     db.execSQL("INSERT INTO OrderEntity (id, date, time, order_total, status) VALUES(?, ?, ?, ?, ?)", values)
     db.close()

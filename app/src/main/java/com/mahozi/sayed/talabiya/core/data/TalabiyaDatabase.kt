@@ -1,8 +1,6 @@
 package com.mahozi.sayed.talabiya.core.data
 
-import android.content.ContentValues
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import androidx.room.Database
 import androidx.room.Room
@@ -52,8 +50,9 @@ abstract class TalabiyaDatabase : RoomDatabase() {
       val timeColumnName = "time"
 
       try {
-        db.execSQL("ALTER TABLE $tableName ADD COLUMN $datetimeColumnName INTEGER NOT NULL")
+        db.execSQL("ALTER TABLE $tableName ADD COLUMN $datetimeColumnName INTEGER")
       } catch (e: SQLiteException) {
+
         //Todo find a better way to check if column exists
       }
 
@@ -86,16 +85,17 @@ abstract class TalabiyaDatabase : RoomDatabase() {
         instants.add(instant)
       }
 
-      val values = ContentValues()
-      instants.forEach { values.put(datetimeColumnName, it) }
+      db.beginTransaction()
+      try {
+        instants.forEachIndexed { index, datetime ->
+          val updateQuery = "update $tableName set $datetimeColumnName = $datetime where id = ${ids[index]}"
+          db.execSQL(updateQuery)
+        }
+        db.setTransactionSuccessful()
+      } finally {
+        db.endTransaction()
+      }
 
-      db.update(
-        tableName,
-        SQLiteDatabase.CONFLICT_NONE,
-        values,
-        "id = ?",
-        ids.toTypedArray()
-      )
 // TODO drop these columns when usages of date and time are removed
 //      db.execSQL("ALTER TABLE $tableName DROP COLUMN $dateColumnName")
 //      db.execSQL("ALTER TABLE $tableName DROP COLUMN $timeColumnName")
