@@ -1,6 +1,5 @@
 package com.mahozi.sayed.talabiya.core.main
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.mahozi.sayed.talabiya.core.Presenters
 import com.mahozi.sayed.talabiya.core.datetime.AppDateTimeFormatter
@@ -22,7 +21,10 @@ interface MainGraph {
 
   @Subcomponent.Factory
   interface Factory {
-    fun create(@BindsInstance navigator: Navigator, @BindsInstance context: AppCompatActivity): MainGraph
+    fun create(
+      @BindsInstance navigator: Navigator,
+      @BindsInstance context: AppCompatActivity
+    ): MainGraph
   }
 }
 
