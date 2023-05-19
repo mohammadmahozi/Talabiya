@@ -1,19 +1,22 @@
 package com.mahozi.sayed.talabiya.core.datetime
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.staticCompositionLocalOf
+import com.mahozi.sayed.talabiya.core.di.SingleIn
 import com.mahozi.sayed.talabiya.core.extensions.locale
+import com.mahozi.sayed.talabiya.core.main.MainScope
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
 import javax.inject.Inject
 
 val LocalDateTimeFormatter = staticCompositionLocalOf<AppDateTimeFormatter> {
-  error("AppLocalDateTimeFormatter is not provider")
+  error("AppLocalDateTimeFormatter is not provided")
 }
 
+@SingleIn(MainScope::class)
 class AppDateTimeFormatter @Inject constructor(
-  private val context: Activity
+  private val context: AppCompatActivity
 ) {
 
   private val zoneId = ZoneId.systemDefault()

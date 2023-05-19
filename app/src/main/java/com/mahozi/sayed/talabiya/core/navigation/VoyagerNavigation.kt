@@ -17,6 +17,8 @@ import com.mahozi.sayed.talabiya.core.Uis
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.TalabiyaApp
 import com.mahozi.sayed.talabiya.core.Ui
+import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
+import com.mahozi.sayed.talabiya.core.extensions.getActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.parcelize.Parcelize
@@ -63,7 +65,7 @@ private data class DelegatingVoyagerScreen(
     val navigator = remember(voyagerNavigator) { DelegatingNavigator(voyagerNavigator) }
     val appGraph = (context.applicationContext as TalabiyaApp).appGraph
     val mainGraph by remember {
-      mutableStateOf(appGraph.mainGraph().create(navigator))
+      mutableStateOf(appGraph.mainGraph().create(navigator, context.getActivity()!!))
     }
 
     val presenterFactories = mainGraph.presenterFactories()
@@ -76,7 +78,9 @@ private data class DelegatingVoyagerScreen(
     val state by screenModel.states.collectAsState()
     val ui = Uis(screen = screen) as Ui<Any?, Any?>
 
-    ui.Content(state = state, onEvent = { screenModel.events.tryEmit(it) })
+    CompositionLocalProvider(LocalDateTimeFormatter provides mainGraph.formatter()) {
+      ui.Content(state = state, onEvent = { screenModel.events.tryEmit(it) })
+    }
   }
 
   override val key: ScreenKey
