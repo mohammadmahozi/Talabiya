@@ -23,17 +23,13 @@ data class OrderDetailsScreen(val orderId: Int): Screen
     val tab = OrderDetailsTab.tab(selectedTabIndex)
 
     Column {
-        if (state.info == null) return
         Tabs(
             selectedTabIndex = selectedTabIndex,
             onTabSelected = { selectedTabIndex = it }
         )
 
         when (tab) {
-            OrderDetailsTab.INFO -> OrderInfoScreen(
-                state.info,
-                onEvent
-            )
+            OrderDetailsTab.INFO -> if (state.info != null) OrderInfoScreen(state.info, onEvent)
             OrderDetailsTab.SUBORDERS -> {}
             OrderDetailsTab.FULL -> {}
         }
