@@ -10,6 +10,8 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.time.Instant;
+
 @Entity(foreignKeys = {
 
         @ForeignKey(entity = PersonEntity.class,
@@ -58,6 +60,9 @@ public class OrderEntity {
 
     @ColumnInfo(name = "receipt_path")
     public String receiptPath;
+
+    @ColumnInfo(name = "datetime")
+    public Instant instant;
 
 
     public OrderEntity(String restaurantName, String date, String time){

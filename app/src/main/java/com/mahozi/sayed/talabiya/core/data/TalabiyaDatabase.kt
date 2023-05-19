@@ -3,9 +3,11 @@ package com.mahozi.sayed.talabiya.core.data
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import com.mahozi.sayed.talabiya.order.store.OrderDao
 import com.mahozi.sayed.talabiya.order.store.OrderEntity
@@ -30,8 +32,10 @@ import java.util.*
     MenuItemEntity::class,
     RestaurantEntity::class
   ],
-  version = 1
+  version = 2
 )
+
+@TypeConverters(InstantConverter::class)
 abstract class TalabiyaDatabase : RoomDatabase() {
 
   abstract fun orderDao(): OrderDao
@@ -40,15 +44,20 @@ abstract class TalabiyaDatabase : RoomDatabase() {
 
   companion object {
 
-    private val MIGRATION_1_2 = Migration(1, 2) { db ->
+    //Migrate string date and time columns to single epoch data time column
+    val MIGRATION_1_2 = Migration(1, 2) { db ->
       val tableName = "OrderEntity"
       val datetimeColumnName = "datetime"
       val dateColumnName = "date"
       val timeColumnName = "time"
 
-      db.execSQL("ALTER TABLE $tableName ADD COLUMN $datetimeColumnName INTEGER NOT NULL")
+      try {
+        db.execSQL("ALTER TABLE $tableName ADD COLUMN $datetimeColumnName INTEGER NOT NULL")
+      } catch (e: SQLiteException) {
+        //Todo find a better way to check if column exists
+      }
 
-      val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd E HH:mm", Locale.ENGLISH)
+      val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd, E HH:mm", Locale.ENGLISH)
 
       val query = "SELECT id, date, time FROM $tableName"
       val cursor = db.query(query)
@@ -78,7 +87,7 @@ abstract class TalabiyaDatabase : RoomDatabase() {
       }
 
       val values = ContentValues()
-      instants.forEach { values.put(dateColumnName, it) }
+      instants.forEach { values.put(datetimeColumnName, it) }
 
       db.update(
         tableName,
@@ -87,9 +96,9 @@ abstract class TalabiyaDatabase : RoomDatabase() {
         "id = ?",
         ids.toTypedArray()
       )
-
-      db.execSQL("ALTER TABLE $tableName DROP COLUMN $dateColumnName")
-      db.execSQL("ALTER TABLE $tableName DROP COLUMN $timeColumnName")
+// TODO drop these columns when usages of date and time are removed
+//      db.execSQL("ALTER TABLE $tableName DROP COLUMN $dateColumnName")
+//      db.execSQL("ALTER TABLE $tableName DROP COLUMN $timeColumnName")
     }
 
     @Volatile
