@@ -7,7 +7,6 @@ import com.mahozi.sayed.talabiya.order.store.OrderStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 
 class OrderDetailsPresenter @AssistedInject constructor(
@@ -25,12 +24,15 @@ class OrderDetailsPresenter @AssistedInject constructor(
       events.collect {
         when(it) {
           OrderDetailsEvent.OrderInfoEvent.AddInvoiceClicked -> TODO()
-          OrderDetailsEvent.OrderInfoEvent.DateClicked -> showDatePicker = !showDatePicker
+          OrderDetailsEvent.OrderInfoEvent.DateClicked -> showDatePicker = true
+          OrderDetailsEvent.OrderInfoEvent.DateDialogDismissed -> showDatePicker = false
+          is OrderDetailsEvent.OrderInfoEvent.DateSelected -> {}
           OrderDetailsEvent.OrderInfoEvent.InvoiceClicked -> TODO()
           is OrderDetailsEvent.OrderInfoEvent.NoteChanged -> TODO()
           OrderDetailsEvent.OrderInfoEvent.PayerClicked -> TODO()
           OrderDetailsEvent.OrderInfoEvent.StatusClicked -> TODO()
           OrderDetailsEvent.OrderInfoEvent.TimeClicked -> TODO()
+
         }
       }
     }

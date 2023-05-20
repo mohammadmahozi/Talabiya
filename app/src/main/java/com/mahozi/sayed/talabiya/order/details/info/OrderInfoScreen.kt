@@ -101,7 +101,10 @@ fun OrderInfoScreen(
       )
     }
   }
-  if (model.datePickerVisible) DatePickerDialog({}, {})
+  if (model.datePickerVisible) DatePickerDialog(
+    onConfirm = { onEvent(OrderInfoEvent.DateSelected(it)) },
+    onDismiss = { onEvent(OrderInfoEvent.DateDialogDismissed) }
+  )
 }
 
 @Preview

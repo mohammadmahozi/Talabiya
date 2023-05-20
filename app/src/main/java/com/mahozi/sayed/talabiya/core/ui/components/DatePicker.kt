@@ -42,17 +42,21 @@ fun DatePickerDialog(
   onDismiss: () -> Unit,
   modifier: Modifier = Modifier
 ) {
+  var date = LocalDate.now()
+
   Dialog(onDismissRequest = { onDismiss() }) {
     Column(
       modifier = modifier.background(colors.material.background, shape = RoundedCornerShape(5.dp))
     ) {
-      Calendar()
+      Calendar(date) {
+        date = it
+      }
 
       Row(
         modifier = Modifier.align(Alignment.End)
       ) {
         DialogTextButton(text = R.string.confirm) {
-
+          onConfirm(date)
         }
         Spacer(modifier = Modifier.width(16.dp))
         DialogTextButton(text = R.string.cancel, onClick = onDismiss)
@@ -81,18 +85,23 @@ private fun DialogTextButton(
 @Preview(showBackground = true)
 @Composable
 fun PreviewCalendar() {
-  Calendar()
+  Calendar(LocalDate.now()) {}
 }
 
 @Composable
-fun Calendar() {
+fun Calendar(
+  selectedDate: LocalDate,
+  onDateSelected: (LocalDate)  -> Unit
+) {
   AndroidView(
     factory = { context ->
       CalendarView(ContextThemeWrapper(context, R.style.CalenderView))
     },
     update = { view ->
+      view.date = selectedDate.toEpochDay()
       view.setOnDateChangeListener { _, year, month, dayOfMonth ->
         val date = LocalDate.of(year, month + 1, dayOfMonth)
+        onDateSelected(date)
       }
     }
   )
