@@ -10,6 +10,7 @@
     <color name="suborder_footer_background">#f7f7f7</color>
 
     <color name="suborder_background">#EBEBEB</color>
-
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
 
 </resources>

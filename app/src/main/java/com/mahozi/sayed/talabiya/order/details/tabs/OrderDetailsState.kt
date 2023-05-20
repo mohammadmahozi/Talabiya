@@ -13,4 +13,5 @@ data class OrderInfoState(
     val payer: String?,
     val status: OrderStatus,
     val note: String,
+    val datePickerVisible: Boolean,
 )

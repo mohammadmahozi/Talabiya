@@ -7,6 +7,7 @@ import com.mahozi.sayed.talabiya.order.store.OrderStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 
 class OrderDetailsPresenter @AssistedInject constructor(
@@ -18,6 +19,22 @@ class OrderDetailsPresenter @AssistedInject constructor(
   override fun start(events: Flow<OrderDetailsEvent>): OrderDetailsState {
     val orderState by remember { orderStore.getOrder(orderId) }.collectAsState(initial = null)
 
+    var showDatePicker by remember { mutableStateOf(false) }
+
+    LaunchedEffect(events) {
+      events.collect {
+        when(it) {
+          OrderDetailsEvent.OrderInfoEvent.AddInvoiceClicked -> TODO()
+          OrderDetailsEvent.OrderInfoEvent.DateClicked -> showDatePicker = !showDatePicker
+          OrderDetailsEvent.OrderInfoEvent.InvoiceClicked -> TODO()
+          is OrderDetailsEvent.OrderInfoEvent.NoteChanged -> TODO()
+          OrderDetailsEvent.OrderInfoEvent.PayerClicked -> TODO()
+          OrderDetailsEvent.OrderInfoEvent.StatusClicked -> TODO()
+          OrderDetailsEvent.OrderInfoEvent.TimeClicked -> TODO()
+        }
+      }
+    }
+
     val order = orderState
     return when (order) {
       null -> OrderDetailsState(null)
@@ -27,7 +44,8 @@ class OrderDetailsPresenter @AssistedInject constructor(
           order.total,
           order.payer,
           OrderStatus.COMPLETE,
-          order.note ?: ""
+          order.note ?: "",
+          showDatePicker
         )
       )
     }
