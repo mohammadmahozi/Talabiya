@@ -15,9 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.navigation.Screen
-import com.mahozi.sayed.talabiya.core.ui.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
-import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.colors
 import com.mahozi.sayed.talabiya.order.store.OrderEntity
 import kotlinx.parcelize.Parcelize

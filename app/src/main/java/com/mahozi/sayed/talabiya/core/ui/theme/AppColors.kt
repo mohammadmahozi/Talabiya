@@ -6,34 +6,35 @@ import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
 
 data class AppColors(
-    val material: Colors,
-    val primary: Color,
-    val primaryDark: Color,
-    val accent: Color,
-    val primaryText: Color,
-    val secondaryText: Color,
-    val rowBackground: Color,
-    val lightBorder: Color
+  val material: Colors,
+  val primaryText: Color,
+  val secondaryText: Color,
+  val rowBackground: Color,
+  val lightBorder: Color
 )
 
 val lightColors = AppColors(
-    material = lightColors(),
+  material = lightColors().copy(
     primary = Color(0xFFA30505),
-    primaryDark = Color(0xFF680606),
-    accent = Color(0xFFD81B60),
-    primaryText = Color.Black,
-    secondaryText = Color(0xFF959595),
-    rowBackground = Color.White,
-    lightBorder = Color(0xFFE4E4E4),
+    primaryVariant = Color(0xFF680606),
+    secondary = Color(0xFF680606),
+    secondaryVariant = Color(0xFF680606),
+  ),
+  primaryText = Color.Black,
+  secondaryText = Color(0xFF959595),
+  rowBackground = Color.White,
+  lightBorder = Color(0xFFE4E4E4),
 )
 
 val darkColors = AppColors(
-    material = darkColors(),
+  material = darkColors().copy(
     primary = Color(0xFFA30505),
-    primaryDark = Color(0xFF680606),
-    accent = Color(0xFFD81B60),
-    primaryText = Color.Black,
-    secondaryText = Color(0xFF959595),
-    rowBackground = Color.Black,
-    lightBorder = Color(0xFFE4E4E4),
+    primaryVariant = Color(0xFF680606),
+    secondary = Color(0xFF680606),
+    secondaryVariant = Color(0xFF680606),
+  ),
+  primaryText = Color.Black,
+  secondaryText = Color(0xFF959595),
+  rowBackground = Color.Black,
+  lightBorder = Color(0xFFE4E4E4),
 )

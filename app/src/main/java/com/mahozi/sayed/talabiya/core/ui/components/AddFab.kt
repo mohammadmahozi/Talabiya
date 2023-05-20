@@ -8,16 +8,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.mahozi.sayed.talabiya.R
-import com.mahozi.sayed.talabiya.core.ui.theme.colors
+import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
 @Preview @Composable fun PreviewAddFab() {
-    AddFab { }
+    AppTheme {
+        AddFab { }
+    }
 }
 @Composable
 fun AddFab(onClick: () -> Unit) {
     FloatingActionButton(
         onClick = { onClick() },
-        backgroundColor = colors.primary,
         contentColor = Color.White,
         content = {
             Icon(

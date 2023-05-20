@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.navigation.Screen
-import com.mahozi.sayed.talabiya.core.ui.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.colors
 import com.mahozi.sayed.talabiya.order.details.info.OrderInfoScreen
@@ -56,9 +56,9 @@ fun Tabs(
     contentColor = colors.primaryText,
     indicator = @Composable { tabPositions ->
       TabRowDefaults.Indicator(
-        Modifier
+        modifier = Modifier
           .tabIndicatorOffset(tabPositions[selectedTabIndex]),
-        color = colors.primary
+        color = colors.material.primary
       )
     },
   ) {

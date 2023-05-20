@@ -1,6 +1,7 @@
-package com.mahozi.sayed.talabiya.core.ui
+package com.mahozi.sayed.talabiya.core.ui.components
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -9,10 +10,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
-import com.mahozi.sayed.talabiya.core.ui.theme.colors
 
 @Preview @Composable fun PreviewBar() {
-    TalabiyaBar(title = R.string.app_name)
+    AppTheme {
+        TalabiyaBar(title = R.string.app_name)
+    }
 }
 
 @Composable fun TalabiyaBar(@StringRes title: Int) {
@@ -23,6 +25,5 @@ import com.mahozi.sayed.talabiya.core.ui.theme.colors
                 color = Color.White
             )
         },
-        backgroundColor = colors.primary
     )
 }
