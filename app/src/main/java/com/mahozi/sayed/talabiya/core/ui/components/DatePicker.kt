@@ -5,6 +5,7 @@ import android.view.ContextThemeWrapper
 import android.widget.CalendarView
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.ui.string
+import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.colors
 import java.time.LocalDate
 
@@ -28,7 +30,9 @@ import java.time.LocalDate
 @Preview(showBackground = true)
 @Composable
 fun PreviewDatePickerDialog() {
-  DatePickerDialog({}, {})
+  AppTheme {
+    DatePickerDialog({}, {})
+  }
 }
 
 @SuppressLint("ComposeModifierMissing")
@@ -64,9 +68,12 @@ private fun DialogTextButton(
   @StringRes text: Int,
   onClick: () -> Unit
 ) {
-  TextButton(onClick = onClick) {
+  TextButton(
+    onClick = onClick,
+  ) {
     Text(
-      string(text)
+      text = string(text),
+      color = colors.material.onSurface
     )
   }
 }
