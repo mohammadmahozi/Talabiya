@@ -4,6 +4,8 @@ apply plugin: 'app.cash.molecule'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.squareup.anvil'
+apply plugin: "app.cash.sqldelight"
+
 
 android {
     compileSdkVersion 33
@@ -105,4 +107,13 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
     lintChecks("com.slack.lint.compose:compose-lint-checks:1.2.0")
+}
+
+
+sqldelight {
+    databases {
+        Database {
+            packageName = "com.mahozi.talabiya"
+        }
+    }
 }
