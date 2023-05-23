@@ -107,6 +107,8 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
     lintChecks("com.slack.lint.compose:compose-lint-checks:1.2.0")
+
+    implementation "app.cash.sqldelight:android-driver:2.0.0-alpha05"
 }
 
 
