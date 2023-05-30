@@ -96,6 +96,7 @@
     <string name="new_">New</string>
     <string name="select_payer">Select payer</string>
     <string name="order_number">Order #%s</string>
+    <string name="select_restaurant">Select restaurant</string>
 
 
 </resources>

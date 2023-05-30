@@ -2,6 +2,10 @@ package com.mahozi.sayed.talabiya.core
 
 import androidx.compose.runtime.Composable
 import com.mahozi.sayed.talabiya.core.navigation.Screen
+import com.mahozi.sayed.talabiya.order.create.CreateOrderEvent
+import com.mahozi.sayed.talabiya.order.create.CreateOrderScreen
+import com.mahozi.sayed.talabiya.order.create.CreateOrderUi
+import com.mahozi.sayed.talabiya.order.create.CreateOrderState
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsScreen
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsState
@@ -21,6 +25,8 @@ fun Uis(
     }
     is OrderDetailsScreen ->
       ui<OrderDetailsState, OrderDetailsEvent> { state, onEvent -> OrderDetailsUi(state,onEvent) }
+    is CreateOrderScreen ->
+      ui<CreateOrderState, CreateOrderEvent> { state, onEvent -> CreateOrderUi(state, onEvent) }
     else -> throw IllegalStateException("Unknown screen $screen")
   }
 }

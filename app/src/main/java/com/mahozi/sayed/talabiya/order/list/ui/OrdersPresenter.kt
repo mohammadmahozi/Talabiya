@@ -3,6 +3,7 @@ package com.mahozi.sayed.talabiya.order.list.ui
 import androidx.compose.runtime.*
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
+import com.mahozi.sayed.talabiya.order.create.CreateOrderScreen
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsScreen
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +25,9 @@ class OrdersPresenter @Inject constructor(
       launch {
         events.collect {
           when (it) {
-            OrdersEvent.CreateOrderClicked -> TODO()
+            OrdersEvent.CreateOrderClicked -> {
+              navigator.goto(CreateOrderScreen)
+            }
             is OrdersEvent.DeleteOrderClicked -> TODO()
             is OrdersEvent.OrderClicked -> {
               navigator.goto(OrderDetailsScreen(it.order.id))
