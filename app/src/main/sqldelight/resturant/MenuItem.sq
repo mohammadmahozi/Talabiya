@@ -1,0 +1,14 @@
+CREATE TABLE MenuItemEntity(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    restaurantId INTEGER NOT NULL,
+    name TEXT NOT NULL UNIQUE,
+    FOREIGN KEY (restaurantId) REFERENCES RestaurantEntity(id)
+);
+
+CREATE TABLE MenuItemPriceEntity(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    menuItemId INTEGER NOT NULL,
+    datetime INTEGER NOT NULL,
+    price INTEGER NOT NULL,
+    FOREIGN KEY (menuItemId) REFERENCES MenuItemEntity(id)
+);

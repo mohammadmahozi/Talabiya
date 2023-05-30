@@ -1,0 +1,54 @@
+CREATE TABLE OrderEntity(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    restaurantId INTEGER NOT NULL,
+    createdAt INTEGER NOT NULL,
+    payerId INTEGER,
+    attachment TEXT,
+    note TEXT NOT NULL DEFAULT "",
+    FOREIGN KEY (restaurantId) REFERENCES RestaurantEntity(id),
+    FOREIGN KEY (payerId) REFERENCES CustomerEntity(id)
+);
+
+CREATE TABLE OrderItemEntity(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    orderId INTEGER NOT NULL,
+    menuItemId INTEGER NOT NULL,
+    price INTEGER NOT NULL,
+    FOREIGN KEY (orderId) REFERENCES OrderEntity(id),
+    FOREIGN KEY (menuItemId) REFERENCES MenuItemEntity(id),
+    UNIQUE(orderId, menuItemId)
+);
+
+CREATE TABLE Repayment(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    amount INTEGER NOT NULL,
+    createdAt INTEGER NOT NULL,
+    status TEXT NOT NULL
+);
+
+CREATE TABLE RepaymentOrder(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    customerOrderId INTEGER NOT NULL,
+    paymentId INTEGER NOT NULL,
+    FOREIGN KEY (customerOrderId) REFERENCES CustomerOrder(id),
+    FOREIGN KEY (paymentId) REFERENCES CustomerPayment(id)
+);
+
+-- insert:
+-- INSERT INTO hockeyPlayer(player_number, full_name)
+-- VALUES (?, ?);
+
+-- CREATE INDEX hockeyPlayer_full_name ON hockeyPlayer(full_name);
+--
+-- INSERT INTO hockeyPlayer (player_number, full_name)
+-- VALUES (15, 'Ryan Getzlaf');
+--
+-- selectAll:
+-- SELECT *
+-- FROM hockeyPlayer;
+--
+
+insert:
+INSERT INTO OrderEntity(restaurantId, createdAt)
+VALUES ?;
+
