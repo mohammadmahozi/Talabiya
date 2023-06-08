@@ -11,7 +11,7 @@ import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.string
-import com.mahozi.sayed.talabiya.core.ui.theme.colors
+import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.order.details.info.OrderInfoScreen
 import kotlinx.parcelize.Parcelize
 
@@ -52,13 +52,13 @@ fun Tabs(
 ) {
   TabRow(
     selectedTabIndex = selectedTabIndex,
-    backgroundColor = colors.rowBackground,
-    contentColor = colors.primaryText,
+    backgroundColor = AppTheme.colors.backgroundSecondary,
+    contentColor = AppTheme.colors.primaryText,
     indicator = @Composable { tabPositions ->
       TabRowDefaults.Indicator(
         modifier = Modifier
           .tabIndicatorOffset(tabPositions[selectedTabIndex]),
-        color = colors.material.primary
+        color = AppTheme.colors.material.primary
       )
     },
   ) {

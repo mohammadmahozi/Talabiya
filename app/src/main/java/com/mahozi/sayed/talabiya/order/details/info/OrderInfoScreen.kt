@@ -4,7 +4,14 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -19,7 +26,7 @@ import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.ui.components.DatePickerDialog
 import com.mahozi.sayed.talabiya.core.ui.string
-import com.mahozi.sayed.talabiya.core.ui.theme.colors
+import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.order.OrderStatus
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent.OrderInfoEvent
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderInfoState
@@ -67,7 +74,7 @@ fun OrderInfoScreen(
       iconDescription = R.string.time
     ) { onEvent(OrderInfoEvent.TimeClicked) }
 
-    Divider(color = colors.lightBorder)
+    Divider(color = AppTheme.colors.lightBorder)
 
     InfoTextRow(
       text = model.total.toString(),
@@ -87,7 +94,7 @@ fun OrderInfoScreen(
       iconDescription = R.string.status
     ) { onEvent(OrderInfoEvent.StatusClicked) }
 
-    Divider(color = colors.lightBorder)
+    Divider(color = AppTheme.colors.lightBorder)
 
     InfoRow(
       icon = R.drawable.ic_baseline_notes_24,
@@ -131,7 +138,7 @@ private fun InfoTextRow(
   ) {
     Text(
       text = text,
-      color = colors.primaryText
+      color = AppTheme.colors.primaryText
     )
   }
 
@@ -154,7 +161,7 @@ private fun InfoRow(
     Image(
       painter = painterResource(icon),
       contentDescription = string(iconDescription),
-      colorFilter = ColorFilter.tint(colors.primaryText),
+      colorFilter = ColorFilter.tint(AppTheme.colors.primaryText),
       modifier = Modifier
         .size(24.dp)
     )

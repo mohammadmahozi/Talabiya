@@ -5,7 +5,6 @@ import android.view.ContextThemeWrapper
 import android.widget.CalendarView
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +22,6 @@ import androidx.compose.ui.window.Dialog
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
-import com.mahozi.sayed.talabiya.core.ui.theme.colors
 import java.time.LocalDate
 
 
@@ -46,7 +44,7 @@ fun DatePickerDialog(
 
   Dialog(onDismissRequest = { onDismiss() }) {
     Column(
-      modifier = modifier.background(colors.material.background, shape = RoundedCornerShape(5.dp))
+      modifier = modifier.background(AppTheme.colors.material.background, shape = RoundedCornerShape(5.dp))
     ) {
       Calendar(date) {
         date = it
@@ -77,7 +75,7 @@ private fun DialogTextButton(
   ) {
     Text(
       text = string(text),
-      color = colors.material.onSurface
+      color = AppTheme.colors.material.onSurface
     )
   }
 }

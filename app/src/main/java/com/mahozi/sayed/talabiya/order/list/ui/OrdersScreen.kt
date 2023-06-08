@@ -2,7 +2,11 @@ package com.mahozi.sayed.talabiya.order.list.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FabPosition
@@ -15,9 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.navigation.Screen
-import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
-import com.mahozi.sayed.talabiya.core.ui.theme.colors
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.order.store.OrderEntity
 import kotlinx.parcelize.Parcelize
 
@@ -70,7 +74,7 @@ fun PreviewOrderRow() {
 @Composable
 fun OrderRow(order: OrderEntity, onClick: (OrderEntity) -> Unit) {
   Row(Modifier
-    .background(colors.rowBackground)
+    .background(AppTheme.colors.backgroundSecondary)
     .clickable { onClick(order) }
     .padding(vertical = 8.dp)) {
 
@@ -84,7 +88,7 @@ fun OrderRow(order: OrderEntity, onClick: (OrderEntity) -> Unit) {
 
       Text(
         text = order.date,
-        color = colors.secondaryText,
+        color = AppTheme.colors.secondaryText,
         fontSize = 12.sp,
       )
     }

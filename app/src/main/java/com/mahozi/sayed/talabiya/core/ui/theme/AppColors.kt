@@ -9,7 +9,7 @@ data class AppColors(
   val material: Colors,
   val primaryText: Color,
   val secondaryText: Color,
-  val rowBackground: Color,
+  val backgroundSecondary: Color,
   val lightBorder: Color
 )
 
@@ -22,7 +22,7 @@ val lightColors = AppColors(
   ),
   primaryText = Color.Black,
   secondaryText = Color(0xFF959595),
-  rowBackground = Color.White,
+  backgroundSecondary = Color.White,
   lightBorder = Color(0xFFE4E4E4),
 )
 
@@ -35,6 +35,6 @@ val darkColors = AppColors(
   ),
   primaryText = Color.Black,
   secondaryText = Color(0xFF959595),
-  rowBackground = Color.Black,
+  backgroundSecondary = Color.Black,
   lightBorder = Color(0xFFE4E4E4),
 )
