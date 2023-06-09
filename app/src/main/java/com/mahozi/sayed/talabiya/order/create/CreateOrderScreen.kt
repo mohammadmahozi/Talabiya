@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
+import com.mahozi.sayed.talabiya.core.ui.components.DateField
 import com.mahozi.sayed.talabiya.core.ui.components.IconText
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import restaurant.RestaurantEntity
@@ -80,14 +81,10 @@ fun CreateOrderUi(
       Spacer(modifier = Modifier.height(16.dp))
 
       val formatter = LocalDateTimeFormatter.current
-      IconText(
-        text = formatter.formatShortDateWithDay(state.date),
-        painter = painterResource(R.drawable.ic_date),
-        contentDescription = stringResource(R.string.select_date),
-        modifier = Modifier
-          .clickable {  }
-          .padding(vertical = 8.dp)
-          .fillMaxWidth()
+
+      DateField(
+        selectedDate = state.date,
+        onDateSelected = { onEvent(CreateOrderEvent.DateSelected(it)) }
       )
 
       Spacer(modifier = Modifier.height(16.dp))
@@ -97,10 +94,9 @@ fun CreateOrderUi(
         painter = painterResource(R.drawable.ic_time),
         contentDescription = stringResource(R.string.select_time),
         modifier = Modifier
-          .clickable {  }
+          .clickable { }
           .padding(vertical = 8.dp)
           .fillMaxWidth()
-
       )
     }
   }
