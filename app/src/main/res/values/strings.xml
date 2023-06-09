@@ -97,6 +97,8 @@
     <string name="select_payer">Select payer</string>
     <string name="order_number">Order #%s</string>
     <string name="select_restaurant">Select restaurant</string>
+    <string name="select_date">Select a date</string>
+    <string name="select_time">Select time</string>
 
 
 </resources>

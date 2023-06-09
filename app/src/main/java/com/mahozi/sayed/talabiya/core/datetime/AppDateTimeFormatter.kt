@@ -1,13 +1,12 @@
 package com.mahozi.sayed.talabiya.core.datetime
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.mahozi.sayed.talabiya.core.di.SingleIn
-import com.mahozi.sayed.talabiya.core.extensions.locale
 import com.mahozi.sayed.talabiya.core.main.MainScope
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
+import java.util.Locale
 import javax.inject.Inject
 
 val LocalDateTimeFormatter = staticCompositionLocalOf<AppDateTimeFormatter> {
@@ -16,25 +15,25 @@ val LocalDateTimeFormatter = staticCompositionLocalOf<AppDateTimeFormatter> {
 
 @SingleIn(MainScope::class)
 class AppDateTimeFormatter @Inject constructor(
-  private val context: AppCompatActivity
+  private val locale: Locale
 ) {
 
   private val zoneId = ZoneId.systemDefault()
 
   private val shortDateTimeFormatter: DateTimeFormatter =
-    DateTimeFormatter.ofPattern(" yyyy/MM/dd - hh:mm a", context.locale)
+    DateTimeFormatter.ofPattern(" yyyy/MM/dd - hh:mm a", locale)
       .withZone(zoneId)
 
   private val shortDateFormatter: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("yyyy/MM/dd", context.locale)
+    DateTimeFormatter.ofPattern("yyyy/MM/dd", locale)
       .withZone(zoneId)
 
   private val shortDateWithDayFormatter: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("EEEE yyyy/MM/dd", context.locale)
+    DateTimeFormatter.ofPattern("EEEE yyyy/MM/dd", locale)
       .withZone(zoneId)
 
   private val timeFormatter: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("hh:mm a", context.locale)
+    DateTimeFormatter.ofPattern("hh:mm a", locale)
       .withZone(zoneId)
 
   /**

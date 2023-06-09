@@ -1,7 +1,10 @@
 package com.mahozi.sayed.talabiya.order.create
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
@@ -21,23 +24,49 @@ import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import kotlinx.parcelize.Parcelize
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
+import com.mahozi.sayed.talabiya.core.Preview
+import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
+import com.mahozi.sayed.talabiya.core.ui.components.IconText
+import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import restaurant.RestaurantEntity
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Parcelize
 object CreateOrderScreen : Screen
 
+@Preview
 @Composable
-fun CreateOrderUi(state: CreateOrderState, onEvent: (CreateOrderEvent) -> Unit) {
+fun PreviewCreateOrderUi() {
+  Preview{
+    CreateOrderUi(
+      state = CreateOrderState(
+        RestaurantEntity(1, "Name"),
+        listOf(),
+        LocalDate.now(),
+        LocalTime.now()
+      ),
+      onEvent = {}
+    )
+  }
+}
+@Composable
+fun CreateOrderUi(
+  state: CreateOrderState,
+  onEvent: (CreateOrderEvent) -> Unit,
+  modifier: Modifier = Modifier,
+) {
   Scaffold(
     topBar = {
       TalabiyaBar(title = R.string.app_name)
     }) { paddingValues ->
     Column(
-      modifier = Modifier
+      modifier = modifier
         .padding(paddingValues)
         .padding(16.dp)
     )
@@ -47,11 +76,37 @@ fun CreateOrderUi(state: CreateOrderState, onEvent: (CreateOrderEvent) -> Unit) 
         restaurants = state.restaurants,
         onRestaurantSelected = { onEvent(CreateOrderEvent.RestaurantSelected(it)) }
       )
+
+      Spacer(modifier = Modifier.height(16.dp))
+
+      val formatter = LocalDateTimeFormatter.current
+      IconText(
+        text = formatter.formatShortDateWithDay(state.date),
+        painter = painterResource(R.drawable.ic_date),
+        contentDescription = stringResource(R.string.select_date),
+        modifier = Modifier
+          .clickable {  }
+          .padding(vertical = 8.dp)
+          .fillMaxWidth()
+      )
+
+      Spacer(modifier = Modifier.height(16.dp))
+
+      IconText(
+        text = formatter.formatTime(state.time),
+        painter = painterResource(R.drawable.ic_time),
+        contentDescription = stringResource(R.string.select_time),
+        modifier = Modifier
+          .clickable {  }
+          .padding(vertical = 8.dp)
+          .fillMaxWidth()
+
+      )
     }
   }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PreviewRestaurants() {
   Restaurants(
@@ -77,7 +132,6 @@ private fun Restaurants(
   ExposedDropdownMenuBox(
     expanded = expanded,
     onExpandedChange = { expanded = !expanded },
-
     ) {
     TextField(
       value = selectedRestaurant?.name ?: "",
@@ -87,7 +141,9 @@ private fun Restaurants(
       trailingIcon = {
         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
       },
-      colors = ExposedDropdownMenuDefaults.textFieldColors(),
+      colors = ExposedDropdownMenuDefaults.textFieldColors(
+        backgroundColor = AppTheme.colors.backgroundSecondary
+      ),
       modifier = Modifier
         .fillMaxWidth()
     )
