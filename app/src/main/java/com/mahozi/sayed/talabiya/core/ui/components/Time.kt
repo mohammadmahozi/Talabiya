@@ -1,11 +1,11 @@
 package com.mahozi.sayed.talabiya.core.ui.components
 
 import android.view.ContextThemeWrapper
-import android.widget.CalendarView
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +15,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,36 +28,45 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
-import java.time.LocalDate
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import java.time.LocalTime
+import android.widget.TimePicker as TimePickerView
 
-@Composable fun DateField(
-  selectedDate: LocalDate,
-  onDateSelected: (LocalDate) -> Unit,
+@Preview(showBackground = true)
+@Composable
+private fun PreviewTimeField() {
+  Preview {
+    TimeField(selectedTime = LocalTime.now(), onTimeSelected = {})
+  }
+}
+@Composable
+fun TimeField(
+  selectedTime: LocalTime,
+  onTimeSelected: (LocalTime) -> Unit,
   modifier: Modifier = Modifier,
+  padding: PaddingValues = PaddingValues()
 ) {
-
   val formatter = LocalDateTimeFormatter.current
 
   var showDialog by remember { mutableStateOf(false) }
 
   IconText(
-    text = formatter.formatShortDateWithDay(selectedDate),
-    painter = painterResource(R.drawable.ic_date),
+    text = formatter.formatTime(selectedTime),
+    painter = painterResource(R.drawable.ic_time),
     contentDescription = stringResource(R.string.select_date),
-    modifier = Modifier
+    modifier = modifier
       .clickable { showDialog = true }
-      .padding(vertical = 8.dp)
+      .padding(padding)
       .fillMaxWidth()
   )
 
   if (showDialog) {
-    DatePickerDialog(
-      onConfirm = onDateSelected,
+    TimePickerDialog(
+      selectedTime,
+      onConfirm = onTimeSelected,
       onDismiss = { showDialog = false }
     )
   }
@@ -63,37 +74,40 @@ import androidx.compose.runtime.setValue
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewDatePickerDialog() {
-  AppTheme {
-    DatePickerDialog({}, {})
-  }
+private fun PreviewTimePicker() {
+  TimePickerDialog(
+    selectedTime = LocalTime.now(),
+    onConfirm = {},
+    onDismiss = {}
+  )
 }
-
 @Composable
-fun DatePickerDialog(
-  onConfirm: (LocalDate) -> Unit,
+fun TimePickerDialog(
+  selectedTime: LocalTime,
+  onConfirm: (LocalTime) -> Unit,
   onDismiss: () -> Unit,
   modifier: Modifier = Modifier
 ) {
-  var date = LocalDate.now()
+
+  var time = selectedTime
 
   Dialog(onDismissRequest = { onDismiss() }) {
     Column(
       modifier = modifier
         .background(
           AppTheme.colors.material.background,
-          shape = RoundedCornerShape(5.dp)
+          shape = AppTheme.shapes.small
         )
     ) {
-      Calendar(date) {
-        date = it
+      TimePicker(time) {
+        time = it
       }
 
       Row(
         modifier = Modifier.align(Alignment.End)
       ) {
         DialogTextButton(text = R.string.confirm) {
-          onConfirm(date)
+          onConfirm(time)
         }
         Spacer(modifier = Modifier.width(16.dp))
         DialogTextButton(text = R.string.cancel, onClick = onDismiss)
@@ -119,29 +133,22 @@ private fun DialogTextButton(
   }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun PreviewCalendar() {
-  Calendar(LocalDate.now()) {}
-}
-
-@Composable
-fun Calendar(
-  selectedDate: LocalDate,
-  onDateSelected: (LocalDate)  -> Unit
+private fun TimePicker(
+  selectedTime: LocalTime,
+  onTimeSelected: (LocalTime) -> Unit,
 ) {
   AndroidView(
     factory = { context ->
-      CalendarView(ContextThemeWrapper(context, R.style.CalenderView)).apply {
-        date = selectedDate.toEpochDay()
+      TimePickerView(ContextThemeWrapper(context, R.style.TimePickerView)).apply {
+        setOnTimeChangedListener { _, hourOfDay, minute ->
+          onTimeSelected(LocalTime.of(hourOfDay, minute))
+        }
       }
     },
-    update = { view ->
-      view.date = selectedDate.toEpochDay()
-      view.setOnDateChangeListener { _, year, month, dayOfMonth ->
-        val date = LocalDate.of(year, month + 1, dayOfMonth)
-        onDateSelected(date)
-      }
+    update = {
+      it.hour = selectedTime.hour
+      it.minute = selectedTime.minute
     }
   )
 }

@@ -1,7 +1,8 @@
 package com.mahozi.sayed.talabiya.order.create
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,25 +16,23 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import com.mahozi.sayed.talabiya.R
-import com.mahozi.sayed.talabiya.core.navigation.Screen
-import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
-import kotlinx.parcelize.Parcelize
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
+import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.Preview
-import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
+import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.DateField
-import com.mahozi.sayed.talabiya.core.ui.components.IconText
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.components.TimeField
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
+import kotlinx.parcelize.Parcelize
 import restaurant.RestaurantEntity
 import java.time.LocalDate
 import java.time.LocalTime
@@ -44,7 +43,7 @@ object CreateOrderScreen : Screen
 @Preview
 @Composable
 fun PreviewCreateOrderUi() {
-  Preview{
+  Preview {
     CreateOrderUi(
       state = CreateOrderState(
         RestaurantEntity(1, "Name"),
@@ -56,6 +55,7 @@ fun PreviewCreateOrderUi() {
     )
   }
 }
+
 @Composable
 fun CreateOrderUi(
   state: CreateOrderState,
@@ -80,23 +80,28 @@ fun CreateOrderUi(
 
       Spacer(modifier = Modifier.height(16.dp))
 
-      val formatter = LocalDateTimeFormatter.current
-
       DateField(
         selectedDate = state.date,
-        onDateSelected = { onEvent(CreateOrderEvent.DateSelected(it)) }
+        onDateSelected = { onEvent(CreateOrderEvent.DateSelected(it)) },
+        padding = PaddingValues(horizontal = 8.dp, vertical = 16.dp),
+        modifier = Modifier
+          .background(
+            color = AppTheme.colors.backgroundSecondary,
+            shape = AppTheme.shapes.small
+          )
       )
 
-      Spacer(modifier = Modifier.height(16.dp))
+      Spacer(modifier = Modifier.height(8.dp))
 
-      IconText(
-        text = formatter.formatTime(state.time),
-        painter = painterResource(R.drawable.ic_time),
-        contentDescription = stringResource(R.string.select_time),
+      TimeField(
+        selectedTime = state.time,
+        onTimeSelected = { onEvent(CreateOrderEvent.TimeSelected(it)) },
+        padding = PaddingValues(horizontal = 8.dp, vertical = 16.dp),
         modifier = Modifier
-          .clickable { }
-          .padding(vertical = 8.dp)
-          .fillMaxWidth()
+          .background(
+            color = AppTheme.colors.backgroundSecondary,
+            shape = AppTheme.shapes.small
+          )
       )
     }
   }
@@ -128,7 +133,7 @@ private fun Restaurants(
   ExposedDropdownMenuBox(
     expanded = expanded,
     onExpandedChange = { expanded = !expanded },
-    ) {
+  ) {
     TextField(
       value = selectedRestaurant?.name ?: "",
       onValueChange = { },
@@ -138,7 +143,7 @@ private fun Restaurants(
         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
       },
       colors = ExposedDropdownMenuDefaults.textFieldColors(
-        backgroundColor = AppTheme.colors.backgroundSecondary
+        backgroundColor = AppTheme.colors.backgroundSecondary,
       ),
       modifier = Modifier
         .fillMaxWidth()

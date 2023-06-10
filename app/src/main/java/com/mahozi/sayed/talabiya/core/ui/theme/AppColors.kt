@@ -22,7 +22,7 @@ val lightColors = AppColors(
   ),
   primaryText = Color.Black,
   secondaryText = Color(0xFF959595),
-  backgroundSecondary = Color(0xFFF1F1F1),
+  backgroundSecondary = Color(0xFFF7F7F7),
   lightBorder = Color(0xFFE4E4E4),
 )
 
