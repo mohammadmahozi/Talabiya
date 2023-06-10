@@ -8,4 +8,5 @@ sealed interface CreateOrderEvent {
   data class RestaurantSelected(val restaurant: RestaurantEntity): CreateOrderEvent
   data class DateSelected(val date: LocalDate): CreateOrderEvent
   data class TimeSelected(val time: LocalTime): CreateOrderEvent
+  object CreateOrder : CreateOrderEvent
 }

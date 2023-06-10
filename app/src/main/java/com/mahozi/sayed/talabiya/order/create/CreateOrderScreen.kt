@@ -28,6 +28,7 @@ import androidx.compose.ui.window.PopupProperties
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.navigation.Screen
+import com.mahozi.sayed.talabiya.core.ui.components.ConfirmFab
 import com.mahozi.sayed.talabiya.core.ui.components.DateField
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.components.TimeField
@@ -65,7 +66,13 @@ fun CreateOrderUi(
   Scaffold(
     topBar = {
       TalabiyaBar(title = R.string.app_name)
-    }) { paddingValues ->
+    },
+    floatingActionButton = {
+      ConfirmFab {
+        onEvent(CreateOrderEvent.CreateOrder)
+      }
+    }
+  ) { paddingValues ->
     Column(
       modifier = modifier
         .padding(paddingValues)
