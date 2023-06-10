@@ -36,7 +36,7 @@ public class OrderViewModel extends AndroidViewModel {
     public OrderViewModel(@NonNull Application application) {
         super(application);
 
-        mOrderStore = new OrderStore(TalabiyaDatabase.getDatabase(application).orderDao());
+        //mOrderStore = new OrderStore(TalabiyaDatabase.getDatabase(application).orderDao());
 
 
         mRestaurantRepository = RestaurantRepository.getInstance();

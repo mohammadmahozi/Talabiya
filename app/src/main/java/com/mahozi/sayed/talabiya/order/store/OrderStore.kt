@@ -2,12 +2,38 @@ package com.mahozi.sayed.talabiya.order.store
 
 import androidx.lifecycle.LiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
+import order.OrderQueries
+import restaurant.RestaurantEntity
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class OrderStore @Inject constructor(
-    private val orderDao: OrderDao
+    private val orderDao: OrderDao,
+    private val orderQueries: OrderQueries,
+    private val dispatcher: CoroutineDispatcher,
 ) {
+    suspend fun createOrder(
+        restaurantId: Long,
+        date: LocalDate,
+        time: LocalTime,
+    ) {
+        val instant = LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant()
+        withContext(dispatcher) {
+            orderQueries.insert(
+                restaurantId = restaurantId,
+                createdAt = instant
+            )
+        }
+    }
+
     fun insert(orderEntity: OrderEntity) {
         orderDao.insertOrder(orderEntity)
     }

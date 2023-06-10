@@ -33,7 +33,7 @@ public class PersonViewModel extends AndroidViewModel {
         mPersonRepository.init(application);
 
 
-        mOrderStore = new OrderStore(TalabiyaDatabase.getDatabase(application).orderDao());
+        //mOrderStore = new OrderStore(TalabiyaDatabase.getDatabase(application).orderDao());
 
 
         mAllPersonEntities = mPersonRepository.selectAllPeople();

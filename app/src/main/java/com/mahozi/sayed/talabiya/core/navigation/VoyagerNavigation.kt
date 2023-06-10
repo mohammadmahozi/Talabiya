@@ -48,7 +48,11 @@ private class DelegatingNavigator(var voyagerNavigator: VoyagerNavigator) : Navi
   }
 
   override fun back(screen: Screen?) {
-    voyagerNavigator.pop()
+    if (screen != null) {
+      voyagerNavigator.popUntil { it == screen }
+    } else {
+      voyagerNavigator.pop()
+    }
   }
 }
 

@@ -1,7 +1,9 @@
+import java.time.Instant;
+
 CREATE TABLE OrderEntity(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     restaurantId INTEGER NOT NULL,
-    createdAt INTEGER NOT NULL,
+    createdAt INTEGER AS Instant NOT NULL,
     payerId INTEGER,
     attachment TEXT,
     note TEXT NOT NULL DEFAULT "",
@@ -50,5 +52,5 @@ CREATE TABLE RepaymentOrder(
 
 insert:
 INSERT INTO OrderEntity(restaurantId, createdAt)
-VALUES ?;
+VALUES (?, ?);
 
