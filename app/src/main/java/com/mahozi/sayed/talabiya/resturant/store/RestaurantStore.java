@@ -8,23 +8,23 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 
-public class RestaurantRepository {
+public class RestaurantStore {
 
-    private static volatile RestaurantRepository mRestaurantRepository;
+    private static volatile RestaurantStore mRestaurantRepository;
 
     private RestaurantDao mRestaurantDao;
 
 
-    private RestaurantRepository(){
+    private RestaurantStore(){
 
 
 
     }
 
-    public static RestaurantRepository getInstance(){
+    public static RestaurantStore getInstance(){
 
         if(mRestaurantRepository == null)
-            mRestaurantRepository = new RestaurantRepository();
+            mRestaurantRepository = new RestaurantStore();
 
         return mRestaurantRepository;
     }

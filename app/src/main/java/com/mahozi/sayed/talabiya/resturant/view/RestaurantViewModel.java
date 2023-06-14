@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.mahozi.sayed.talabiya.resturant.store.MenuItemEntity;
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantEntity;
-import com.mahozi.sayed.talabiya.resturant.store.RestaurantRepository;
+import com.mahozi.sayed.talabiya.resturant.store.RestaurantStore;
 
 import java.util.List;
 
@@ -23,12 +23,12 @@ public class RestaurantViewModel extends AndroidViewModel {
 
     private MenuItemEntity currentMenuItemEntity;
 
-    private RestaurantRepository mRestaurantRepository;
+    private RestaurantStore mRestaurantRepository;
 
     public RestaurantViewModel(Application application){
         super(application);
 
-        mRestaurantRepository = RestaurantRepository.getInstance();
+        mRestaurantRepository = RestaurantStore.getInstance();
         mRestaurantRepository.init(application);
 
         mAllRestaurantEntities = mRestaurantRepository.selectAllRestaurants();
