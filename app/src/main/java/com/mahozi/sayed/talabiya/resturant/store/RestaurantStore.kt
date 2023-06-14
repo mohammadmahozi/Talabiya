@@ -1,77 +1,61 @@
-package com.mahozi.sayed.talabiya.resturant.store;
+package com.mahozi.sayed.talabiya.resturant.store
 
-import android.app.Application;
+import android.app.Application
+import androidx.lifecycle.LiveData
+import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase.Companion.getDatabase
 
-import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase;
+class RestaurantStore private constructor() {
+  private var mRestaurantDao: RestaurantDao? = null
 
-import java.util.List;
+  fun init(application: Application?) {
+    val talabiyaDatabase = getDatabase(application!!)
+    mRestaurantDao = talabiyaDatabase.restaurantDao()
+  }
 
-import androidx.lifecycle.LiveData;
+  fun insertRestaurant(restaurantEntity: RestaurantEntity?) {
+    mRestaurantDao!!.insert(restaurantEntity)
+  }
 
-public class RestaurantStore {
+  fun selectAllRestaurants(): LiveData<List<RestaurantEntity>> {
+    return mRestaurantDao!!.selectAllRestaurants()
+  }
 
-    private static volatile RestaurantStore mRestaurantRepository;
+  fun insertFood(menuItemEntity: MenuItemEntity?) {
+    mRestaurantDao!!.insert(menuItemEntity)
+  }
 
-    private RestaurantDao mRestaurantDao;
+  fun selectAllMenuItems(restaurantName: String?): LiveData<List<MenuItemEntity>> {
+    return mRestaurantDao!!.selectAllMenuItems(restaurantName)
+  }
 
+  fun selectRestaurantsNames(): List<String> {
+    return mRestaurantDao!!.selectRestaurantsNames()
+  }
 
-    private RestaurantStore(){
+  fun deleteRestaurant(restaurantEntity: RestaurantEntity?) {
+    mRestaurantDao!!.deleteRestaurant(restaurantEntity)
+  }
 
+  fun deleteMenuItem(menuItemEntity: MenuItemEntity?) {
+    mRestaurantDao!!.deleteMenuItem(menuItemEntity)
+  }
 
+  fun updateRestaurant(restaurantEntity: RestaurantEntity?) {
+    mRestaurantDao!!.updateRestaurant(restaurantEntity)
+  }
 
-    }
+  fun updateMenuItem(menuItemEntity: MenuItemEntity?) {
+    mRestaurantDao!!.updateMenuItem(menuItemEntity)
+  }
 
-    public static RestaurantStore getInstance(){
-
-        if(mRestaurantRepository == null)
-            mRestaurantRepository = new RestaurantStore();
-
-        return mRestaurantRepository;
-    }
-
-    public void init(Application application){
-        TalabiyaDatabase talabiyaDatabase = TalabiyaDatabase.getDatabase(application);
-        mRestaurantDao = talabiyaDatabase.restaurantDao();
-
-    }
-
-    public void insertRestaurant(RestaurantEntity restaurantEntity){
-        mRestaurantDao.insert(restaurantEntity);
-    }
-
-    public LiveData<List<RestaurantEntity>> selectAllRestaurants(){
-        return mRestaurantDao.selectAllRestaurants();
-    }
-
-    public void insertFood(MenuItemEntity menuItemEntity){
-        mRestaurantDao.insert(menuItemEntity);
-    }
-
-    public LiveData<List<MenuItemEntity>> selectAllMenuItems(String restaurantName){
-
-        return mRestaurantDao.selectAllMenuItems(restaurantName);
-
-    }
-
-    public List<String> selectRestaurantsNames(){
-        return mRestaurantDao.selectRestaurantsNames();
-    }
-
-
-    public void deleteRestaurant(RestaurantEntity restaurantEntity){
-        mRestaurantDao.deleteRestaurant(restaurantEntity);
-    }
-
-    public void deleteMenuItem(MenuItemEntity menuItemEntity){
-        mRestaurantDao.deleteMenuItem(menuItemEntity);
-    }
-
-    public void updateRestaurant(RestaurantEntity restaurantEntity){
-        mRestaurantDao.updateRestaurant(restaurantEntity);
-    }
-
-    public void updateMenuItem(MenuItemEntity menuItemEntity){
-        mRestaurantDao.updateMenuItem(menuItemEntity);
-    }
-
+  companion object {
+    @Volatile
+    private var mRestaurantRepository: RestaurantStore? = null
+    @JvmStatic
+    val instance: RestaurantStore?
+      get() {
+        if (mRestaurantRepository == null) mRestaurantRepository = RestaurantStore()
+        return mRestaurantRepository
+      }
+  }
 }
