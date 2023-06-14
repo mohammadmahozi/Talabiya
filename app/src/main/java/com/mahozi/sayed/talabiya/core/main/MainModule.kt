@@ -7,6 +7,7 @@ import com.mahozi.sayed.talabiya.core.extensions.locale
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import java.util.Locale
 import javax.inject.Singleton
 
 
@@ -15,6 +16,6 @@ import javax.inject.Singleton
 object MainModule {
 
     @Provides
-    fun provideDatabase(context: Context) = context.locale
+    fun provideDatabase(context: Context): Locale = context.locale
 
 }
