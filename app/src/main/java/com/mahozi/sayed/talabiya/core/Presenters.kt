@@ -7,6 +7,8 @@ import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsPresenter
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsScreen
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersPresenter
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
+import com.mahozi.sayed.talabiya.resturant.list.RestaurantsEvent
+import com.mahozi.sayed.talabiya.resturant.list.RestaurantsPresenter
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -14,7 +16,8 @@ import javax.inject.Provider
 class Presenters @Inject constructor(
   private val ordersPresenter: Provider<OrdersPresenter>,
   private val ordersDetailsPresenter: OrderDetailsPresenter.OrderDetailsPresenterAssistedFactory,
-  private val createOrderPresenter: Provider<CreateOrderPresenter>
+  private val createOrderPresenter: Provider<CreateOrderPresenter>,
+  private val restaurantsPresenter: Provider<RestaurantsPresenter>,
 ) {
 
   fun create(screen: Screen): Presenter<*, *> {
@@ -22,6 +25,7 @@ class Presenters @Inject constructor(
       is OrdersScreen -> ordersPresenter.get()
       is OrderDetailsScreen -> ordersDetailsPresenter.create(screen.orderId)
       is CreateOrderScreen -> createOrderPresenter.get()
+      is RestaurantsEvent -> restaurantsPresenter.get()
       else -> throw IllegalStateException("Unknown screen $screen")
     }
   }

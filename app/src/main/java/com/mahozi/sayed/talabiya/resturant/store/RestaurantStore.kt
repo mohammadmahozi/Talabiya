@@ -3,8 +3,11 @@ package com.mahozi.sayed.talabiya.resturant.store
 import android.app.Application
 import androidx.lifecycle.LiveData
 import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase.Companion.getDatabase
+import javax.inject.Inject
 
-class RestaurantStore private constructor() {
+class RestaurantStore @Inject constructor(
+
+) {
   private var mRestaurantDao: RestaurantDao? = null
 
   fun init(application: Application?) {
