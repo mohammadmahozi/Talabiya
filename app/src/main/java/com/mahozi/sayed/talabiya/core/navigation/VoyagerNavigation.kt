@@ -2,7 +2,16 @@ package com.mahozi.sayed.talabiya.core.navigation
 
 import android.content.Context
 import android.os.Parcelable
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.launchMolecule
@@ -13,14 +22,21 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.mahozi.sayed.talabiya.core.Uis
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.TalabiyaApp
 import com.mahozi.sayed.talabiya.core.Ui
+import com.mahozi.sayed.talabiya.core.Uis
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.extensions.getActivity
-import kotlinx.coroutines.*
+import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
+import com.mahozi.sayed.talabiya.resturant.list.RestaurantsScreen
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.plus
 import kotlinx.parcelize.Parcelize
 import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 import cafe.adriel.voyager.navigator.Navigator as VoyagerNavigator
@@ -54,6 +70,10 @@ private class DelegatingNavigator(var voyagerNavigator: VoyagerNavigator) : Navi
       voyagerNavigator.pop()
     }
   }
+
+  override fun replaceAll(screen: Screen) {
+    voyagerNavigator.replaceAll(screen.toVoyagerScreen())
+  }
 }
 
 @Parcelize
@@ -83,7 +103,21 @@ private data class DelegatingVoyagerScreen(
     val ui = Uis(screen = screen) as Ui<Any?, Any?>
 
     CompositionLocalProvider(LocalDateTimeFormatter provides mainGraph.formatter()) {
-      ui.Content(state = state, onEvent = { screenModel.events.tryEmit(it) })
+      Scaffold(
+        drawerContent = {
+          Drawer(
+            onOrdersClicked = { navigator.replaceAll(OrdersScreen) },
+            onRestaurantsClicked = { navigator.replaceAll(RestaurantsScreen) }
+          )
+        },
+      ) { paddingValues ->
+        Box(
+          modifier = Modifier
+            .padding(paddingValues)
+        ) {
+          ui.Content(state = state, onEvent = { screenModel.events.tryEmit(it) })
+        }
+      }
     }
   }
 
@@ -96,16 +130,21 @@ private data class DelegatingVoyagerScreen(
  */
 private class MoleculeScreenModel<Event, State>(
   presenter: Presenter<Event, State>,
-): ScreenModel {
+) : ScreenModel {
   val events = MutableSharedFlow<Event>(extraBufferCapacity = 1)
-  val states = moleculeScope.launchMolecule(RecompositionClock.Immediate) { presenter.start(events) }
+  val states =
+    moleculeScope.launchMolecule(RecompositionClock.Immediate) { presenter.start(events) }
 }
 
 private val ScreenModel.moleculeScope: CoroutineScope
   get() = ScreenModelStore.getOrPutDependency(
     screenModel = this,
     name = "ScreenModelMoleculeScope",
-    factory = { key -> CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate) + CoroutineName(key) },
+    factory = { key ->
+      CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate) + CoroutineName(
+        key
+      )
+    },
     onDispose = { scope -> scope.cancel() }
   )
 
