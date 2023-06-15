@@ -4,8 +4,8 @@ CREATE TABLE RestaurantEntity(
 );
 
 insert:
-INSERT INTO RestaurantEntity(id, name)
-VALUES (?, ?);
+INSERT INTO RestaurantEntity(name)
+VALUES (?);
 
 selectAll:
 SELECT id, name FROM RestaurantEntity ORDER BY name;

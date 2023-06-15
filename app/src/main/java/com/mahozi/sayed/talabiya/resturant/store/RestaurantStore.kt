@@ -2,13 +2,31 @@ package com.mahozi.sayed.talabiya.resturant.store
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase.Companion.getDatabase
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
+import restaurant.RestaurantQueries
 import javax.inject.Inject
 
 class RestaurantStore @Inject constructor(
-
+  private val restaurantQueries: RestaurantQueries,
+  private val dispatcher: CoroutineDispatcher,
 ) {
   private var mRestaurantDao: RestaurantDao? = null
+
+  val restaurants: Flow<List<restaurant.RestaurantEntity>> = restaurantQueries
+    .selectAll()
+    .asFlow()
+    .mapToList(dispatcher)
+
+  suspend fun createRestaurant(name: String) {
+    withContext(dispatcher) {
+      restaurantQueries.insert(name)
+    }
+  }
 
   fun init(application: Application?) {
     val talabiyaDatabase = getDatabase(application!!)
@@ -57,8 +75,7 @@ class RestaurantStore @Inject constructor(
     @JvmStatic
     val instance: RestaurantStore?
       get() {
-        if (mRestaurantRepository == null) mRestaurantRepository = RestaurantStore()
-        return mRestaurantRepository
+        return null
       }
   }
 }

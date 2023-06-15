@@ -109,6 +109,7 @@ dependencies {
     lintChecks("com.slack.lint.compose:compose-lint-checks:1.2.0")
 
     implementation "app.cash.sqldelight:android-driver:2.0.0-alpha05"
+    implementation "app.cash.sqldelight:coroutines-extensions:2.0.0-alpha05"
 }
 
 
