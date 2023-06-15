@@ -100,6 +100,7 @@
     <string name="select_date">Select a date</string>
     <string name="select_time">Select time</string>
     <string name="restaurants">Restaurants</string>
+    <string name="create_restaurant">Create restaurant</string>
 
 
 </resources>

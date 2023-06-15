@@ -15,6 +15,9 @@ import com.mahozi.sayed.talabiya.order.list.ui.OrdersEvent
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersState
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersUi
+import com.mahozi.sayed.talabiya.resturant.create.CreateRestaurantEvent
+import com.mahozi.sayed.talabiya.resturant.create.CreateRestaurantScreen
+import com.mahozi.sayed.talabiya.resturant.create.CreateRestaurantState
 import com.mahozi.sayed.talabiya.resturant.list.RestaurantsEvent
 import com.mahozi.sayed.talabiya.resturant.list.RestaurantsScreen
 import com.mahozi.sayed.talabiya.resturant.list.RestaurantsState
@@ -41,6 +44,9 @@ fun Uis(
       RestaurantsScreen(state, onEvent)
     }
 
+    is CreateRestaurantScreen -> ui<CreateRestaurantState, CreateRestaurantEvent> { state, onEvent ->
+      CreateRestaurantScreen(state, onEvent)
+    }
     else -> throw IllegalStateException("Unknown screen $screen")
   }
 }

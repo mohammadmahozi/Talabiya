@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
+import com.mahozi.sayed.talabiya.resturant.create.CreateRestaurantScreen
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantStore
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -16,13 +17,12 @@ class RestaurantsPresenter @Inject constructor(
   private val navigator: Navigator,
 ): Presenter<RestaurantsEvent, RestaurantsState> {
 
-
   @Composable override fun start(events: Flow<RestaurantsEvent>): RestaurantsState {
     val restaurants by remember { restaurantStore.restaurants }.collectAsState(initial = emptyList())
 
     CollectEvents(events) { event ->
       when(event) {
-        RestaurantsEvent.CreateRestaurantClicked -> {}
+        RestaurantsEvent.CreateRestaurantClicked -> navigator.goto(CreateRestaurantScreen)
         is RestaurantsEvent.DeleteRestaurantClicked -> {}
         is RestaurantsEvent.RestaurantClicked -> {}
       }
