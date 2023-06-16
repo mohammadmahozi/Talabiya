@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +27,17 @@ import restaurant.RestaurantEntity
 
 @Parcelize object RestaurantsScreen: Screen
 
+@Preview
+@Composable
+private fun PreviewRestaurantScreen() {
+  AppTheme {
+    RestaurantsScreen(
+      state = RestaurantsState(listOf(RestaurantEntity(0L, "Name"))),
+      onEvent = {}
+    )
+
+  }
+}
 @Composable fun RestaurantsScreen(
   state: RestaurantsState,
   onEvent: (RestaurantsEvent) -> Unit,
@@ -37,13 +49,17 @@ import restaurant.RestaurantEntity
     },
     floatingActionButton = { AddFab { onEvent(RestaurantsEvent.CreateRestaurantClicked) } }
   ) { paddingValues ->
-    Box(modifier = modifier.padding(paddingValues)) {
+    Box(
+      modifier = modifier
+        .padding(paddingValues)
+    ) {
       LazyColumn {
         items(state.restaurants) { restaurant ->
           Restaurant(
             restaurant = restaurant,
             onClick = { onEvent(RestaurantsEvent.RestaurantClicked(it)) }
           )
+          Divider()
         }
       }
     }
@@ -67,7 +83,7 @@ private fun PreviewRestaurant() {
   Row(
     modifier = Modifier
       .clickable { onClick(restaurant) }
-      .padding(vertical = 16.dp)
+      .padding(16.dp)
       .fillMaxWidth()
   ) {
     Text(
