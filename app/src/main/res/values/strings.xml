@@ -102,6 +102,7 @@
     <string name="restaurants">Restaurants</string>
     <string name="create_restaurant">Create restaurant</string>
     <string name="orders">Orders</string>
+    <string name="enter_restaurant_name">Enter restaurant name</string>
 
 
 </resources>
