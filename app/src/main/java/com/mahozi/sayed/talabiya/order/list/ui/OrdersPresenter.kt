@@ -12,14 +12,14 @@ import javax.inject.Inject
 
 
 class OrdersPresenter @Inject constructor(
-  private val ordersRepository: OrderStore,
+  private val orderStore: OrderStore,
   private val navigator: Navigator,
 ) : Presenter<OrdersEvent, OrdersState> {
 
 
   @Composable
   override fun start(events: Flow<OrdersEvent>): OrdersState {
-    val orders by remember { ordersRepository.selectAllOrders() }.collectAsState(initial = emptyList())
+    val orders by remember { orderStore.orders }.collectAsState(initial = emptyList())
 
     LaunchedEffect(Unit) {
       launch {

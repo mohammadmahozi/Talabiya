@@ -5,7 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,16 +14,18 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
-import com.mahozi.sayed.talabiya.order.store.OrderEntity
+import com.mahozi.sayed.talabiya.order.list.Order
 import kotlinx.parcelize.Parcelize
+import java.time.Instant
 
 
 @Parcelize
@@ -31,7 +33,11 @@ object OrdersScreen : Screen
 
 
 @Composable
-fun OrdersUi(state: OrdersState, onEvent: (OrdersEvent) -> Unit) {
+fun OrdersUi(
+  state: OrdersState,
+  onEvent: (OrdersEvent) -> Unit,
+  modifier: Modifier = Modifier
+) {
   Scaffold(
     topBar = {
       TalabiyaBar(title = R.string.app_name)
@@ -43,7 +49,7 @@ fun OrdersUi(state: OrdersState, onEvent: (OrdersEvent) -> Unit) {
     }, floatingActionButtonPosition = FabPosition.End
   ) {
     Box(
-      modifier = Modifier
+      modifier = modifier
         .padding(it)
         .padding(horizontal = 16.dp)
     ) {
@@ -55,7 +61,7 @@ fun OrdersUi(state: OrdersState, onEvent: (OrdersEvent) -> Unit) {
 }
 
 @Composable
-fun Orders(orders: List<OrderEntity>, onClick: (OrderEntity) -> Unit) {
+private fun Orders(orders: List<Order>, onClick: (Order) -> Unit) {
   LazyColumn {
     items(orders) {
       OrderRow(order = it, onClick)
@@ -63,40 +69,42 @@ fun Orders(orders: List<OrderEntity>, onClick: (OrderEntity) -> Unit) {
   }
 }
 
+@Preview
 @Composable
-fun PreviewOrderRow() {
-  OrderRow(order = OrderEntity("Tannoor", "200", "20").apply {
-    id = 0
-    status = false
-  }) {}
+private fun PreviewOrderRow() {
+  OrderRow(
+    order = Order(
+      1L,
+      "Tannoor",
+      Instant.now()
+    ),
+    onClick = {}
+  )
 }
 
 @Composable
-fun OrderRow(order: OrderEntity, onClick: (OrderEntity) -> Unit) {
-  Row(Modifier
-    .background(AppTheme.colors.backgroundSecondary)
-    .clickable { onClick(order) }
-    .padding(vertical = 8.dp)) {
+private fun OrderRow(order: Order, onClick: (Order) -> Unit) {
+  Row(
+    Modifier
+      .fillMaxWidth()
+      .background(AppTheme.colors.backgroundSecondary)
+      .clickable { onClick(order) }
+      .padding(vertical = 8.dp)) {
 
     Text(
       text = order.id.toString(), modifier = Modifier.padding(end = 48.dp)
     )
     Column {
       Text(
-        text = order.restaurantName, Modifier.padding(bottom = 4.dp)
+        text = order.restaurant, Modifier.padding(bottom = 4.dp)
       )
 
+      val formatter = LocalDateTimeFormatter.current
+
       Text(
-        text = order.date,
+        text = formatter.formatShortDateWithDay(order.createdAt),
         color = AppTheme.colors.secondaryText,
         fontSize = 12.sp,
-      )
-    }
-
-    Spacer(Modifier.weight(1f))
-    if (order.status) {
-      Text(
-        text = stringResource(R.string.complete),
       )
     }
   }

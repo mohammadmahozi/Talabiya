@@ -54,3 +54,7 @@ insert:
 INSERT INTO OrderEntity(restaurantId, createdAt)
 VALUES (?, ?);
 
+selectAll:
+SELECT OrderEntity.id, OrderEntity.createdAt, RestaurantEntity.name
+FROM OrderEntity
+JOIN RestaurantEntity ON OrderEntity.id = RestaurantEntity.id;

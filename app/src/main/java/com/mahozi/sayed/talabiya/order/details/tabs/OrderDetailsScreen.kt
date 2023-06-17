@@ -16,7 +16,7 @@ import com.mahozi.sayed.talabiya.order.details.info.OrderInfoScreen
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class OrderDetailsScreen(val orderId: Int) : Screen
+data class OrderDetailsScreen(val orderId: Long) : Screen
 
 @Composable
 fun OrderDetailsUi(state: OrderDetailsState, onEvent: (OrderDetailsEvent) -> Unit) {

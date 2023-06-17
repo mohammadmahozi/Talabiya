@@ -10,13 +10,13 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 
 class OrderDetailsPresenter @AssistedInject constructor(
-  @Assisted private val orderId: Int,
+  @Assisted private val orderId: Long,
   private val orderStore: OrderStore,
 ) : Presenter<OrderDetailsEvent, OrderDetailsState> {
 
   @Composable
   override fun start(events: Flow<OrderDetailsEvent>): OrderDetailsState {
-    val orderState by remember { orderStore.getOrder(orderId) }.collectAsState(initial = null)
+    val orderState by remember { orderStore.getOrder(orderId.toInt()) }.collectAsState(initial = null)
 
     var showDatePicker by remember { mutableStateOf(false) }
 
@@ -55,6 +55,6 @@ class OrderDetailsPresenter @AssistedInject constructor(
 
   @AssistedFactory
   interface OrderDetailsPresenterAssistedFactory {
-    fun create(orderId: Int): OrderDetailsPresenter
+    fun create(orderId: Long): OrderDetailsPresenter
   }
 }

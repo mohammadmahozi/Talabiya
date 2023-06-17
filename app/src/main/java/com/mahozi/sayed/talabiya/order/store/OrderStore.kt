@@ -2,17 +2,17 @@ package com.mahozi.sayed.talabiya.order.store
 
 import androidx.lifecycle.LiveData
 import androidx.sqlite.db.SimpleSQLiteQuery
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
+import com.mahozi.sayed.talabiya.order.list.Order
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import order.OrderQueries
-import restaurant.RestaurantEntity
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class OrderStore @Inject constructor(
@@ -20,6 +20,14 @@ class OrderStore @Inject constructor(
     private val orderQueries: OrderQueries,
     private val dispatcher: CoroutineDispatcher,
 ) {
+
+    val orders: Flow<List<Order>> = orderQueries
+        .selectAll(mapper = { id, createdAt, name ->
+            Order(id, name, createdAt)
+        })
+        .asFlow()
+        .mapToList(dispatcher)
+
     suspend fun createOrder(
         restaurantId: Long,
         date: LocalDate,
@@ -36,10 +44,6 @@ class OrderStore @Inject constructor(
 
     fun insert(orderEntity: OrderEntity) {
         orderDao.insertOrder(orderEntity)
-    }
-
-    fun selectAllOrders(): Flow<List<OrderEntity>> {
-        return orderDao.selectAllOrders()
     }
 
     fun getOrder(id: Int): Flow<OrderEntity> = orderDao.selectOrder(id)
