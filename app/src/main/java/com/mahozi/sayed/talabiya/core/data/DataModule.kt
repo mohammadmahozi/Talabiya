@@ -1,6 +1,7 @@
 package com.mahozi.sayed.talabiya.core.data
 
 import android.content.Context
+import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.mahozi.sayed.talabiya.core.di.AppScope
 import com.mahozi.talabiya.Database
@@ -24,7 +25,15 @@ object DataModule {
     @Singleton
     @Provides
     fun provideTalabiyaDatabase(context: Context): Database {
-        val driver = AndroidSqliteDriver(Database.Schema, context, "main")
+        val driver = AndroidSqliteDriver(
+            schema = Database.Schema,
+            context = context,
+            name = "main",
+            callback = object : AndroidSqliteDriver.Callback(Database.Schema) {
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    db.execSQL("PRAGMA foreign_keys=ON;");
+                }
+            })
         return Database(driver, OrderEntity.Adapter(TypeAdapters.instantAdapter))
     }
 
