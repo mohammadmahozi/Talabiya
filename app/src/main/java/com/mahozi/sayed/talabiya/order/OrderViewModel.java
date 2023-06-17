@@ -48,28 +48,12 @@ public class OrderViewModel extends AndroidViewModel {
         return currentOrderEntity;
     }
 
-    public void setCurrentOrderEntity(OrderEntity currentOrderEntity) {
-        this.currentOrderEntity = currentOrderEntity;
-    }
-
     public SubOrderEntity getCurrentSubOrder() {
         return currentSubOrderEntity;
     }
 
     public void setCurrentSubOrder(SubOrderEntity SubOrderEntity) {
         this.currentSubOrderEntity = SubOrderEntity;
-    }
-
-    public LiveData<List<OrderEntity>> getAllOrderEntities() {
-        return mAllOrderEntities;
-    }
-
-    public void insertOrder(OrderEntity orderEntity){
-        mOrderStore.insert(orderEntity);
-    }
-
-    public List<String> selectRestaurantsNames(){
-        return mRestaurantRepository.selectRestaurantsNames();
     }
 
     public void insertSubOrder(SubOrderEntity subOrderEntity){
@@ -84,22 +68,6 @@ public class OrderViewModel extends AndroidViewModel {
 
     public LiveData<List<SubOrderAndOrderItems>> getSubOrders() {
         return mSubOrders;
-    }
-
-    public void setOrderItems(int orderId) {
-        mOrderItems = mOrderStore.selectOrderItemsWithOrderIdAndPerson(orderId, "");
-    }
-
-    public LiveData<List<OrderItemEntity>> getOrderItems() {
-        return mOrderItems;
-    }
-
-    public void setCurrentRestaurantName(String currentRestaurantName) {
-        this.currentRestaurantName = currentRestaurantName;
-    }
-
-    public String getCurrentRestaurantName() {
-        return currentRestaurantName;
     }
 
     public long insertOrderItem(OrderItemEntity orderItemEntity){
@@ -133,10 +101,6 @@ public class OrderViewModel extends AndroidViewModel {
 
     public void deleteOrderItem(OrderItemEntity orderItemEntity){
         mOrderStore.deleteOrderItem(orderItemEntity);
-    }
-
-    public void deleteOrder(OrderEntity orderEntity){
-        mOrderStore.deleteOrder(orderEntity);
     }
 
     public void updateOrder(OrderEntity orderEntity){
