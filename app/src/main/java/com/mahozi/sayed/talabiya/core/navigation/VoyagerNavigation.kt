@@ -13,7 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import app.cash.molecule.RecompositionClock
+import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.ScreenModelStore
@@ -133,7 +133,7 @@ private class MoleculeScreenModel<Event, State>(
 ) : ScreenModel {
   val events = MutableSharedFlow<Event>(extraBufferCapacity = 1)
   val states =
-    moleculeScope.launchMolecule(RecompositionClock.Immediate) { presenter.start(events) }
+    moleculeScope.launchMolecule(RecompositionMode.Immediate) { presenter.start(events) }
 }
 
 private val ScreenModel.moleculeScope: CoroutineScope
