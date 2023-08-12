@@ -12,3 +12,17 @@ CREATE TABLE MenuItemPriceEntity(
     price INTEGER NOT NULL,
     FOREIGN KEY (menuItemId) REFERENCES MenuItemEntity(id)
 );
+
+insert:
+INSERT INTO MenuItemEntity(restaurantId, name)
+VALUES (?, ?);
+
+insertPrice:
+INSERT INTO MenuItemPriceEntity(menuItemId, datetime, price)
+VALUES (?, ?, ?);
+
+selectAll:
+SELECT MenuItemEntity.id, MenuItemEntity.name, MenuItemPriceEntity.price, max(MenuItemPriceEntity.datetime)
+FROM MenuItemEntity
+JOIN MenuItemPriceEntity ON MenuItemEntity.id = MenuItemPriceEntity.menuItemId
+GROUP BY MenuItemEntity.id;

@@ -111,6 +111,12 @@ dependencies {
     implementation("app.cash.sqldelight:android-driver:2.0.0")
     implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
     testImplementation("app.cash.sqldelight:sqlite-driver:2.0.0")
+    testImplementation('org.xerial:sqlite-jdbc:3.8.10.2') {
+        // Override the version of sqlite used by sqlite-driver to match Android API 23
+        version {
+            strictly("3.8.10.2")
+        }
+    }
 }
 
 
