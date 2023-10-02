@@ -8,6 +8,7 @@ import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.resturant.create.CreateRestaurantScreen
+import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsScreen
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantStore
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -24,7 +25,7 @@ class RestaurantsPresenter @Inject constructor(
       when(event) {
         RestaurantsEvent.CreateRestaurantClicked -> navigator.goto(CreateRestaurantScreen)
         is RestaurantsEvent.DeleteRestaurantClicked -> {}
-        is RestaurantsEvent.RestaurantClicked -> {}
+        is RestaurantsEvent.RestaurantClicked -> navigator.goto(MenuItemsScreen(event.restaurantEntity.id))
       }
     }
     return RestaurantsState(restaurants)

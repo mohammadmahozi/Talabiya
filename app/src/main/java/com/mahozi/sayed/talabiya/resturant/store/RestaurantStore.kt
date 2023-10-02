@@ -4,15 +4,21 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase.Companion.getDatabase
+import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import restaurant.MenuItemQueries
 import restaurant.RestaurantQueries
+import java.time.Instant
 import javax.inject.Inject
 
 class RestaurantStore @Inject constructor(
   private val restaurantQueries: RestaurantQueries,
+  private val menuItemQueries: MenuItemQueries,
   private val dispatcher: CoroutineDispatcher,
 ) {
   private var mRestaurantDao: RestaurantDao? = null
@@ -22,9 +28,44 @@ class RestaurantStore @Inject constructor(
     .asFlow()
     .mapToList(dispatcher)
 
+  fun menuItems(restaurantId: Long): Flow<List<MenuItem>> = menuItemQueries
+    .menuItemsEntity(
+      restaurantId = restaurantId,
+      mapper = { id, name, price, _, category ->
+        MenuItem(
+          id = id,
+          name = name,
+          category = category,
+          price = price.money
+        )
+      }
+    ).asFlow()
+    .mapToList(dispatcher)
+
   suspend fun createRestaurant(name: String) {
     withContext(dispatcher) {
       restaurantQueries.insert(name)
+    }
+  }
+
+  suspend fun createMenuItem(
+    restaurantId: Long,
+    name: String,
+    price: Money,
+    category: String
+  ) {
+    withContext(dispatcher) {
+      menuItemQueries.transaction {
+        menuItemQueries.insert(restaurantId, name, category)
+        val menuItemId = menuItemQueries.lastInsertRowId().executeAsOne()
+        menuItemQueries.insertPrice(menuItemId, Instant.now(), price.toLong())
+      }
+    }
+  }
+
+  suspend fun getCategories(): List<String> {
+    return withContext(dispatcher) {
+      menuItemQueries.selectAllCategories().executeAsList()
     }
   }
 

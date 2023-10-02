@@ -98,6 +98,9 @@
     <string name="select_date">Select a date</string>
     <string name="select_time">Select time</string>
     <string name="restaurants">Restaurants</string>
+    <string name="add_new_item">Add new item</string>
+    <string name="name">Name</string>
+    <string name="price">Price</string>
 
 
 </resources>

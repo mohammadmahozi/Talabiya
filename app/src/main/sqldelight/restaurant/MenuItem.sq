@@ -1,28 +1,58 @@
+import java.time.Instant;
+
 CREATE TABLE MenuItemEntity(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     restaurantId INTEGER NOT NULL,
     name TEXT NOT NULL UNIQUE,
-    FOREIGN KEY (restaurantId) REFERENCES RestaurantEntity(id)
+    category TEXT NOT NULL,
+    FOREIGN KEY (restaurantId) REFERENCES RestaurantEntity(id),
+    FOREIGN KEY (category) REFERENCES CategoryEntity(name)
 );
 
 CREATE TABLE MenuItemPriceEntity(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     menuItemId INTEGER NOT NULL,
-    datetime INTEGER NOT NULL,
+    datetime INTEGER AS Instant NOT NULL,
     price INTEGER NOT NULL,
     FOREIGN KEY (menuItemId) REFERENCES MenuItemEntity(id)
 );
 
+CREATE TABLE CategoryEntity(
+    name TEXT PRIMARY KEY NOT NULL,
+    number INTEGER NOT NULL UNIQUE
+);
+
+INSERT INTO CategoryEntity(name, number)
+VALUES
+    ("Pastery", 0),
+    ("Grills", 1),
+    ("Sandwich", 2),
+    ("Fries", 3),
+    ("Burger", 4),
+    ("Appetizer", 5),
+    ("Drink", 6);
+
 insert:
-INSERT INTO MenuItemEntity(restaurantId, name)
-VALUES (?, ?);
+INSERT INTO MenuItemEntity(restaurantId, name, category)
+VALUES (?, ?, ?);
 
 insertPrice:
 INSERT INTO MenuItemPriceEntity(menuItemId, datetime, price)
 VALUES (?, ?, ?);
 
-selectAll:
-SELECT MenuItemEntity.id, MenuItemEntity.name, MenuItemPriceEntity.price, max(MenuItemPriceEntity.datetime)
+menuItemsEntity:
+SELECT MenuItemEntity.id, MenuItemEntity.name, MenuItemPriceEntity.price, max(MenuItemPriceEntity.datetime),
+CategoryEntity.name
 FROM MenuItemEntity
 JOIN MenuItemPriceEntity ON MenuItemEntity.id = MenuItemPriceEntity.menuItemId
+JOIN CategoryEntity ON MenuItemEntity.category = CategoryEntity.name
+WHERE MenuItemEntity.restaurantId = ?
 GROUP BY MenuItemEntity.id;
+
+selectAllCategories:
+SELECT name
+FROM CategoryEntity
+ORDER BY number;
+
+lastInsertRowId:
+SELECT last_insert_rowid();

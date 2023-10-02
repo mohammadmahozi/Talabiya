@@ -10,6 +10,7 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 import order.OrderEntity
+import restaurant.MenuItemPriceEntity
 import javax.inject.Singleton
 
 
@@ -34,7 +35,11 @@ object DataModule {
                     db.execSQL("PRAGMA foreign_keys=ON;");
                 }
             })
-        return Database(driver, OrderEntity.Adapter(TypeAdapters.instantAdapter))
+        return Database(
+            driver,
+            MenuItemPriceEntity.Adapter(TypeAdapters.instantAdapter),
+            OrderEntity.Adapter(TypeAdapters.instantAdapter)
+        )
     }
 
     @Provides fun provideDispatcher() = Dispatchers.IO
