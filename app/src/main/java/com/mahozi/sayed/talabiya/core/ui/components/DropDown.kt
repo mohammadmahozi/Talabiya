@@ -47,8 +47,9 @@ fun <T> DropDown(
   onItemSelected: (T) -> Unit,
   itemContent: @Composable (T) -> Unit,
   modifier: Modifier = Modifier,
+  startExpanded: Boolean = true,
   ) {
-  var expanded by remember { mutableStateOf(true) }
+  var expanded by remember { mutableStateOf(startExpanded) }
 
   ExposedDropdownMenuBox(
     expanded = expanded,

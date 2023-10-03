@@ -14,10 +14,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -158,6 +160,8 @@ private fun CreateMenuItemContent(
   onEvent: (CreateMenuItemEvent) -> Unit,
   modifier: Modifier = Modifier
 ) {
+  val focusRequester = remember { FocusRequester() }
+
   Column(
     verticalArrangement = Arrangement.spacedBy(8.dp),
     modifier = modifier
@@ -169,14 +173,16 @@ private fun CreateMenuItemContent(
       placeholder = { 
         Text(text = stringResource(R.string.name))
       },
+      keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
       modifier = Modifier
         .fillMaxWidth()
+        .focusRequester(focusRequester),
     )
 
     OutlinedTextField(
       value = state.price,
       onValueChange = { onEvent(CreateMenuItemEvent.PriceChanged(it)) },
-      keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+      keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
       placeholder = {
         Text(text = stringResource(R.string.price))
       },
@@ -188,9 +194,14 @@ private fun CreateMenuItemContent(
       value = state.selectedCategory.orEmpty(),
       items = state.categories,
       onItemSelected = { onEvent(CreateMenuItemEvent.CategoryChanged(it)) },
+      startExpanded = false,
       itemContent = {
         Text(text = it)
       }
     )
+  }
+
+  LaunchedEffect(Unit) {
+    focusRequester.requestFocus()
   }
 }
