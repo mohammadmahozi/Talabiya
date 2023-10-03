@@ -137,8 +137,10 @@ fun CreateMenuItemScreen(
       TalabiyaBar(R.string.add_new_item)
     },
     floatingActionButton = {
-      ConfirmFab {
-
+      ConfirmFab(
+        enabled = state.canSave
+      ) {
+        onEvent(CreateMenuItemEvent.SaveClicked)
       }
     },
   ) {
