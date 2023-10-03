@@ -19,16 +19,14 @@ data class Money constructor(private val amount: BigDecimal){
   fun format(): String = format.format(amount)
 
   fun toLong(): Long = (amount * BigDecimal.valueOf(100)).longValueExact()
-
-  companion object {
-    fun from(cents: Long): Money {
-      val centsInBigDecimal = cents.toBigDecimal()
-      val money = centsInBigDecimal / BigDecimal.valueOf(100)
-      return Money(money)
-    }
-  }
 }
 
 val Number.money: Money get() = Money(this.toDouble().toBigDecimal())
 
 val String.money: Money get() = Money(this.toBigDecimal())
+
+val Cent.money: Money get() {
+  val centsInBigDecimal = cents.toBigDecimal()
+  val money = centsInBigDecimal / BigDecimal.valueOf(100)
+  return Money(money)
+}

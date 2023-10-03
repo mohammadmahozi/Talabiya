@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import com.mahozi.sayed.talabiya.core.Cent
 import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase.Companion.getDatabase
 import com.mahozi.sayed.talabiya.core.money
@@ -36,7 +37,7 @@ class RestaurantStore @Inject constructor(
           id = id,
           name = name,
           category = category,
-          price = price.money
+          price = Cent(price).money
         )
       }
     ).asFlow()
