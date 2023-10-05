@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
+import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.ui.components.DatePickerDialog
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
@@ -41,7 +42,7 @@ fun PreviewOrderInfoScreen() {
     OrderInfoScreen(
       model = OrderInfoState(
         Instant.now(),
-        60.0,
+        60.0.money,
         "mmm",
         OrderStatus.COMPLETE,
         "Note",
@@ -80,7 +81,7 @@ fun OrderInfoScreen(
     Divider(color = AppTheme.colors.lightBorder)
 
     InfoTextRow(
-      text = model.total.toString(),
+      text = model.total.format(),
       icon = R.drawable.ic_money,
       iconDescription = R.string.total
     ) {}

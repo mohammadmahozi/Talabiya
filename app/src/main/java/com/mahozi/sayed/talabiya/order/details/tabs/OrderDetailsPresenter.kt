@@ -16,7 +16,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
 
   @Composable
   override fun start(events: Flow<OrderDetailsEvent>): OrderDetailsState {
-    val orderState by remember { orderStore.getOrder(orderId.toInt()) }.collectAsState(initial = null)
+    val orderState by remember { orderStore.getOrderDetails(orderId) }.collectAsState(initial = null)
 
     var showDatePicker by remember { mutableStateOf(false) }
 
@@ -42,11 +42,11 @@ class OrderDetailsPresenter @AssistedInject constructor(
       null -> OrderDetailsState(null)
       else -> OrderDetailsState(
         OrderInfoState(
-          order.instant,
+          order.createdAt,
           order.total,
           order.payer,
           OrderStatus.COMPLETE,
-          order.note ?: "",
+          order.note,
           showDatePicker
         )
       )

@@ -10,14 +10,8 @@ interface OrderDao {
   @Insert
   fun insertOrder(orderEntities: OrderEntity)
 
-  @Query("SELECT * FROM OrderEntity WHERE id = :id")
-  fun selectOrder(id: Int): Flow<OrderEntity>
-
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertOrderItem(orderItemEntity: OrderItemEntity): Long
-
-  @Query("SELECT * FROM OrderEntity ORDER BY date DESC")
-  fun selectAllOrders(): Flow<List<OrderEntity>>
 
   @Insert
   fun insertSubOrder(subOrderEntity: SubOrderEntity)

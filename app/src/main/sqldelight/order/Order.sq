@@ -52,13 +52,13 @@ FROM OrderEntity
 JOIN RestaurantEntity ON OrderEntity.id = RestaurantEntity.id;
 
 selectById:
-SELECT OrderEntity.id, OrderEntity.createdAt, CustomerEntity.name AS payer,
- RestaurantEntity.name AS restaurant, sum(MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total, OrderEntity.note
+SELECT OrderEntity.id, OrderEntity.createdAt, RestaurantEntity.name AS restaurant, CustomerEntity.name AS payer,
+sum(MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total, OrderEntity.note
 FROM OrderEntity
 JOIN RestaurantEntity ON OrderEntity.restaurantId = RestaurantEntity.id
 LEFT JOIN CustomerEntity ON OrderEntity.payerId = CustomerEntity.id
 LEFT JOIN OrderItemEntity ON OrderEntity.id = OrderItemEntity.orderId
-LEFT JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
+JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
 WHERE OrderEntity.id = ?;
 
 insertOrderItem:
