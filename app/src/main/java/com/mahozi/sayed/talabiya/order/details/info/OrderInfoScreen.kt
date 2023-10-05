@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.ui.components.DatePickerDialog
 import com.mahozi.sayed.talabiya.core.ui.string
@@ -36,17 +37,19 @@ import java.time.Instant
 @Preview(showBackground = true)
 @Composable
 fun PreviewOrderInfoScreen() {
-  OrderInfoScreen(
-    model = OrderInfoState(
-      Instant.now(),
-      60.0,
-      "mmm",
-      OrderStatus.COMPLETE,
-      "Note",
-      false
-    ),
-    onEvent = { }
-  )
+  Preview {
+    OrderInfoScreen(
+      model = OrderInfoState(
+        Instant.now(),
+        60.0,
+        "mmm",
+        OrderStatus.COMPLETE,
+        "Note",
+        false
+      ),
+      onEvent = { }
+    )
+  }
 }
 
 @Composable
