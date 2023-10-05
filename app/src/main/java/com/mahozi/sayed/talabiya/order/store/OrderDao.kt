@@ -7,8 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface OrderDao {
-  @Insert
-  fun insertOrder(orderEntities: OrderEntity)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertOrderItem(orderItemEntity: OrderItemEntity): Long

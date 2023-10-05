@@ -61,10 +61,6 @@ class OrderStore @Inject constructor(
     }
   }
 
-  fun insert(orderEntity: OrderEntity) {
-    orderDao.insertOrder(orderEntity)
-  }
-
   fun insertSubOrder(subOrderEntity: SubOrderEntity) {
     orderDao.insertSubOrder(subOrderEntity)
   }
