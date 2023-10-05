@@ -14,25 +14,17 @@ CREATE TABLE OrderEntity(
 CREATE TABLE OrderItemEntity(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     orderId INTEGER NOT NULL,
-    menuItemId INTEGER NOT NULL,
-    price INTEGER NOT NULL,
+    customerId INTEGER NOT NULL,
+    quantity INTEGER NOT NULL,
+    menuItemPriceId INTEGER NOT NULL,
     FOREIGN KEY (orderId) REFERENCES OrderEntity(id),
-    FOREIGN KEY (menuItemId) REFERENCES MenuItemEntity(id),
-    UNIQUE(orderId, menuItemId)
+    FOREIGN KEY (menuItemPriceId) REFERENCES MenuItemPriceEntity(id),
+    UNIQUE(orderId, menuItemPriceId)
 );
 
-CREATE TABLE Repayment(
+CREATE TABLE OrderPayment(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    amount INTEGER NOT NULL,
-    createdAt INTEGER NOT NULL,
-    status TEXT NOT NULL
-);
-
-CREATE TABLE RepaymentOrder(
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    customerOrderId INTEGER NOT NULL,
     paymentId INTEGER NOT NULL,
-    FOREIGN KEY (customerOrderId) REFERENCES CustomerOrder(id),
     FOREIGN KEY (paymentId) REFERENCES CustomerPayment(id)
 );
 
@@ -58,3 +50,18 @@ selectAll:
 SELECT OrderEntity.id, OrderEntity.createdAt, RestaurantEntity.name
 FROM OrderEntity
 JOIN RestaurantEntity ON OrderEntity.id = RestaurantEntity.id;
+
+selectById:
+SELECT OrderEntity.id, OrderEntity.createdAt, CustomerEntity.name AS payer,
+ RestaurantEntity.name AS restaurant, sum(MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total, OrderEntity.note
+FROM OrderEntity
+JOIN RestaurantEntity ON OrderEntity.restaurantId = RestaurantEntity.id
+LEFT JOIN CustomerEntity ON OrderEntity.payerId = CustomerEntity.id
+LEFT JOIN OrderItemEntity ON OrderEntity.id = OrderItemEntity.orderId
+LEFT JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
+WHERE OrderEntity.id = ?;
+
+insertOrderItem:
+INSERT INTO OrderItemEntity(orderId, customerId, quantity, menuItemPriceId)
+VALUES (?, ?, ?, ?);
+

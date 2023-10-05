@@ -3,38 +3,9 @@ CREATE TABLE CustomerEntity(
     name TEXT NOT NULL
 );
 
-CREATE TABLE CustomerOrder(
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    orderId INTEGER NOT NULL,
-    customerId INTEGER NOT NULL,
-    FOREIGN KEY (orderId) REFERENCES OrderEntity(id),
-    FOREIGN KEY (customerId) REFERENCES CustomerEntity(id),
-    UNIQUE(orderId, customerId)
-);
-
-CREATE TABLE CustomerOrderItem(
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    customerOrderId INTEGER NOT NULL,
-    orderItemId INTEGER NOT NULL,
-    quantity INTEGER NOT NULL,
-    FOREIGN KEY (customerOrderId) REFERENCES CustomerOrder(id),
-    FOREIGN KEY (orderItemId) REFERENCES OrderItemEntity(id),
-    UNIQUE(customerOrderId, orderItemId)
-);
-
 CREATE TABLE CustomerPayment(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     amount INTEGER NOT NULL,
     createdAt INTEGER NOT NULL,
     status TEXT NOT NULL
 );
-
-CREATE TABLE CustomerPaymentOrder(
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    customerOrderId INTEGER NOT NULL,
-    paymentId INTEGER NOT NULL,
-    FOREIGN KEY (customerOrderId) REFERENCES CustomerOrder(id),
-    FOREIGN KEY (paymentId) REFERENCES CustomerPayment(id)
-);
-
-
