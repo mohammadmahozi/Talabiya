@@ -111,7 +111,7 @@ abstract class TalabiyaDatabase : RoomDatabase() {
           context.applicationContext,
           TalabiyaDatabase::class.java,
           "talabiya_database"
-        ).createFromAsset("talabiya_database")
+        )
           .allowMainThreadQueries()
           .addMigrations(MIGRATION_1_2)
           .build()
