@@ -58,7 +58,7 @@ FROM OrderEntity
 JOIN RestaurantEntity ON OrderEntity.restaurantId = RestaurantEntity.id
 LEFT JOIN CustomerEntity ON OrderEntity.payerId = CustomerEntity.id
 LEFT JOIN OrderItemEntity ON OrderEntity.id = OrderItemEntity.orderId
-JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
+LEFT JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
 WHERE OrderEntity.id = ?;
 
 insertOrderItem:
