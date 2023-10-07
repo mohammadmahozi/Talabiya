@@ -25,6 +25,9 @@ private val LocalColors = staticCompositionLocalOf { lightColors }
 @SuppressLint("ComposeCompositionLocalUsage")
 private val LocalShapes = staticCompositionLocalOf { AppShapes() }
 
+@SuppressLint("ComposeCompositionLocalUsage")
+private val LocalTypes = staticCompositionLocalOf { AppTypes() }
+
 @Composable fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
@@ -33,7 +36,8 @@ private val LocalShapes = staticCompositionLocalOf { AppShapes() }
 
     CompositionLocalProvider(
         LocalColors provides colors,
-        LocalShapes provides AppShapes()
+        LocalShapes provides AppShapes(),
+        LocalTypes provides AppTypes()
     ) {
         MaterialTheme(
             content = content,
@@ -50,4 +54,6 @@ object AppTheme {
     val colors @Composable get() = LocalColors.current
 
     val shapes @Composable get() = LocalShapes.current
+
+    val types @Composable get() = LocalTypes.current
 }
