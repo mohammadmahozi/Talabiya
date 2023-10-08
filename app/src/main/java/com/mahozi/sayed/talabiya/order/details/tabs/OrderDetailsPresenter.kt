@@ -39,7 +39,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
 
     val order = orderState
     return when (order) {
-      null -> OrderDetailsState(null)
+      null -> OrderDetailsState(null, emptyList())
       else -> OrderDetailsState(
         OrderInfoState(
           order.createdAt,
@@ -48,7 +48,8 @@ class OrderDetailsPresenter @AssistedInject constructor(
           OrderStatus.COMPLETE,
           order.note,
           showDatePicker
-        )
+        ),
+        emptyList()
       )
     }
   }

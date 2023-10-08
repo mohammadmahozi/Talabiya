@@ -2,11 +2,14 @@ package com.mahozi.sayed.talabiya.order.details.suborder
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -44,6 +47,22 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
       suborder,
       suborder.copy(expanded = true)
     )
+}
+
+@Composable fun SubordersScreen(
+  suborders: List<Suborder>,
+  modifier: Modifier = Modifier
+) {
+  val scrollState = rememberScrollState()
+  Column(
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+    modifier = modifier
+      .verticalScroll(scrollState)
+  ) {
+    suborders.forEach {
+      Suborder(it)
+    }
+  }
 }
 
 @Preview(showBackground = true)
