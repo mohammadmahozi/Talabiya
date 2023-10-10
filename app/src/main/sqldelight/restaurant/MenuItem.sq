@@ -24,7 +24,7 @@ CREATE TABLE CategoryEntity(
 
 INSERT INTO CategoryEntity(name, number)
 VALUES
-    ("Pastery", 0),
+    ("Pastry", 0),
     ("Grills", 1),
     ("Sandwich", 2),
     ("Fries", 3),
