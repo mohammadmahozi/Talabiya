@@ -57,6 +57,6 @@ class OrderQueriesTest {
     database.customerQueries.insert("Customer 2")
     orderQueries.insertOrderItem(1, 2, 10, 1)
 
-    orderQueries.selectAllSuborders(1).executeAsList().forEach(::println)
+    orderQueries.selectAllOrderItems(1).executeAsList().forEach(::println)
   }
 }

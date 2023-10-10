@@ -7,9 +7,12 @@ import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.order.details.info.OrderInfo
+import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
+import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
 import com.mahozi.sayed.talabiya.order.list.Order
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import order.OrderQueries
 import java.time.LocalDate
@@ -45,6 +48,26 @@ class OrderStore @Inject constructor(
         )
       }).asFlow()
       .mapToOne(dispatcher)
+  }
+
+  fun getSuborders(id: Long): Flow<List<Suborder>> {
+    return orderQueries.selectAllOrderItems(id)
+      .asFlow()
+      .map { selectAllOrderItemsQuery ->
+        selectAllOrderItemsQuery.executeAsList()
+          .groupBy { item -> item.customerId }
+          .map { (id, orderItems) ->
+            val suborderTotal = orderItems.sumOf { it.total }.money
+
+            Suborder(
+              id,
+              orderItems.first().name,
+              orderItems.map { OrderItem(it.id, it.quantity.toInt(), it.name, it.total.money) },
+              suborderTotal,
+              false
+              )
+        }
+      }
   }
 
   suspend fun createOrder(

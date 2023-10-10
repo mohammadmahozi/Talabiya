@@ -62,8 +62,8 @@ LEFT JOIN OrderItemEntity ON OrderEntity.id = OrderItemEntity.orderId
 LEFT JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
 WHERE OrderEntity.id = ?;
 
-selectAllSuborders:
-SELECT OrderItemEntity.customerId, CustomerEntity.name , MenuItemPriceEntity.price, OrderItemEntity.quantity,
+selectAllOrderItems:
+SELECT OrderItemEntity.id, OrderItemEntity.customerId, CustomerEntity.name , MenuItemPriceEntity.price, OrderItemEntity.quantity,
 (MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total
 FROM OrderItemEntity
 JOIN CustomerEntity ON OrderItemEntity.customerId = CustomerEntity.id
