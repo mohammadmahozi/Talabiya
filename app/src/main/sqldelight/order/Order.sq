@@ -62,6 +62,15 @@ LEFT JOIN OrderItemEntity ON OrderEntity.id = OrderItemEntity.orderId
 LEFT JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
 WHERE OrderEntity.id = ?;
 
+selectAllSuborders:
+SELECT OrderItemEntity.customerId, CustomerEntity.name , MenuItemPriceEntity.price, OrderItemEntity.quantity,
+(MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total
+FROM OrderItemEntity
+JOIN CustomerEntity ON OrderItemEntity.customerId = CustomerEntity.id
+JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
+JOIN MenuItemEntity ON MenuItemPriceEntity.id = MenuItemEntity.id
+WHERE OrderItemEntity.orderId = ?;
+
 insertOrderItem:
 INSERT INTO OrderItemEntity(orderId, customerId, quantity, menuItemPriceId)
 VALUES (?, ?, ?, ?);
