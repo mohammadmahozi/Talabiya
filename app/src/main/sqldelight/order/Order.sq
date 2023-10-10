@@ -17,9 +17,10 @@ CREATE TABLE OrderItemEntity(
     customerId INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
     menuItemPriceId INTEGER NOT NULL,
+    FOREIGN KEY (customerId) REFERENCES CustomerEntity(id),
     FOREIGN KEY (orderId) REFERENCES OrderEntity(id),
     FOREIGN KEY (menuItemPriceId) REFERENCES MenuItemPriceEntity(id),
-    UNIQUE(orderId, menuItemPriceId)
+    UNIQUE(customerId, orderId, menuItemPriceId)
 );
 
 CREATE TABLE OrderPayment(
