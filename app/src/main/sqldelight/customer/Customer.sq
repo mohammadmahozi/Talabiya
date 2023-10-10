@@ -9,3 +9,7 @@ CREATE TABLE CustomerPayment(
     createdAt INTEGER NOT NULL,
     status TEXT NOT NULL
 );
+
+insert:
+INSERT INTO CustomerEntity(name)
+VALUES (?);
