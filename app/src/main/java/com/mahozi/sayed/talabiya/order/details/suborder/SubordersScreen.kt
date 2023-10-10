@@ -33,11 +33,12 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
 private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   private val suborder = Suborder(
+    0,
     "Customer",
     listOf(
-      OrderItem(0L, 1, "Item 1", 10.money),
-      OrderItem(1L, 575, "Item 2", 100.money),
-      OrderItem(2L, 12, "Item 3", 4000.money),
+      OrderItem(0, 1, "Item 1", 10.money),
+      OrderItem(1, 575, "Item 2", 100.money),
+      OrderItem(2, 12, "Item 3", 4000.money),
     ),
     6000.money,
     expanded = false
