@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -13,10 +14,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -54,16 +60,21 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   suborders: List<Suborder>,
   modifier: Modifier = Modifier
 ) {
-  val scrollState = rememberScrollState()
-  Column(
-    verticalArrangement = Arrangement.spacedBy(8.dp),
-    modifier = modifier
-      .verticalScroll(scrollState)
-  ) {
-    suborders.forEach {
-      Suborder(it)
+  Scaffold { paddingValues ->
+    val scrollState = rememberScrollState()
+    Column(
+      verticalArrangement = Arrangement.spacedBy(8.dp),
+      modifier = modifier
+        .verticalScroll(scrollState)
+        .padding(paddingValues)
+
+    ) {
+      suborders.forEach {
+        Suborder(it)
+      }
     }
   }
+
 }
 
 @Preview(showBackground = true)
@@ -114,6 +125,7 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
     verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier
       .clickable(onClick = onHeaderClicked)
+      .padding(horizontal = 8.dp)
   ) {
     Text(text = name)
 
@@ -143,7 +155,7 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
 @Composable private fun OrderItem(item: OrderItem) {
   Row(
     modifier = Modifier
-      .padding(vertical = 8.dp)
+      .padding(8.dp)
   ) {
     Text(
       text = item.quantity.toString(),
@@ -180,8 +192,9 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
 ) {
   Row(
     modifier = Modifier
-      .padding(vertical = 8.dp)
+      .fillMaxWidth()
       .background(color = AppTheme.colors.backgroundSecondary)
+      .padding(8.dp)
   ) {
     Text(
       text = total.format(),
