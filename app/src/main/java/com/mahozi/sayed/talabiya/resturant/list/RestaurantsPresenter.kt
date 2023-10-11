@@ -24,7 +24,9 @@ class RestaurantsPresenter @Inject constructor(
     CollectEvents(events) { event ->
       when(event) {
         RestaurantsEvent.CreateRestaurantClicked -> navigator.goto(CreateRestaurantScreen)
-        is RestaurantsEvent.DeleteRestaurantClicked -> {}
+        is RestaurantsEvent.DeleteRestaurantClicked -> {
+          restaurantStore.deleteRestaurant(event.restaurant.id)
+        }
         is RestaurantsEvent.RestaurantClicked -> navigator.goto(MenuItemsScreen(event.restaurantEntity.id))
       }
     }

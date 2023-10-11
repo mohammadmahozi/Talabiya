@@ -91,12 +91,8 @@ class RestaurantStore @Inject constructor(
     return mRestaurantDao!!.selectAllMenuItems(restaurantName)
   }
 
-  fun selectRestaurantsNames(): List<String> {
-    return mRestaurantDao!!.selectRestaurantsNames()
-  }
-
-  fun deleteRestaurant(restaurantEntity: RestaurantEntity?) {
-    mRestaurantDao!!.deleteRestaurant(restaurantEntity)
+  fun deleteRestaurant(restaurantId: Long) {
+    restaurantQueries.delete(restaurantId)
   }
 
   fun deleteMenuItem(menuItemEntity: MenuItemEntity?) {

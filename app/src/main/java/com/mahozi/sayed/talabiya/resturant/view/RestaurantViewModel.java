@@ -45,43 +45,20 @@ public class RestaurantViewModel extends AndroidViewModel {
 
     }
 
-    public void insertRestaurant(RestaurantEntity restaurantEntity){
-        mRestaurantRepository.insertRestaurant(restaurantEntity);
-    }
-
     public void insertFood(MenuItemEntity menuItemEntity){
         mRestaurantRepository.insertFood(menuItemEntity);
-    }
-
-    public LiveData<List<RestaurantEntity>> getAllRestaurantEntities(){
-        return mAllRestaurantEntities;
     }
 
     public LiveData<List<MenuItemEntity>> getAllMenuItemEntities(){
         return mAllMenuItemEntities;
     }
 
-
-
-    public void setSelectedRestaurant(RestaurantEntity restaurantEntity){
-        currentRestaurantEntity = restaurantEntity;
-    }
-
     public RestaurantEntity getCurrentRestaurantEntity(){
         return currentRestaurantEntity;
     }
 
-
-    public void deleteRestaurant(RestaurantEntity restaurantEntity){
-        mRestaurantRepository.deleteRestaurant(restaurantEntity);
-    }
-
     public void deleteMenuItem(MenuItemEntity menuItemEntity){
         mRestaurantRepository.deleteMenuItem(menuItemEntity);
-    }
-
-    public void updateRestaurant(RestaurantEntity restaurantEntity){
-        mRestaurantRepository.updateRestaurant(restaurantEntity);
     }
 
     public void updateMenuItem(MenuItemEntity menuItemEntity){

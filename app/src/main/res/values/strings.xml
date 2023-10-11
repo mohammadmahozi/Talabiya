@@ -107,6 +107,7 @@
     <string name="name">Name</string>
     <string name="price">Price</string>
     <string name="edit_order">Edit order</string>
+    <string name="are_you_sure">Are you sure?</string>
 
 
 </resources>

@@ -1,6 +1,7 @@
 package com.mahozi.sayed.talabiya.resturant.list
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,10 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,12 +25,14 @@ import androidx.compose.ui.unit.sp
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
+import com.mahozi.sayed.talabiya.core.ui.components.DeleteContextMenu
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import kotlinx.parcelize.Parcelize
 import restaurant.RestaurantEntity
 
-@Parcelize object RestaurantsScreen: Screen
+@Parcelize
+object RestaurantsScreen : Screen
 
 @Preview
 @Composable
@@ -38,6 +45,7 @@ private fun PreviewRestaurantScreen() {
 
   }
 }
+
 @Composable fun RestaurantsScreen(
   state: RestaurantsState,
   onEvent: (RestaurantsEvent) -> Unit,
@@ -57,7 +65,8 @@ private fun PreviewRestaurantScreen() {
         items(state.restaurants) { restaurant ->
           Restaurant(
             restaurant = restaurant,
-            onClick = { onEvent(RestaurantsEvent.RestaurantClicked(it)) }
+            onClick = { onEvent(RestaurantsEvent.RestaurantClicked(it)) },
+            onDelete = { onEvent(RestaurantsEvent.DeleteRestaurantClicked(it)) }
           )
           Divider()
         }
@@ -72,17 +81,26 @@ private fun PreviewRestaurant() {
   AppTheme {
     Restaurant(
       restaurant = RestaurantEntity(0L, "Name"),
-      onClick = {}
+      onClick = {},
+      onDelete = {},
     )
   }
 }
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable private fun Restaurant(
   restaurant: RestaurantEntity,
-  onClick: (RestaurantEntity) -> Unit
-) {
+  onClick: (RestaurantEntity) -> Unit,
+  onDelete: (RestaurantEntity) -> Unit,
+  ) {
+  var expanded by remember { mutableStateOf(false) }
+
   Row(
     modifier = Modifier
-      .clickable { onClick(restaurant) }
+      .combinedClickable(
+        onClick = { onClick(restaurant) },
+        onLongClick = { expanded = true }
+      )
       .padding(16.dp)
       .fillMaxWidth()
   ) {
@@ -99,6 +117,13 @@ private fun PreviewRestaurant() {
       color = AppTheme.colors.primaryText,
       fontSize = 14.sp,
     )
+
+    DeleteContextMenu(
+      expanded = expanded,
+      onDelete = { onDelete(restaurant) },
+      onDismiss = { expanded = false }
+    )
   }
 }
+
 
