@@ -5,5 +5,5 @@ CREATE TABLE Payment (
     createdAt INTEGER NOT NULL,
     status TEXT NOT NULL,
     type TEXT NOT NULL,
-    FOREIGN KEY (customerId) REFERENCES CustomerEntity(id)
+    FOREIGN KEY (customerId) REFERENCES UserEntity(id)
 );

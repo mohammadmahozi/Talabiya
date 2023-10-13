@@ -30,6 +30,7 @@ import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.extensions.getActivity
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
 import com.mahozi.sayed.talabiya.resturant.list.RestaurantsScreen
+import com.mahozi.sayed.talabiya.user.list.UsersScreen
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -107,7 +108,8 @@ private data class DelegatingVoyagerScreen(
         drawerContent = {
           Drawer(
             onOrdersClicked = { navigator.replaceAll(OrdersScreen) },
-            onRestaurantsClicked = { navigator.replaceAll(RestaurantsScreen) }
+            onRestaurantsClicked = { navigator.replaceAll(RestaurantsScreen) },
+            onUsersClicked = { navigator.replaceAll(UsersScreen) }
           )
         },
       ) { paddingValues ->

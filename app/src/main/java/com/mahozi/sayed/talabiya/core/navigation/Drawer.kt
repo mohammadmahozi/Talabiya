@@ -33,7 +33,8 @@ private fun PreviewDrawer() {
     ) {
       Drawer(
         onOrdersClicked = {},
-        onRestaurantsClicked = {}
+        onRestaurantsClicked = {},
+        onUsersClicked = {}
       )
     }
   }
@@ -42,9 +43,11 @@ private fun PreviewDrawer() {
 @Composable fun ColumnScope.Drawer(
   onOrdersClicked: () -> Unit,
   onRestaurantsClicked: () -> Unit,
+  onUsersClicked: () -> Unit,
+  modifier: Modifier = Modifier
 ) {
     Column(
-      modifier = Modifier
+      modifier = modifier
         .background(AppTheme.colors.material.primary)
         .fillMaxWidth()
         .padding(16.dp)
@@ -70,6 +73,11 @@ private fun PreviewDrawer() {
       DrawerItem(
         title = R.string.restaurants,
         onClick = onRestaurantsClicked
+      )
+
+      DrawerItem(
+        title = R.string.users,
+        onClick = onUsersClicked
       )
     }
   }

@@ -103,6 +103,7 @@
     <string name="price">Price</string>
     <string name="edit_order">Edit order</string>
     <string name="are_you_sure">Are you sure?</string>
+    <string name="users">Users</string>
 
 
 </resources>

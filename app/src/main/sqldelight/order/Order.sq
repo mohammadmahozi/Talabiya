@@ -8,7 +8,7 @@ CREATE TABLE OrderEntity(
     attachment TEXT,
     note TEXT NOT NULL DEFAULT "",
     FOREIGN KEY (restaurantId) REFERENCES RestaurantEntity(id),
-    FOREIGN KEY (payerId) REFERENCES CustomerEntity(id)
+    FOREIGN KEY (payerId) REFERENCES UserEntity(id)
 );
 
 CREATE TABLE OrderItemEntity(
@@ -17,7 +17,7 @@ CREATE TABLE OrderItemEntity(
     customerId INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
     menuItemPriceId INTEGER NOT NULL,
-    FOREIGN KEY (customerId) REFERENCES CustomerEntity(id),
+    FOREIGN KEY (customerId) REFERENCES UserEntity(id),
     FOREIGN KEY (orderId) REFERENCES OrderEntity(id),
     FOREIGN KEY (menuItemPriceId) REFERENCES MenuItemPriceEntity(id),
     UNIQUE(customerId, orderId, menuItemPriceId)
@@ -26,7 +26,7 @@ CREATE TABLE OrderItemEntity(
 CREATE TABLE OrderPayment(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     paymentId INTEGER NOT NULL,
-    FOREIGN KEY (paymentId) REFERENCES CustomerPayment(id)
+    FOREIGN KEY (paymentId) REFERENCES UserPayment(id)
 );
 
 -- insert:
@@ -53,20 +53,20 @@ FROM OrderEntity
 JOIN RestaurantEntity ON OrderEntity.id = RestaurantEntity.id;
 
 selectById:
-SELECT OrderEntity.id, OrderEntity.createdAt, RestaurantEntity.name AS restaurant, CustomerEntity.name AS payer,
+SELECT OrderEntity.id, OrderEntity.createdAt, RestaurantEntity.name AS restaurant, UserEntity.name AS payer,
 sum(MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total, OrderEntity.note
 FROM OrderEntity
 JOIN RestaurantEntity ON OrderEntity.restaurantId = RestaurantEntity.id
-LEFT JOIN CustomerEntity ON OrderEntity.payerId = CustomerEntity.id
+LEFT JOIN UserEntity ON OrderEntity.payerId = UserEntity.id
 LEFT JOIN OrderItemEntity ON OrderEntity.id = OrderItemEntity.orderId
 LEFT JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
 WHERE OrderEntity.id = ?;
 
 selectAllOrderItems:
-SELECT OrderItemEntity.id, OrderItemEntity.customerId, CustomerEntity.name , MenuItemPriceEntity.price, OrderItemEntity.quantity,
+SELECT OrderItemEntity.id, OrderItemEntity.customerId, UserEntity.name , MenuItemPriceEntity.price, OrderItemEntity.quantity,
 (MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total
 FROM OrderItemEntity
-JOIN CustomerEntity ON OrderItemEntity.customerId = CustomerEntity.id
+JOIN UserEntity ON OrderItemEntity.customerId = UserEntity.id
 JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
 JOIN MenuItemEntity ON MenuItemPriceEntity.id = MenuItemEntity.id
 WHERE OrderItemEntity.orderId = ?;

@@ -1,15 +1,23 @@
-CREATE TABLE CustomerEntity(
+CREATE TABLE UserEntity(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     name TEXT NOT NULL
 );
 
-CREATE TABLE CustomerPayment(
+CREATE TABLE UserPayment(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     amount INTEGER NOT NULL,
     createdAt INTEGER NOT NULL,
     status TEXT NOT NULL
 );
 
+selectAll:
+SELECT id, name
+FROM UserEntity
+ORDER BY name;
+
 insert:
-INSERT INTO CustomerEntity(name)
+INSERT INTO UserEntity(name)
 VALUES (?);
+
+delete:
+DELETE FROM UserEntity WHERE id = ?;

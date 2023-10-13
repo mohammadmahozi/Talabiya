@@ -27,6 +27,9 @@ import com.mahozi.sayed.talabiya.resturant.menu.CreateMenuItemState
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsEvent
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsScreen
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsState
+import com.mahozi.sayed.talabiya.user.list.UsersEvent
+import com.mahozi.sayed.talabiya.user.list.UsersScreen
+import com.mahozi.sayed.talabiya.user.list.UsersState
 
 @SuppressLint("ComposeNamingLowercase")
 @Composable
@@ -62,6 +65,9 @@ fun Uis(
       CreateMenuItemScreen(state, onEvent)
     }
 
+    is UsersScreen -> ui<UsersState, UsersEvent> { state, onEvent ->
+      UsersScreen(state, onEvent)
+    }
     else -> throw IllegalStateException("Unknown screen $screen")
   }
 }
