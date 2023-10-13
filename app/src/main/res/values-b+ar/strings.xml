@@ -104,6 +104,8 @@
     <string name="edit_order">Edit order</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="users">Users</string>
+    <string name="create_user">Create user</string>
+    <string name="enter_user_name">Enter user name</string>
 
 
 </resources>

@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.order.create.CreateOrderEvent
 import com.mahozi.sayed.talabiya.order.create.CreateOrderScreen
-import com.mahozi.sayed.talabiya.order.create.CreateOrderUi
 import com.mahozi.sayed.talabiya.order.create.CreateOrderState
+import com.mahozi.sayed.talabiya.order.create.CreateOrderUi
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsScreen
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsState
@@ -27,6 +27,9 @@ import com.mahozi.sayed.talabiya.resturant.menu.CreateMenuItemState
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsEvent
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsScreen
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsState
+import com.mahozi.sayed.talabiya.user.create.CreateUserEvent
+import com.mahozi.sayed.talabiya.user.create.CreateUserScreen
+import com.mahozi.sayed.talabiya.user.create.CreateUserState
 import com.mahozi.sayed.talabiya.user.list.UsersEvent
 import com.mahozi.sayed.talabiya.user.list.UsersScreen
 import com.mahozi.sayed.talabiya.user.list.UsersState
@@ -68,6 +71,11 @@ fun Uis(
     is UsersScreen -> ui<UsersState, UsersEvent> { state, onEvent ->
       UsersScreen(state, onEvent)
     }
+
+    is CreateUserScreen -> ui<CreateUserState, CreateUserEvent> { state, onEvent ->
+      CreateUserScreen(state, onEvent)
+    }
+
     else -> throw IllegalStateException("Unknown screen $screen")
   }
 }
