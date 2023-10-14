@@ -111,6 +111,8 @@
     <string name="users">Users</string>
     <string name="create_user">Create user</string>
     <string name="enter_user_name">Enter user name</string>
+    <string name="search_by_food_name">Search by food name</string>
+    <string name="cancel_search">Cancel search</string>
 
 
 </resources>
