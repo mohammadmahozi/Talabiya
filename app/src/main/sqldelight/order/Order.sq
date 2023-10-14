@@ -75,3 +75,8 @@ insertOrderItem:
 INSERT INTO OrderItemEntity(orderId, customerId, quantity, menuItemPriceId)
 VALUES (?, ?, ?, ?);
 
+selectRestaurantId:
+SELECT restaurantId
+FROM OrderEntity
+WHERE id = ?;
+

@@ -161,4 +161,10 @@ class OrderStore @Inject constructor(
   ): List<SuborderAndorderItem> {
     return orderDao.selectSubordersAndOrderItemsWithOrderIdAndName(menuItemName, orderId)
   }
+
+  suspend fun getRestaurantId(orderId: Long): Long {
+    return withContext(dispatcher) {
+      orderQueries.selectRestaurantId(orderId).executeAsOne()
+    }
+  }
 }
