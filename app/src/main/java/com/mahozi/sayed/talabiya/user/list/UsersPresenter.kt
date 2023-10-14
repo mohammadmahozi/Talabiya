@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
+import com.mahozi.sayed.talabiya.user.create.CreateUserScreen
 import com.mahozi.sayed.talabiya.user.data.UserStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ class UsersPresenter @Inject constructor(
 
     CollectEvents(events) { event ->
       when(event) {
-        UsersEvent.CreateUserClicked -> {}/*navigator.goto(CreateUserScreen)*/
+        UsersEvent.CreateUserClicked -> navigator.goto(CreateUserScreen)
         is UsersEvent.DeleteUserClicked -> {
           launch {
             userStore.delete(event.user.id)
