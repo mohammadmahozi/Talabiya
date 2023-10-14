@@ -27,7 +27,7 @@ class UserStore @Inject constructor(
 
   suspend fun delete(id: Long) {
     withContext(dispatcher) {
-      delete(id)
+      userQueries.delete(id)
     }
   }
 }
