@@ -38,7 +38,7 @@ fun OrderDetailsUi(state: OrderDetailsState, onEvent: (OrderDetailsEvent) -> Uni
 
         when (tab) {
           OrderDetailsTab.INFO -> if (state.info != null) OrderInfoScreen(state.info, onEvent)
-          OrderDetailsTab.SUBORDERS -> SubordersScreen(state.subOrders)
+          OrderDetailsTab.SUBORDERS -> if (state.subordersState != null) SubordersScreen(state.subordersState, onEvent)
           OrderDetailsTab.FULL -> {}
         }
       }

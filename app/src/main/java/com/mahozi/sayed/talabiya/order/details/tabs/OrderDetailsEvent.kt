@@ -1,5 +1,6 @@
 package com.mahozi.sayed.talabiya.order.details.tabs
 
+import user.UserEntity
 import java.time.LocalDate
 
 sealed interface OrderDetailsEvent {
@@ -13,5 +14,9 @@ sealed interface OrderDetailsEvent {
         object PayerClicked: OrderInfoEvent
         object StatusClicked: OrderInfoEvent
         data class NoteChanged(val note: String): OrderInfoEvent
+    }
+
+    sealed interface SuborderEvent: OrderDetailsEvent {
+        data class UserClicked(val user: UserEntity): SuborderEvent
     }
 }
