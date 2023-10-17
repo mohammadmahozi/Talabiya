@@ -2,8 +2,10 @@ package com.mahozi.sayed.talabiya.order.details.tabs
 
 import androidx.compose.runtime.*
 import com.mahozi.sayed.talabiya.core.Presenter
+import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.order.OrderStatus
 import com.mahozi.sayed.talabiya.order.store.OrderStore
+import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderScreen
 import com.mahozi.sayed.talabiya.user.data.UserStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -14,6 +16,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
   @Assisted private val orderId: Long,
   private val orderStore: OrderStore,
   private val userStore: UserStore,
+  private val navigator: Navigator,
 ) : Presenter<OrderDetailsEvent, OrderDetailsState> {
 
   @Composable
@@ -25,8 +28,8 @@ class OrderDetailsPresenter @AssistedInject constructor(
     var showDatePicker by remember { mutableStateOf(false) }
 
     LaunchedEffect(events) {
-      events.collect {
-        when(it) {
+      events.collect { event ->
+        when(event) {
           OrderDetailsEvent.OrderInfoEvent.AddInvoiceClicked -> TODO()
           OrderDetailsEvent.OrderInfoEvent.DateClicked -> showDatePicker = true
           OrderDetailsEvent.OrderInfoEvent.DateDialogDismissed -> showDatePicker = false
@@ -36,11 +39,10 @@ class OrderDetailsPresenter @AssistedInject constructor(
           OrderDetailsEvent.OrderInfoEvent.PayerClicked -> TODO()
           OrderDetailsEvent.OrderInfoEvent.StatusClicked -> TODO()
           OrderDetailsEvent.OrderInfoEvent.TimeClicked -> TODO()
-          is OrderDetailsEvent.SuborderEvent.UserClicked -> TODO()
+          is OrderDetailsEvent.SuborderEvent.UserClicked -> navigator.goto(CreateSuborderScreen(orderId, event.user.id))
         }
       }
     }
-
 
     val order = orderState
     return when (order) {
