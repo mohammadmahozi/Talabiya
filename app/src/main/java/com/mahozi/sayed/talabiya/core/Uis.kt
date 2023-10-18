@@ -15,6 +15,9 @@ import com.mahozi.sayed.talabiya.order.list.ui.OrdersEvent
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersState
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersUi
+import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderEvent
+import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderScreen
+import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderState
 import com.mahozi.sayed.talabiya.resturant.create.CreateRestaurantEvent
 import com.mahozi.sayed.talabiya.resturant.create.CreateRestaurantScreen
 import com.mahozi.sayed.talabiya.resturant.create.CreateRestaurantState
@@ -66,6 +69,10 @@ fun Uis(
 
     is CreateMenuItemScreen -> ui<CreateMenuItemState, CreateMenuItemEvent> { state, onEvent ->
       CreateMenuItemScreen(state, onEvent)
+    }
+
+    is CreateSuborderScreen -> ui<CreateSuborderState, CreateSuborderEvent> { state, onEvent ->
+      CreateSuborderScreen(state, onEvent)
     }
 
     is UsersScreen -> ui<UsersState, UsersEvent> { state, onEvent ->
