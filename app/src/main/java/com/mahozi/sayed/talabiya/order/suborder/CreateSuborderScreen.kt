@@ -142,7 +142,6 @@ import kotlinx.parcelize.Parcelize
   }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable private fun RowScope.AlphabetIndex() {
   val letters = stringResource(R.string.alphabet).split(" ")
   var touchedLetter by remember { mutableStateOf("") }
@@ -155,16 +154,12 @@ import kotlinx.parcelize.Parcelize
       .onGloballyPositioned { coordinates ->
         val columnHeight = coordinates.size.height
         itemHeight = columnHeight / letters.size
-        Log.d("gggg", "AlphabetIndex: column $columnHeight item $itemHeight")
-
       }.pointerInput(Unit) {
         detectTapGestures { offset ->
-          Log.d("gggg", "AlphabetIndex: offset ${offset.y}")
-
           val indexOfTouchedLetter = (offset.y / itemHeight).toInt()
           touchedLetter = letters[indexOfTouchedLetter]
         }
-
+      }.pointerInput(Unit) {
         detectDragGestures { change, _ ->
           val indexOfTouchedLetter = (change.position.y / itemHeight).toInt()
           touchedLetter = letters[indexOfTouchedLetter]
@@ -178,33 +173,11 @@ import kotlinx.parcelize.Parcelize
         modifier = Modifier
           .weight(1F)
           .padding(horizontal = 2.dp)
-//          .pointerInteropFilter { motionEvent ->
-//            return@pointerInteropFilter when (motionEvent.action) {
-//              MotionEvent.ACTION_DOWN -> {
-//                Log.d("gggg", "AlphabetIndex: down")
-//                touchedLetter = it
-//                true
-//              }
-//              MotionEvent.ACTION_MOVE -> {
-//                Log.d("gggg", "AlphabetIndex: move $it")
-//                false
-//
-//              }
-//              MotionEvent.ACTION_UP -> {
-//                Log.d("gggg", "AlphabetIndex: up")
-//                touchedLetter = ""
-//                true
-//              }
-//              else -> false
-//            }
-//          }
       )
     }
   }
 
   if (touchedLetter.isNotEmpty()) {
-    Log.d("gggg", "AlphabetIndex: pop")
-    
     Popup(
       alignment = Alignment.Center
     ) {
