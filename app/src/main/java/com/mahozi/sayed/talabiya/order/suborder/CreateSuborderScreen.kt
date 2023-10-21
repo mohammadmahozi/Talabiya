@@ -1,43 +1,31 @@
 package com.mahozi.sayed.talabiya.order.suborder
 
-import android.util.Log
-import android.view.MotionEvent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.pointerInteropFilter
-import androidx.compose.ui.layout.boundsInParent
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
@@ -48,7 +36,6 @@ import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.components.SearchBar
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @Parcelize data class CreateSuborderScreen(
@@ -142,10 +129,15 @@ import kotlinx.parcelize.Parcelize
   }
 }
 
-@Composable private fun RowScope.AlphabetIndex() {
+@Composable private fun AlphabetIndex() {
   val letters = stringResource(R.string.alphabet).split(" ")
-  var touchedLetter by remember { mutableStateOf("") }
+  var selectedLetter by remember { mutableStateOf("") }
   var itemHeight by remember { mutableStateOf(0) }
+
+  fun updateSelectedLetter(offset: Offset) {
+    val indexOfTouchedLetter = (offset.y / itemHeight).toInt()
+    selectedLetter = letters.getOrNull(indexOfTouchedLetter) ?: ""
+  }
 
   Column(
     horizontalAlignment = Alignment.CenterHorizontally,
@@ -154,16 +146,25 @@ import kotlinx.parcelize.Parcelize
       .onGloballyPositioned { coordinates ->
         val columnHeight = coordinates.size.height
         itemHeight = columnHeight / letters.size
-      }.pointerInput(Unit) {
-        detectTapGestures { offset ->
-          val indexOfTouchedLetter = (offset.y / itemHeight).toInt()
-          touchedLetter = letters[indexOfTouchedLetter]
-        }
-      }.pointerInput(Unit) {
-        detectDragGestures { change, _ ->
-          val indexOfTouchedLetter = (change.position.y / itemHeight).toInt()
-          touchedLetter = letters[indexOfTouchedLetter]
-        }
+      }
+      .pointerInput(Unit) {
+        detectTapGestures(
+          onPress = { offset ->
+            updateSelectedLetter(offset)
+            awaitRelease()
+            selectedLetter = ""
+          }
+        )
+      }
+      .pointerInput(Unit) {
+        detectDragGestures(
+          onDrag = { change, _ ->
+            updateSelectedLetter(change.position)
+          },
+          onDragEnd = {
+            selectedLetter = ""
+          }
+        )
       }
   ) {
     letters.forEach {
@@ -177,70 +178,11 @@ import kotlinx.parcelize.Parcelize
     }
   }
 
-  if (touchedLetter.isNotEmpty()) {
+  if (selectedLetter.isNotEmpty()) {
     Popup(
       alignment = Alignment.Center
     ) {
-      Text(text = touchedLetter)
+      Text(text = selectedLetter)
     }
   }
 }
-
-//@Composable fun O() {
-//  val items = remember { LoremIpsum().values.first().split(" ").sortedBy { it.lowercase() } }
-//  val headers = remember { items.map { it.first().uppercase() }.toSet().toList() }
-//  Row {
-//    val listState = rememberLazyListState()
-//    LazyColumn(
-//      state = listState,
-//      modifier = Modifier.weight(1f)
-//    ) {
-//      items(items) {
-//        Text(it)
-//      }
-//    }
-//    val offsets = remember { mutableStateMapOf<Int, Float>() }
-//    var selectedHeaderIndex by remember { mutableStateOf(0) }
-//    val scope = rememberCoroutineScope()
-//
-//    fun updateSelectedIndexIfNeeded(offset: Float) {
-//      val index = offsets
-//        .mapValues { abs(it.value - offset) }
-//        .entries
-//        .minByOrNull { it.value }
-//        ?.key ?: return
-//      if (selectedHeaderIndex == index) return
-//      selectedHeaderIndex = index
-//      val selectedItemIndex = items.indexOfFirst { it.first().uppercase() == headers[selectedHeaderIndex] }
-//      scope.launch {
-//        listState.scrollToItem(selectedItemIndex)
-//      }
-//    }
-//
-//    Column(
-//      verticalArrangement = Arrangement.SpaceEvenly,
-//      modifier = Modifier
-//        .fillMaxHeight()
-//        .background(Color.Gray)
-//        .pointerInput(Unit) {
-//          detectTapGestures {
-//            updateSelectedIndexIfNeeded(it.y)
-//          }
-//        }
-//        .pointerInput(Unit) {
-//          detectVerticalDragGestures { change, _ ->
-//            updateSelectedIndexIfNeeded(change.position.y)
-//          }
-//        }
-//    ) {
-//      headers.forEachIndexed { i, header ->
-//        Text(
-//          header,
-//          modifier = Modifier.onGloballyPositioned { coordinates ->
-//            offsets[i] = coordinates.boundsInParent().center.y
-//          }
-//        )
-//      }
-//    }
-//  }
-//}
