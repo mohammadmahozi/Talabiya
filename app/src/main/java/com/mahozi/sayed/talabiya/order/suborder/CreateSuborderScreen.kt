@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +38,7 @@ import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.components.SearchBar
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @Parcelize data class CreateSuborderScreen(
@@ -82,7 +85,11 @@ import kotlinx.parcelize.Parcelize
     }
   ) { paddingValues ->
     Row {
+      val lazyState = rememberLazyListState()
+      val scope = rememberCoroutineScope()
+
       LazyColumn(
+        state = lazyState,
         modifier = modifier
           .weight(1F)
           .padding(paddingValues)
@@ -98,9 +105,21 @@ import kotlinx.parcelize.Parcelize
         .width(1.dp)
       )
 
-      AlphabetIndex()
+      //TODO A big is causing state value inside the lambda to always be the first value (empty menu items)
+      // So we will only show the index when it is no empty. Investigate later
+      if (state.menuItems.isNotEmpty()) {
+        AlphabetIndex(
+          onLetterSelected = { letter ->
+            val index = state.menuItems.map { item -> item.name.first().toString() }.indexOf(letter)
+            if (index != -1) {
+              scope.launch {
+                lazyState.animateScrollToItem(index)
+              }
+            }
+          }
+        )
+      }
     }
-
   }
 }
 
@@ -129,7 +148,9 @@ import kotlinx.parcelize.Parcelize
   }
 }
 
-@Composable private fun AlphabetIndex() {
+@Composable private fun AlphabetIndex(
+  onLetterSelected: (letter: String) -> Unit
+) {
   val letters = stringResource(R.string.alphabet).split(" ")
   var selectedLetter by remember { mutableStateOf("") }
   var itemHeight by remember { mutableStateOf(0) }
@@ -137,6 +158,9 @@ import kotlinx.parcelize.Parcelize
   fun updateSelectedLetter(offset: Offset) {
     val indexOfTouchedLetter = (offset.y / itemHeight).toInt()
     selectedLetter = letters.getOrNull(indexOfTouchedLetter) ?: ""
+    if (selectedLetter.isNotEmpty()) {
+      onLetterSelected(selectedLetter)
+    }
   }
 
   Column(
