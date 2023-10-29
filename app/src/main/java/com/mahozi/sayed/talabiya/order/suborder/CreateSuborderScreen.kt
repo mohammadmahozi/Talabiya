@@ -1,5 +1,6 @@
 package com.mahozi.sayed.talabiya.order.suborder
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -13,8 +14,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,10 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.Popup
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.money
@@ -210,3 +215,46 @@ import kotlinx.parcelize.Parcelize
     }
   }
 }
+
+@Preview(showBackground = true)
+@Composable private fun PreviewAddOrderItem() {
+  AppTheme {
+    AddOrderItem(1)
+  }
+}
+@Composable private fun AddOrderItem(
+  quantity: Int,
+) {
+    Column {
+      Row {
+        Text(
+          text = stringResource(R.string.quantity),
+          style = AppTheme.types.title
+        )
+
+        Spacer(Modifier.weight(1F))
+
+        Row {
+          Icon(
+            painter = painterResource(R.drawable.ic_remove),
+            contentDescription = null,
+            modifier = Modifier
+              .background(color = AppTheme.colors.backgroundSecondary, AppTheme.shapes.circle)
+          )
+
+          Text(
+            text = quantity.toString(),
+            style = AppTheme.types.title
+          )
+
+          Icon(
+            painter = painterResource(R.drawable.ic_add_white_24dp),
+            contentDescription = null,
+            modifier = Modifier
+              .background(color = AppTheme.colors.backgroundSecondary, shape = AppTheme.shapes.circle)
+          )
+        }
+      }
+  }
+}
+

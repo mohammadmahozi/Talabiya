@@ -115,5 +115,6 @@
     <string name="cancel_search">Cancel search</string>
 
     <string name="alphabet">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</string>
+    <string name="quantity">Quantity</string>
 
 </resources>
