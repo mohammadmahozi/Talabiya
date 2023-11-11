@@ -78,7 +78,7 @@ fun OrderInfoScreen(
       iconDescription = R.string.time
     ) { onEvent(OrderInfoEvent.TimeClicked) }
 
-    Divider(color = AppTheme.colors.lightBorder)
+    Divider(color = AppTheme.colors.mediumBackground)
 
     InfoTextRow(
       text = model.total.format(),
@@ -98,7 +98,7 @@ fun OrderInfoScreen(
       iconDescription = R.string.status
     ) { onEvent(OrderInfoEvent.StatusClicked) }
 
-    Divider(color = AppTheme.colors.lightBorder)
+    Divider(color = AppTheme.colors.mediumBackground)
 
     InfoRow(
       icon = R.drawable.ic_baseline_notes_24,

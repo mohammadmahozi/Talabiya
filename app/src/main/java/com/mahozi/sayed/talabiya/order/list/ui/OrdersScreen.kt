@@ -87,7 +87,7 @@ private fun OrderRow(order: Order, onClick: (Order) -> Unit) {
   Row(
     Modifier
       .fillMaxWidth()
-      .background(AppTheme.colors.backgroundSecondary)
+      .background(AppTheme.colors.lightBackground)
       .clickable { onClick(order) }
       .padding(vertical = 8.dp)) {
 

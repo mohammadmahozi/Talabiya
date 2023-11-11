@@ -53,7 +53,7 @@ fun Tabs(
 ) {
   TabRow(
     selectedTabIndex = selectedTabIndex,
-    backgroundColor = AppTheme.colors.backgroundSecondary,
+    backgroundColor = AppTheme.colors.lightBackground,
     contentColor = AppTheme.colors.primaryText,
     indicator = @Composable { tabPositions ->
       TabRowDefaults.Indicator(

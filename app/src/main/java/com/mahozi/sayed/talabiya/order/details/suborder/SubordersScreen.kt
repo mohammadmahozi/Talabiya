@@ -24,7 +24,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -154,7 +153,7 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
     if (suborder.expanded) {
       suborder.items.forEach { orderItem ->
         OrderItem(orderItem)
-        Divider(color = AppTheme.colors.lightBorder)
+        Divider(color = AppTheme.colors.mediumBackground)
       }
     }
 
@@ -248,7 +247,7 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .background(color = AppTheme.colors.backgroundSecondary)
+      .background(color = AppTheme.colors.lightBackground)
       .padding(8.dp)
   ) {
     Text(
