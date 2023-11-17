@@ -22,6 +22,19 @@ CREATE TABLE CategoryEntity(
     number INTEGER NOT NULL UNIQUE
 );
 
+CREATE TABLE OptionEntity(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    restaurantId INTEGER NOT NULL,
+    name TEXT NOT NULL UNIQUE,
+    FOREIGN KEY (restaurantId) REFERENCES RestaurantEntity(id)
+);
+
+CREATE TABLE OptionCatwgoriesEntitiy(
+    optionId INTEGER NOT NULL,
+    categoryId INTEGER NOT NULL,
+    PRIMARY KEY (optionId, categoryId)
+);
+
 INSERT INTO CategoryEntity(name, number)
 VALUES
     ("Pastry", 0),
