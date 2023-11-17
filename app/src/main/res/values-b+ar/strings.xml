@@ -112,6 +112,7 @@
     <string name="alphabet">أ ب ت ث ج ح خ د ذ ر ز س ش ص ض ط ظ ع غ ف ق ك ل م ن ه و ي</string>
     <string name="quantity">Quantity</string>
     <string name="show_menu">Show menu</string>
+    <string name="add_option">Add option</string>
 
 
 </resources>

@@ -1,6 +1,5 @@
 package com.mahozi.sayed.talabiya.resturant.menu
 
-import android.widget.Space
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,12 +18,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
+import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.core.navigation.Screen
@@ -36,7 +38,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 
 data class MenuItemsState(
   val menuItems: List<MenuItem>
@@ -45,6 +46,7 @@ data class MenuItemsState(
 sealed interface MenuItemsEvent {
   data class MenuItemClicked(val item: MenuItem) : MenuItemsEvent
   object AddMenuItemClicked : MenuItemsEvent
+  object AddOptionClicked: MenuItemsEvent
 }
 
 class MenuItemsPresenter @AssistedInject constructor(
@@ -61,6 +63,7 @@ class MenuItemsPresenter @AssistedInject constructor(
       when(event) {
         MenuItemsEvent.AddMenuItemClicked -> navigator.goto(CreateMenuItemScreen(restaurantId))
         is MenuItemsEvent.MenuItemClicked -> TODO()
+        MenuItemsEvent.AddOptionClicked -> TODO()
       }
     }
 
@@ -76,6 +79,15 @@ class MenuItemsPresenter @AssistedInject constructor(
 @Parcelize
 data class MenuItemsScreen(val restaurantId: Long) : Screen
 
+@Preview
+@Composable private fun PreviewMenuItemsScreen(){
+  Preview {
+    val state = MenuItemsState(
+      listOf(MenuItem(0, "Item 1", "Category", 12.money))
+    )
+    MenuItemsScreen(state = state, onEvent = {})
+  }
+}
 @Composable
 fun MenuItemsScreen(
   state: MenuItemsState,
@@ -83,7 +95,16 @@ fun MenuItemsScreen(
   modifier: Modifier = Modifier
 ) {
   Scaffold(
-    topBar = { TalabiyaBar(title = R.string.menu) },
+    topBar = {
+      TalabiyaBar(
+        title = R.string.menu,
+        overFlowActions = {
+          DropdownMenuItem(onClick = { onEvent(MenuItemsEvent.AddOptionClicked) }) {
+            Text(text = stringResource(R.string.add_option))
+          }
+        }
+      )
+   },
     floatingActionButton = {
       AddFab {
         onEvent(MenuItemsEvent.AddMenuItemClicked)
