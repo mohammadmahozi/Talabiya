@@ -2,14 +2,22 @@ package com.mahozi.sayed.talabiya.core.ui.components
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,19 +28,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
 @Preview @Composable fun PreviewBar() {
     AppTheme {
-        TalabiyaBar(title = R.string.app_name)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            TalabiyaBar(title = R.string.app_name)
+
+            TalabiyaBar(
+                title = R.string.app_name,
+                actions = {
+                    Icon(imageVector = Icons.Default.Call, contentDescription = null)
+                },
+                overFlowActions = {
+                    DropdownMenuItem(onClick = { /*TODO*/ }) {
+                        Text(text = "Test")
+                    }
+                }
+            )
+        }
     }
 }
 
 @Composable fun TalabiyaBar(
     @StringRes title: Int,
+    modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
+    overFlowActions: (@Composable ColumnScope.() -> Unit)? = null
 ) {
+    var showMenu by remember { mutableStateOf(false) }
+
     TopAppBar(
         title = {
             Text(
@@ -40,7 +69,25 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
                 color = Color.White
             )
         },
-        actions = actions
+        actions = {
+            actions()
+
+            if (overFlowActions != null) {
+                IconButton(onClick = { showMenu = !showMenu }) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = stringResource(R.string.show_menu)
+                    )
+                }
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    overFlowActions()
+                }
+            }
+        },
+        modifier = modifier,
     )
 }
 
