@@ -8,9 +8,12 @@ import com.mahozi.sayed.talabiya.core.Cent
 import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase.Companion.getDatabase
 import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.resturant.menu.Category
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
+import com.mahozi.sayed.talabiya.resturant.option.FoodOption
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import restaurant.MenuItemQueries
 import restaurant.RestaurantQueries
@@ -28,6 +31,21 @@ class RestaurantStore @Inject constructor(
     .selectAll()
     .asFlow()
     .mapToList(dispatcher)
+
+  val options: Flow<List<FoodOption>> = menuItemQueries.selectAllOptions()
+    .asFlow()
+    .map { query ->
+      query.executeAsList()
+        .groupBy { option -> option.id }
+        .map { (id, options) ->
+          FoodOption(
+            id,
+            options.first().name,
+            options.map { FoodOption.Category(it.category, true)
+            }
+          )
+        }
+    }
 
   fun menuItems(restaurantId: Long): Flow<List<MenuItem>> = menuItemQueries
     .menuItemsEntity(
@@ -67,6 +85,22 @@ class RestaurantStore @Inject constructor(
   suspend fun getCategories(): List<String> {
     return withContext(dispatcher) {
       menuItemQueries.selectAllCategories().executeAsList()
+    }
+  }
+
+  suspend fun createOption(
+    restaurantId: Long,
+    name: String,
+    categories: List<String>,
+  ) {
+    withContext(dispatcher) {
+      menuItemQueries.transaction {
+        menuItemQueries.insertOption(restaurantId, name)
+        val optionId = menuItemQueries.lastInsertRowId().executeAsOne()
+        categories.forEach { category ->
+          menuItemQueries.insertOptionCategory(optionId, category)
+        }
+      }
     }
   }
 

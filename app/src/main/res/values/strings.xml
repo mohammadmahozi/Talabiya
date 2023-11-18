@@ -118,5 +118,6 @@
     <string name="quantity">Quantity</string>
     <string name="show_menu">Show menu</string>
     <string name="add_option">Add option</string>
+    <string name="options">Options</string>
 
 </resources>

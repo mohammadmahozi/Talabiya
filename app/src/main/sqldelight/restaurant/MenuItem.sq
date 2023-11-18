@@ -29,10 +29,12 @@ CREATE TABLE OptionEntity(
     FOREIGN KEY (restaurantId) REFERENCES RestaurantEntity(id)
 );
 
-CREATE TABLE OptionCatwgoriesEntitiy(
+CREATE TABLE OptionCategoryEntity(
     optionId INTEGER NOT NULL,
-    categoryId INTEGER NOT NULL,
-    PRIMARY KEY (optionId, categoryId)
+    category TEXT NOT NULL,
+    PRIMARY KEY (optionId, category),
+    FOREIGN KEY (optionId) REFERENCES OptionEntity(id),
+    FOREIGN KEY (category) REFERENCES CategoryEntity(name)
 );
 
 INSERT INTO CategoryEntity(name, number)
@@ -66,6 +68,20 @@ selectAllCategories:
 SELECT name
 FROM CategoryEntity
 ORDER BY number;
+
+selectAllOptions:
+SELECT id, name, category
+FROM OptionEntity
+JOIN OptionCategoryEntity ON OptionEntity.id = OptionCategoryEntity.optionId;
+
+insertOption:
+INSERT INTO OptionEntity(restaurantId, name)
+VALUES (?, ?);
+
+insertOptionCategory:
+INSERT INTO OptionCategoryEntity(optionId, category)
+VALUES (?, ?);
+
 
 lastInsertRowId:
 SELECT last_insert_rowid();
