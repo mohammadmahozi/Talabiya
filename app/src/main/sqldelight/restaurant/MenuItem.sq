@@ -72,7 +72,8 @@ ORDER BY number;
 selectAllOptions:
 SELECT id, name, category
 FROM OptionEntity
-JOIN OptionCategoryEntity ON OptionEntity.id = OptionCategoryEntity.optionId;
+JOIN OptionCategoryEntity ON OptionEntity.id = OptionCategoryEntity.optionId
+WHERE restaurantId = ?;
 
 insertOption:
 INSERT INTO OptionEntity(restaurantId, name)

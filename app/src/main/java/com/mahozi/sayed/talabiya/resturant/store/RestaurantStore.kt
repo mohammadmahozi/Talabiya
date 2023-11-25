@@ -32,21 +32,6 @@ class RestaurantStore @Inject constructor(
     .asFlow()
     .mapToList(dispatcher)
 
-  val options: Flow<List<FoodOption>> = menuItemQueries.selectAllOptions()
-    .asFlow()
-    .map { query ->
-      query.executeAsList()
-        .groupBy { option -> option.id }
-        .map { (id, options) ->
-          FoodOption(
-            id,
-            options.first().name,
-            options.map { FoodOption.Category(it.category, true)
-            }
-          )
-        }
-    }
-
   fun menuItems(restaurantId: Long): Flow<List<MenuItem>> = menuItemQueries
     .menuItemsEntity(
       restaurantId = restaurantId,
@@ -87,6 +72,21 @@ class RestaurantStore @Inject constructor(
       menuItemQueries.selectAllCategories().executeAsList()
     }
   }
+
+  fun getOptions(restaurantId: Long): Flow<List<FoodOption>> = menuItemQueries.selectAllOptions(restaurantId)
+    .asFlow()
+    .map { query ->
+      query.executeAsList()
+        .groupBy { option -> option.id }
+        .map { (id, options) ->
+          FoodOption(
+            id,
+            options.first().name,
+            options.map { FoodOption.Category(it.category, true)
+            }
+          )
+        }
+    }
 
   suspend fun createOption(
     restaurantId: Long,

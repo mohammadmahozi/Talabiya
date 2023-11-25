@@ -17,6 +17,8 @@ import com.mahozi.sayed.talabiya.resturant.menu.CreateMenuItemPresenter
 import com.mahozi.sayed.talabiya.resturant.menu.CreateMenuItemScreen
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsPresenter
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsScreen
+import com.mahozi.sayed.talabiya.resturant.option.OptionsPresenter
+import com.mahozi.sayed.talabiya.resturant.option.OptionsScreen
 import com.mahozi.sayed.talabiya.user.create.CreateUserPresenter
 import com.mahozi.sayed.talabiya.user.create.CreateUserScreen
 import com.mahozi.sayed.talabiya.user.list.UsersPresenter
@@ -36,6 +38,7 @@ class Presenters @Inject constructor(
   private val usersPresenter: Provider<UsersPresenter>,
   private val createUserPresenter: Provider<CreateUserPresenter>,
   private val createSuborderPresenter: CreateSuborderPresenter.Factory,
+  private val optionsPresenter: OptionsPresenter.Factory,
 ) {
 
   fun create(screen: Screen): Presenter<*, *> {
@@ -50,6 +53,7 @@ class Presenters @Inject constructor(
       is UsersScreen -> usersPresenter.get()
       is CreateUserScreen -> createUserPresenter.get()
       is CreateSuborderScreen -> createSuborderPresenter.create(screen)
+      is OptionsScreen -> optionsPresenter.create(screen.restaurantId)
       else -> throw IllegalStateException("Unknown screen $screen")
     }
   }

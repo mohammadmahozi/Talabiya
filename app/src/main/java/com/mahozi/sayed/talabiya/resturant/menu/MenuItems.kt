@@ -32,6 +32,7 @@ import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
+import com.mahozi.sayed.talabiya.resturant.option.OptionsScreen
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -46,7 +47,7 @@ data class MenuItemsState(
 sealed interface MenuItemsEvent {
   data class MenuItemClicked(val item: MenuItem) : MenuItemsEvent
   object AddMenuItemClicked : MenuItemsEvent
-  object AddOptionClicked: MenuItemsEvent
+  object OptionsClicked: MenuItemsEvent
 }
 
 class MenuItemsPresenter @AssistedInject constructor(
@@ -63,7 +64,7 @@ class MenuItemsPresenter @AssistedInject constructor(
       when(event) {
         MenuItemsEvent.AddMenuItemClicked -> navigator.goto(CreateMenuItemScreen(restaurantId))
         is MenuItemsEvent.MenuItemClicked -> TODO()
-        MenuItemsEvent.AddOptionClicked -> TODO()
+        MenuItemsEvent.OptionsClicked -> navigator.goto(OptionsScreen(restaurantId))
       }
     }
 
@@ -99,8 +100,8 @@ fun MenuItemsScreen(
       TalabiyaBar(
         title = R.string.menu,
         overFlowActions = {
-          DropdownMenuItem(onClick = { onEvent(MenuItemsEvent.AddOptionClicked) }) {
-            Text(text = stringResource(R.string.add_option))
+          DropdownMenuItem(onClick = { onEvent(MenuItemsEvent.OptionsClicked) }) {
+            Text(text = stringResource(R.string.options))
           }
         }
       )
