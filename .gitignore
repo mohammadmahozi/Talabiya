@@ -5,7 +5,8 @@
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
-/.idea
+/.idea/*
+!.idea/codeStyles
 .DS_Store
 /build
 /captures
