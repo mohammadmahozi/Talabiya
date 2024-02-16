@@ -82,8 +82,7 @@ class RestaurantStore @Inject constructor(
           FoodOption(
             id,
             options.first().name,
-            options.map { FoodOption.Category(it.category, true)
-            }
+            options.map { FoodOption.Category(it.category, true) }
           )
         }
     }

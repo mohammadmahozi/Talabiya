@@ -108,7 +108,7 @@ class OptionsPresenter @AssistedInject constructor(
   Column {
     Text(text = option.name)
 
-    val categories = option.categories.joinToString(", ") { it.category }
+    val categories = option.categories.joinToString(", ") { it.name }
     Text(
       text = categories,
       fontSize = 12.sp,

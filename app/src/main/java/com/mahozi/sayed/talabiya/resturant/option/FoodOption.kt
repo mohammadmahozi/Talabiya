@@ -7,8 +7,8 @@ data class FoodOption(
   val categories: List<Category>,
 ) {
   data class Category(
-    val category: String,
-    val isSelected: Boolean
+    val name: String,
+    val selected: Boolean
   )
 }
 
