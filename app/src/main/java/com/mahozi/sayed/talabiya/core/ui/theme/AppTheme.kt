@@ -5,8 +5,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Shapes
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
@@ -41,7 +41,7 @@ private val LocalTypes = staticCompositionLocalOf { AppTypes() }
     ) {
         MaterialTheme(
             content = content,
-            colors = colors.material,
+            colorScheme = colors.material,
             shapes = Shapes(
                 small = RoundedCornerShape(5.dp),
                 medium = RoundedCornerShape(5.dp),

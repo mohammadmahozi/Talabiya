@@ -2,13 +2,12 @@ package com.mahozi.sayed.talabiya.core.ui.components
 
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,7 +36,9 @@ fun AddFab(
                 painterResource(R.drawable.ic_add_white_24dp),
                 stringResource(R.string.create_order)
             )
-        })
+        },
+      modifier = modifier
+    )
 }
 
 @Preview
@@ -45,7 +46,6 @@ fun AddFab(
 private fun PreviewConfirmFab() {
     AppTheme {
         ConfirmFab {
-
         }
     }
 }
@@ -60,7 +60,9 @@ fun ConfirmFab(
         modifier = modifier.defaultMinSize(minWidth = 56.dp, minHeight = 56.dp),
         enabled = enabled,
         shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(backgroundColor = AppTheme.colors.material.secondary)
+        colors = ButtonDefaults.buttonColors(
+          containerColor = AppTheme.colors.material.secondary
+        )
 
     ){
         Icon(
