@@ -7,14 +7,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ExposedDropdownMenuBox
-import androidx.compose.material.ExposedDropdownMenuDefaults
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -128,7 +128,7 @@ fun PreviewRestaurants() {
   )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Restaurants(
   selectedRestaurant: RestaurantEntity?,
@@ -150,7 +150,8 @@ private fun Restaurants(
         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
       },
       colors = ExposedDropdownMenuDefaults.textFieldColors(
-        backgroundColor = AppTheme.colors.lightBackground,
+        unfocusedContainerColor = AppTheme.colors.lightBackground,
+        focusedContainerColor = AppTheme.colors.lightBackground
       ),
       modifier = Modifier
         .fillMaxWidth()
@@ -169,15 +170,16 @@ private fun Restaurants(
     ) {
       restaurants.forEach { restaurant ->
         DropdownMenuItem(
+          text = {
+            Text(
+              text = restaurant.name,
+            )
+          },
           onClick = {
             onRestaurantSelected(restaurant)
             expanded = false
           },
-        ) {
-          Text(
-            text = restaurant.name,
-          )
-        }
+        )
       }
     }
   }

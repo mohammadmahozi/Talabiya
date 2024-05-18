@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -100,9 +100,11 @@ fun MenuItemsScreen(
       TalabiyaBar(
         title = R.string.menu,
         overFlowActions = {
-          DropdownMenuItem(onClick = { onEvent(MenuItemsEvent.OptionsClicked) }) {
-            Text(text = stringResource(R.string.options))
-          }
+          DropdownMenuItem(
+            text = {
+              Text(text = stringResource(R.string.options))
+            },
+            onClick = { onEvent(MenuItemsEvent.OptionsClicked) })
         }
       )
    },

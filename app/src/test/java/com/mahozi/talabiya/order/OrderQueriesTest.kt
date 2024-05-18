@@ -50,11 +50,11 @@ class OrderQueriesTest {
 
     orderQueries.insert(1, time)
 
-    database.customerQueries.insert("Customer 1")
+    database.userQueries.insert("Customer 1")
     orderQueries.insertOrderItem(1, 1, 1, 1)
     orderQueries.insertOrderItem(1, 1, 5, 2)
 
-    database.customerQueries.insert("Customer 2")
+    database.userQueries.insert("Customer 2")
     orderQueries.insertOrderItem(1, 2, 10, 1)
 
     orderQueries.selectAllOrderItems(1).executeAsList().forEach(::println)

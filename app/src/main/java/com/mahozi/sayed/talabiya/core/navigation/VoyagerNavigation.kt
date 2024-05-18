@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -104,20 +106,24 @@ private data class DelegatingVoyagerScreen(
     val ui = Uis(screen = screen) as Ui<Any?, Any?>
 
     CompositionLocalProvider(LocalDateTimeFormatter provides mainGraph.formatter()) {
-      Scaffold(
+      ModalNavigationDrawer(
         drawerContent = {
-          Drawer(
-            onOrdersClicked = { navigator.replaceAll(OrdersScreen) },
-            onRestaurantsClicked = { navigator.replaceAll(RestaurantsScreen) },
-            onUsersClicked = { navigator.replaceAll(UsersScreen) }
-          )
-        },
-      ) { paddingValues ->
-        Box(
-          modifier = Modifier
-            .padding(paddingValues)
-        ) {
-          ui.Content(state = state, onEvent = { screenModel.events.tryEmit(it) })
+          ModalDrawerSheet {
+            Drawer(
+              onOrdersClicked = { navigator.replaceAll(OrdersScreen) },
+              onRestaurantsClicked = { navigator.replaceAll(RestaurantsScreen) },
+              onUsersClicked = { navigator.replaceAll(UsersScreen) }
+            )
+          }
+        }
+      ) {
+        Scaffold { paddingValues ->
+          Box(
+            modifier = Modifier
+              .padding(paddingValues)
+          ) {
+            ui.Content(state = state, onEvent = { screenModel.events.tryEmit(it) })
+          }
         }
       }
     }

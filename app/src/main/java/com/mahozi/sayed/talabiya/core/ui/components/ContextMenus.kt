@@ -1,8 +1,8 @@
 package com.mahozi.sayed.talabiya.core.ui.components
 
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +27,7 @@ import com.mahozi.sayed.talabiya.R
     modifier = modifier,
   ) {
     DropdownMenuItem(
-      content = { Text(stringResource(R.string.delete)) },
+      text = { Text(stringResource(R.string.delete)) },
       onClick = {
         confirm = true
         onDismiss()

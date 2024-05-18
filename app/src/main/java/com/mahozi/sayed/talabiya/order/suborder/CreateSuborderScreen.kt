@@ -14,15 +14,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -58,7 +57,8 @@ data class CreateSuborderScreen(
 ) : Screen
 
 @Preview
-@Composable private fun PreviewCreateSuborderScreen() {
+@Composable
+private fun PreviewCreateSuborderScreen() {
   val menu = listOf(
     MenuItem(
       0,
@@ -75,17 +75,17 @@ data class CreateSuborderScreen(
   }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@Composable fun CreateSuborderScreen(
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CreateSuborderScreen(
   state: CreateSuborderState,
   onEvent: (CreateSuborderEvent) -> Unit,
   modifier: Modifier = Modifier,
 ) {
 
-  val sheetState = ModalBottomSheetState(
-    initialValue = ModalBottomSheetValue.Hidden,
-    isSkipHalfExpanded = true,
-    )
+  val sheetState = rememberModalBottomSheetState(
+    skipPartiallyExpanded = true,
+  )
   val scope = rememberCoroutineScope()
 
   LaunchedEffect(state.openedOrderItemState) {
@@ -96,9 +96,65 @@ data class CreateSuborderScreen(
     }
   }
 
-  ModalBottomSheetLayout(
+  Scaffold(
+    topBar = {
+      SearchBar(
+        title = R.string.menu,
+        query = "",
+        onSearchClicked = {},
+        onQueryChanged = {},
+      )
+    },
+    floatingActionButton = {
+      AddFab {
+
+      }
+    }
+  ) { paddingValues ->
+    Row {
+      val lazyState = rememberLazyListState()
+
+      LazyColumn(
+        state = lazyState,
+        modifier = modifier
+          .weight(1F)
+          .padding(paddingValues)
+      ) {
+        items(state.menuItems) { menuItem ->
+          MenuItem(item = menuItem, onItemClicked = {
+            onEvent(CreateSuborderEvent.MenuItemClicked(it.id))
+          })
+          Divider()
+        }
+      }
+
+      Divider(
+        modifier = Modifier
+          .fillMaxHeight()
+          .width(1.dp)
+      )
+
+      //TODO A big is causing state value inside the lambda to always be the first value (empty menu items)
+      // So we will only show the index when it is no empty. Investigate later
+      if (state.menuItems.isNotEmpty()) {
+        AlphabetIndex(
+          onLetterSelected = { letter ->
+            val index = state.menuItems.map { item -> item.name.first().toString() }.indexOf(letter)
+            if (index != -1) {
+              scope.launch {
+                lazyState.animateScrollToItem(index)
+              }
+            }
+          }
+        )
+      }
+    }
+  }
+
+  ModalBottomSheet(
+    onDismissRequest = { },
     sheetState = sheetState,
-    sheetContent = {
+    content = {
       if (state.openedOrderItemState != null) {
         AddOrderItem(
           state = state.openedOrderItemState,
@@ -110,67 +166,12 @@ data class CreateSuborderScreen(
           }
         )
       }
-    },
-    content = {
-      Scaffold(
-        topBar = {
-          SearchBar(
-            title = R.string.menu,
-            query = "",
-            onSearchClicked = {},
-            onQueryChanged = {},
-          )
-        },
-        floatingActionButton = {
-          AddFab {
-
-          }
-        }
-      ) { paddingValues ->
-        Row {
-          val lazyState = rememberLazyListState()
-
-          LazyColumn(
-            state = lazyState,
-            modifier = modifier
-              .weight(1F)
-              .padding(paddingValues)
-          ) {
-            items(state.menuItems) { menuItem ->
-              MenuItem(item = menuItem, onItemClicked = {
-                onEvent(CreateSuborderEvent.MenuItemClicked(it.id))
-              })
-              Divider()
-            }
-          }
-
-          Divider(
-            modifier = Modifier
-              .fillMaxHeight()
-              .width(1.dp)
-          )
-
-          //TODO A big is causing state value inside the lambda to always be the first value (empty menu items)
-          // So we will only show the index when it is no empty. Investigate later
-          if (state.menuItems.isNotEmpty()) {
-            AlphabetIndex(
-              onLetterSelected = { letter ->
-                val index = state.menuItems.map { item -> item.name.first().toString() }.indexOf(letter)
-                if (index != -1) {
-                  scope.launch {
-                    lazyState.animateScrollToItem(index)
-                  }
-                }
-              }
-            )
-          }
-        }
-      }
     }
   )
 }
 
-@Composable private fun MenuItem(
+@Composable
+private fun MenuItem(
   item: MenuItem,
   onItemClicked: (MenuItem) -> Unit,
 ) {
@@ -195,7 +196,8 @@ data class CreateSuborderScreen(
   }
 }
 
-@Composable private fun AlphabetIndex(
+@Composable
+private fun AlphabetIndex(
   onLetterSelected: (letter: String) -> Unit
 ) {
   val letters = stringResource(R.string.alphabet).split(" ")
@@ -259,7 +261,8 @@ data class CreateSuborderScreen(
 }
 
 @Preview(showBackground = true)
-@Composable private fun PreviewAddOrderItem() {
+@Composable
+private fun PreviewAddOrderItem() {
   AppTheme {
     AddOrderItem(
       state = OpenedOrderItemState(1, 13),
@@ -269,7 +272,8 @@ data class CreateSuborderScreen(
   }
 }
 
-@Composable private fun AddOrderItem(
+@Composable
+private fun AddOrderItem(
   state: OpenedOrderItemState,
   onQuantityChanged: (newQuantity: Int) -> Unit,
   onConfirm: () -> Unit,

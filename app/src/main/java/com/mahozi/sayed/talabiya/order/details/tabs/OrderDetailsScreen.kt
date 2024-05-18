@@ -3,8 +3,8 @@ package com.mahozi.sayed.talabiya.order.details.tabs
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.mahozi.sayed.talabiya.R
@@ -53,7 +53,7 @@ fun Tabs(
 ) {
   TabRow(
     selectedTabIndex = selectedTabIndex,
-    backgroundColor = AppTheme.colors.lightBackground,
+    containerColor = AppTheme.colors.lightBackground,
     contentColor = AppTheme.colors.primaryText,
     indicator = @Composable { tabPositions ->
       TabRowDefaults.Indicator(

@@ -3,14 +3,13 @@ package com.mahozi.sayed.talabiya.core.ui.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ExposedDropdownMenuBox
-import androidx.compose.material.ExposedDropdownMenuDefaults
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +38,7 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
   }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> DropDown(
   value: String,
@@ -65,7 +64,8 @@ fun <T> DropDown(
         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
       },
       colors = ExposedDropdownMenuDefaults.textFieldColors(
-        backgroundColor = AppTheme.colors.material.background,
+        focusedContainerColor = AppTheme.colors.material.background,
+        unfocusedContainerColor = AppTheme.colors.material.background,
       ),
       modifier = Modifier
         .fillMaxWidth()
@@ -84,13 +84,14 @@ fun <T> DropDown(
     ) {
       items.forEach { item ->
         DropdownMenuItem(
+          text = {
+            itemContent(item)
+          },
           onClick = {
             onItemSelected(item)
             expanded = false
           },
-        ) {
-          itemContent(item)
-        }
+        )
       }
     }
   }
