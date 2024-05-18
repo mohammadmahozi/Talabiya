@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -33,6 +32,7 @@ import com.mahozi.sayed.talabiya.core.ui.components.DateField
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.components.TimeField
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
+import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme.colors
 import kotlinx.parcelize.Parcelize
 import restaurant.RestaurantEntity
 import java.time.LocalDate
@@ -146,6 +146,7 @@ private fun Restaurants(
       onValueChange = { },
       label = { Text(stringResource(R.string.select_restaurant)) },
       readOnly = true,
+      singleLine = true,
       trailingIcon = {
         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
       },
@@ -155,16 +156,12 @@ private fun Restaurants(
       ),
       modifier = Modifier
         .fillMaxWidth()
+        .menuAnchor()
     )
 
-    DropdownMenu(
+    ExposedDropdownMenu(
       expanded = expanded,
       onDismissRequest = { expanded = false },
-      properties = PopupProperties(
-        focusable = true,
-        dismissOnClickOutside = true,
-        dismissOnBackPress = true
-      ),
       modifier = Modifier
         .exposedDropdownSize()
     ) {
