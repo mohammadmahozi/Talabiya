@@ -22,7 +22,9 @@ data class TalabiyaColorScheme(
   val lightBackground: Color,
   val mediumBackground: Color,
   val darkBackground: Color,
-)
+) {
+  val primary get() = material.primary
+}
 
 val lightColors = TalabiyaColorScheme(
   material = lightColorScheme(
