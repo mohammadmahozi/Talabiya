@@ -1,6 +1,9 @@
 package com.mahozi.sayed.talabiya.core.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
@@ -10,19 +13,20 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewAppCheckBox() {
+private fun PreviewCheckBox() {
   AppTheme {
-    AppCheckbox(text = "Test", checked = true, onCheckedChange = {})
+    TalabiyaCheckbox(text = "Test", checked = true, onCheckedChange = {})
   }
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppCheckbox(
+fun TalabiyaCheckbox(
   text: String,
   checked: Boolean,
   onCheckedChange: ((Boolean) -> Unit),
@@ -31,15 +35,19 @@ fun AppCheckbox(
 
   Row(
     verticalAlignment = Alignment.CenterVertically,
-    modifier = modifier,
+    modifier = modifier
+      .clickable {
+        onCheckedChange(!checked)
+      },
   ) {
     CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
       Checkbox(
         checked = checked,
-        onCheckedChange = onCheckedChange
+        onCheckedChange = onCheckedChange,
       )
     }
 
+    Spacer(modifier = Modifier.width(8.dp))
     Text(text = text)
   }
 }

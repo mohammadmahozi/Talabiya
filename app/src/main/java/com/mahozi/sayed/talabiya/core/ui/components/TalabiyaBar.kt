@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
 @Preview
@@ -70,14 +71,26 @@ fun TalabiyaBar(
   actions: @Composable RowScope.() -> Unit = {},
   overFlowActions: (@Composable ColumnScope.() -> Unit)? = null
 ) {
+  TalabiyaBar(
+    title = { Text(text = string(title)) },
+    modifier = modifier,
+    actions = actions,
+    overFlowActions = overFlowActions)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TalabiyaBar(
+  title: @Composable () -> Unit,
+  modifier: Modifier = Modifier,
+  actions: @Composable RowScope.() -> Unit = {},
+  overFlowActions: (@Composable ColumnScope.() -> Unit)? = null
+) {
   var showMenu by remember { mutableStateOf(false) }
 
   TopAppBar(
     title = {
-      Text(
-        text = stringResource(id = title),
-        color = Color.White
-      )
+      title()
     },
     actions = {
       actions()
@@ -100,6 +113,7 @@ fun TalabiyaBar(
     modifier = modifier,
     colors = TopAppBarDefaults.topAppBarColors(
       containerColor = AppTheme.colors.primary,
+      titleContentColor = Color.White,
       navigationIconContentColor = Color.White,
       actionIconContentColor = Color.White
     )

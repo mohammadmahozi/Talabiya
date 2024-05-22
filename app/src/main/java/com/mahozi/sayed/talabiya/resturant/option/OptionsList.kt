@@ -19,6 +19,7 @@ import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.Preview
+import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
@@ -46,13 +47,14 @@ sealed interface OptionsEvent {
 class OptionsPresenter @AssistedInject constructor(
   @Assisted private val restaurantId: Long,
   private val restaurantStore: RestaurantStore,
+  private val navigator: Navigator,
 ): Presenter<OptionsEvent, OptionsState> {
 
   @Composable override fun start(events: Flow<OptionsEvent>): OptionsState {
     val options by remember { restaurantStore.getOptions(restaurantId) }.collectAsState(initial = emptyList())
     CollectEvents(events) {
       when(it) {
-        OptionsEvent.AddOption -> TODO()
+        OptionsEvent.AddOption -> navigator.goto(CreateOptionScreen(restaurantId))
       }
     }
 

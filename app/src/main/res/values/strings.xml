@@ -119,5 +119,7 @@
     <string name="show_menu">Show menu</string>
     <string name="add_option">Add option</string>
     <string name="options">Options</string>
+    <string name="create_option">Create an option</string>
+    <string name="enter_option_name">Enter option name</string>
 
 </resources>

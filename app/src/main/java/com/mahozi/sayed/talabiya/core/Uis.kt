@@ -30,6 +30,9 @@ import com.mahozi.sayed.talabiya.resturant.menu.CreateMenuItemState
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsEvent
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsScreen
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsState
+import com.mahozi.sayed.talabiya.resturant.option.CreateOptionEvent
+import com.mahozi.sayed.talabiya.resturant.option.CreateOptionScreen
+import com.mahozi.sayed.talabiya.resturant.option.CreateOptionState
 import com.mahozi.sayed.talabiya.resturant.option.OptionsEvent
 import com.mahozi.sayed.talabiya.resturant.option.OptionsScreen
 import com.mahozi.sayed.talabiya.resturant.option.OptionsState
@@ -90,6 +93,9 @@ fun Uis(
       OptionsScreen(state, onEvent)
     }
 
+    is CreateOptionScreen -> ui<CreateOptionState, CreateOptionEvent> { state, onEvent ->
+      CreateOptionScreen(state = state, onEvent = onEvent)
+    }
     else -> throw IllegalStateException("Unknown screen $screen")
   }
 }
