@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
@@ -26,7 +27,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -90,12 +95,28 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   val sheetState = rememberModalBottomSheetState(
     skipPartiallyExpanded = true
   )
+  val sheetMaxHeight = LocalConfiguration.current.screenHeightDp * 0.5
+  var showUsersSheetState by remember { mutableStateOf(false) }
+
+  if (showUsersSheetState) {
+    ModalBottomSheet(
+      sheetState = sheetState,
+      onDismissRequest = { showUsersSheetState = false }
+    ) {
+      Users(
+        users = state.users,
+        onUserClicked = { onEvent(SuborderEvent.UserClicked(it)) },
+        modifier = Modifier
+          .height(sheetMaxHeight.dp)
+      )
+    }
+  }
 
   Scaffold(
     floatingActionButton = {
       AddFab {
         scope.launch {
-          sheetState.show()
+          showUsersSheetState = true
         }
       }
     },
@@ -113,20 +134,6 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
       }
     }
   }
-
-  val sheetMaxHeight = LocalConfiguration.current.screenHeightDp * 0.5
-
-  ModalBottomSheet(
-    onDismissRequest = { scope.launch{ sheetState.hide() } }
-  ) {
-    Users(
-      users = state.users,
-      onUserClicked = { onEvent(SuborderEvent.UserClicked(it)) },
-      modifier = Modifier
-        .height(sheetMaxHeight.dp)
-    )
-  }
-
 }
 
 @Preview(showBackground = true)
@@ -146,12 +153,12 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
       onEditClicked = { }
     )
 
-    Divider(color = AppTheme.colors.material.primary)
+    HorizontalDivider(color = AppTheme.colors.material.primary)
 
     if (suborder.expanded) {
       suborder.items.forEach { orderItem ->
         OrderItem(orderItem)
-        Divider(color = AppTheme.colors.mediumBackground)
+        HorizontalDivider(color = AppTheme.colors.mediumBackground)
       }
     }
 
