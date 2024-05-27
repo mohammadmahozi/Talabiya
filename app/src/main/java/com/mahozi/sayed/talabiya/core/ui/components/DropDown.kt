@@ -69,6 +69,7 @@ fun <T> DropDown(
       ),
       modifier = Modifier
         .fillMaxWidth()
+        .menuAnchor()
     )
 
     DropdownMenu(
