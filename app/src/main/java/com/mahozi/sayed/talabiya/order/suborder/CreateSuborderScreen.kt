@@ -67,7 +67,7 @@ private fun PreviewCreateSuborderScreen() {
     MenuItem(
       0,
       "Item 1",
-      "Pastery",
+      "Pastry",
       0L,
       14.money,
     )
