@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +32,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,13 +48,19 @@ fun PreviewBar() {
     Column(
       verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-      TalabiyaBar(title = R.string.app_name)
+      TalabiyaBar(
+        title = R.string.app_name,
+      )
 
       TalabiyaBar(
         title = R.string.app_name,
+        navigationIcon = { TalabiyaTopBarDefaults.BackIcon(onClick = { }) },
         actions = {
-
-          Icon(imageVector = Icons.Default.Call, contentDescription = null)
+          TalabiyaIconButton(
+            imageVector = Icons.Default.Call,
+            contentDescription = null,
+            onClick = {}
+          )
         },
         overFlowActions = {
           DropdownMenuItem(
@@ -69,12 +80,14 @@ fun PreviewBar() {
 fun TalabiyaBar(
   @StringRes title: Int,
   modifier: Modifier = Modifier,
+  navigationIcon: @Composable () -> Unit = {},
   actions: @Composable RowScope.() -> Unit = {},
   overFlowActions: (@Composable ColumnScope.() -> Unit)? = null
 ) {
   TalabiyaBar(
     title = { Text(text = string(title)) },
     modifier = modifier,
+    navigationIcon = navigationIcon,
     actions = actions,
     overFlowActions = overFlowActions)
 }
@@ -84,6 +97,7 @@ fun TalabiyaBar(
 fun TalabiyaBar(
   title: @Composable () -> Unit,
   modifier: Modifier = Modifier,
+  navigationIcon: @Composable () -> Unit = {},
   actions: @Composable RowScope.() -> Unit = {},
   overFlowActions: (@Composable ColumnScope.() -> Unit)? = null
 ) {
@@ -93,16 +107,17 @@ fun TalabiyaBar(
     title = {
       title()
     },
+    navigationIcon = navigationIcon,
     actions = {
       actions()
 
       if (overFlowActions != null) {
-        IconButton(onClick = { showMenu = !showMenu }) {
-          Icon(
-            imageVector = Icons.Default.MoreVert,
-            contentDescription = stringResource(R.string.show_menu)
-          )
-        }
+        TalabiyaIconButton(
+          imageVector = Icons.Default.MoreVert,
+          contentDescription = stringResource(R.string.show_menu),
+          onClick = { showMenu = !showMenu }
+        )
+
         DropdownMenu(
           expanded = showMenu,
           onDismissRequest = { showMenu = false }
@@ -205,18 +220,73 @@ fun SearchField(
 }
 
 @Composable
-fun SearchAction(
+private fun SearchAction(
   onClick: () -> Unit,
-  modifier: Modifier = Modifier,
 ) {
   IconButton(
     onClick = onClick,
-    modifier = modifier
   ) {
     Icon(
       imageVector = Icons.Default.Search,
       contentDescription = stringResource(R.string.search_by_food_name),
     )
   }
+}
 
+@Preview
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun PreviewTalabiyaCenterAlignedTopBar() {
+  AppTheme {
+    Column {
+      TalabiyaCenterAlignedTopBar(
+        title = { Text(text = "Test") },
+        navigationIcon = { TalabiyaTopBarDefaults.BackIcon(onClick = { /*TODO*/ }) }
+      )
+    }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TalabiyaCenterAlignedTopBar(
+  title: @Composable () -> Unit,
+  modifier: Modifier = Modifier,
+  navigationIcon: @Composable () -> Unit = {},
+  actions: @Composable RowScope.() -> Unit = {},
+  colors: TopAppBarColors = TalabiyaTopBarDefaults.primary(),
+) {
+  CenterAlignedTopAppBar(
+    title = title,
+    modifier = modifier,
+    navigationIcon = navigationIcon,
+    actions = actions,
+    colors = colors,
+  )
+}
+
+object TalabiyaTopBarDefaults {
+
+  @OptIn(ExperimentalMaterial3Api::class)
+  @Composable
+  fun primary() = TopAppBarColors(
+    containerColor = AppTheme.colors.primary,
+    scrolledContainerColor = AppTheme.colors.primary,
+    navigationIconContentColor = Color.White,
+    titleContentColor = Color.White,
+    actionIconContentColor = Color.White,
+  )
+
+  @Composable
+  fun BackIcon(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+  ) {
+    TalabiyaIconButton(
+      imageVector = Icons.AutoMirrored.Default.ArrowBack,
+      contentDescription = stringResource(id = R.string.back),
+      onClick = onClick,
+      modifier = modifier
+    )
+  }
 }

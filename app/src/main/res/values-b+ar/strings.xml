@@ -117,6 +117,7 @@
     <string name="create_option">Create an option</string>
     <string name="enter_option_name">Enter option name</string>
     <string name="view_selected_items">View selected items</string>
+    <string name="back">Back</string>
 
 
 </resources>
