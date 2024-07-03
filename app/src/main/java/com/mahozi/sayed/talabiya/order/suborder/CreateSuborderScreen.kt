@@ -46,8 +46,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.core.navigation.LocalNavigator
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaSearchBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
@@ -123,12 +125,17 @@ fun CreateSuborderScreen(
     }
   }
 
+  val navigator = LocalNavigator.current
+
   Scaffold(
     topBar = {
       TalabiyaSearchBar(
         title = { Text(stringResource(R.string.menu)) },
         query = "",
         onQueryChanged = {},
+        navigationIcon = {
+          TalabiyaTopBarDefaults.BackIcon(onClick = { navigator.back() })
+        },
         actions = {
           IconButton(onClick = { onEvent(CreateSuborderEvent.AddMenuItemClicked) }) {
             Icon(

@@ -154,6 +154,7 @@ fun TalabiyaSearchBar(
   query: String,
   onQueryChanged: (String) -> Unit,
   modifier: Modifier = Modifier,
+  navigationIcon: @Composable () -> Unit = {},
   actions: @Composable RowScope.() -> Unit = {},
 ) {
   var isSearching by remember { mutableStateOf(false) }
@@ -185,6 +186,7 @@ fun TalabiyaSearchBar(
         title()
       }
     },
+    navigationIcon = navigationIcon,
     actions = {
       actions()
 
@@ -199,7 +201,7 @@ fun TalabiyaSearchBar(
 }
 
 @Composable
-fun SearchField(
+private fun SearchField(
   query: String,
   onQueryChanged: (String) -> Unit,
   modifier: Modifier = Modifier

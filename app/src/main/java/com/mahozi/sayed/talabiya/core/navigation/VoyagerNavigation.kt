@@ -105,7 +105,10 @@ private data class DelegatingVoyagerScreen(
     val state by screenModel.states.collectAsState()
     val ui = Uis(screen = screen) as Ui<Any?, Any?>
 
-    CompositionLocalProvider(LocalDateTimeFormatter provides mainGraph.formatter()) {
+    CompositionLocalProvider(
+      LocalDateTimeFormatter provides mainGraph.formatter(),
+          com.mahozi.sayed.talabiya.core.navigation.LocalNavigator provides navigator
+      ) {
       ModalNavigationDrawer(
         drawerContent = {
           ModalDrawerSheet {
