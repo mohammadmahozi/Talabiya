@@ -8,8 +8,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
-import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
+import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.order.store.OrderStore
+import com.mahozi.sayed.talabiya.resturant.menu.CreateMenuItemScreen
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantStore
 import dagger.assisted.Assisted
@@ -24,6 +25,7 @@ class CreateSuborderPresenter @AssistedInject constructor(
   @Assisted private val screen: CreateSuborderScreen,
   private val orderStore: OrderStore,
   private val restaurantStore: RestaurantStore,
+  private val navigator: Navigator,
 ): Presenter<CreateSuborderEvent, CreateSuborderState> {
 
   @Composable override fun start(events: Flow<CreateSuborderEvent>): CreateSuborderState {
@@ -35,7 +37,12 @@ class CreateSuborderPresenter @AssistedInject constructor(
 
     CollectEvents(events) { event ->
       when(event) {
-        CreateSuborderEvent.AddMenuItemClicked -> TODO()
+        CreateSuborderEvent.AddMenuItemClicked -> {
+          launch {
+            val restaurantId = orderStore.getRestaurantId(screen.orderId)
+            navigator.goto(CreateMenuItemScreen(restaurantId))
+          }
+        }
         is CreateSuborderEvent.MenuItemClicked -> {
           //TODO fix id comparision
           val quantity = addedItems.find { it.id == event.priceId }?.quantity ?: 1

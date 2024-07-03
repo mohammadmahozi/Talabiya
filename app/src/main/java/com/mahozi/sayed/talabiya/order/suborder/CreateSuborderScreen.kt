@@ -130,7 +130,7 @@ fun CreateSuborderScreen(
         query = "",
         onQueryChanged = {},
         actions = {
-          IconButton(onClick = { /*TODO*/ }) {
+          IconButton(onClick = { onEvent(CreateSuborderEvent.AddMenuItemClicked) }) {
             Icon(
               painterResource(R.drawable.ic_add_white_24dp),
               stringResource(R.string.add_new_item)
