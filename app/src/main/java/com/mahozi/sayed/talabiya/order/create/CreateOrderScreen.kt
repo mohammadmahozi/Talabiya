@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.PopupProperties
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.navigation.Screen
@@ -32,7 +31,6 @@ import com.mahozi.sayed.talabiya.core.ui.components.DateField
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.components.TimeField
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
-import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme.colors
 import kotlinx.parcelize.Parcelize
 import restaurant.RestaurantEntity
 import java.time.LocalDate
