@@ -81,8 +81,17 @@ JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntit
 JOIN MenuItemEntity ON MenuItemPriceEntity.id = MenuItemEntity.id
 WHERE OrderItemEntity.orderId = ?;
 
+selectUserOrderItems:
+SELECT OrderItemEntity.id, OrderItemEntity.customerId, MenuItemPriceEntity.price,
+OrderItemEntity.quantity, MenuItemEntity.name, (MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total
+FROM OrderItemEntity
+JOIN UserEntity ON OrderItemEntity.customerId = UserEntity.id
+JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
+JOIN MenuItemEntity ON MenuItemPriceEntity.id = MenuItemEntity.id
+WHERE OrderItemEntity.orderId = :orderId AND UserEntity.id = :userId;
+
 insertOrderItem:
-INSERT INTO OrderItemEntity(orderId, customerId, quantity, menuItemPriceId)
+INSERT OR REPLACE INTO OrderItemEntity(orderId, customerId, quantity, menuItemPriceId)
 VALUES (?, ?, ?, ?);
 
 selectRestaurantId:

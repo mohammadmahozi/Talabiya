@@ -2,6 +2,7 @@ package com.mahozi.sayed.talabiya.order.details.suborder
 
 import com.mahozi.sayed.talabiya.core.Money
 
+//TODO rename to userOrder
 data class Suborder(
   val id: Long,
   val customer: String,

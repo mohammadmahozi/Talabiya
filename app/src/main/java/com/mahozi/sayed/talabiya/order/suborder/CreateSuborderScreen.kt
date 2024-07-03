@@ -15,15 +15,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,9 +47,9 @@ import androidx.compose.ui.window.Popup
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.navigation.Screen
-import com.mahozi.sayed.talabiya.core.ui.components.AddFab
-import com.mahozi.sayed.talabiya.core.ui.components.SearchBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaSearchBar
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
+import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -64,12 +68,13 @@ private fun PreviewCreateSuborderScreen() {
       0,
       "Item 1",
       "Pastery",
-      14.money
+      0L,
+      14.money,
     )
   )
   AppTheme {
     CreateSuborderScreen(
-      state = CreateSuborderState(menu, null),
+      state = CreateSuborderState(menu, listOf(), null),
       onEvent = {}
     )
   }
@@ -82,35 +87,69 @@ fun CreateSuborderScreen(
   onEvent: (CreateSuborderEvent) -> Unit,
   modifier: Modifier = Modifier,
 ) {
-
-  val sheetState = rememberModalBottomSheetState(
-    skipPartiallyExpanded = true,
-  )
   val scope = rememberCoroutineScope()
 
-  LaunchedEffect(state.openedOrderItemState) {
-    if (state.openedOrderItemState != null) {
-      sheetState.show()
-    } else {
-      sheetState.hide()
+  val quantitySheetState = rememberModalBottomSheetState(
+    skipPartiallyExpanded = true,
+  )
+  if (state.openedOrderItemState != null) {
+    ModalBottomSheet(
+      onDismissRequest = { onEvent(CreateSuborderEvent.OnCancelAddingMenuItem) },
+      sheetState = quantitySheetState,
+    ) {
+      AddOrderItem(
+        state = state.openedOrderItemState,
+        onQuantityChanged = {
+          onEvent(CreateSuborderEvent.QuantityChanged(it))
+        },
+        onConfirm = {
+          onEvent(CreateSuborderEvent.OnSaveMenuItemClicked)
+        }
+      )
+    }
+  }
+
+  val orderSheetState = rememberModalBottomSheetState(
+    skipPartiallyExpanded = true,
+  )
+  var orderSheetExpanded by remember { mutableStateOf(false) }
+  if (orderSheetExpanded) {
+    ModalBottomSheet(
+      onDismissRequest = { orderSheetExpanded = false },
+      sheetState = orderSheetState,
+      dragHandle = null,
+    ) {
+      UserOrderItems(items = state.addedItems)
     }
   }
 
   Scaffold(
     topBar = {
-      SearchBar(
-        title = R.string.menu,
+      TalabiyaSearchBar(
+        title = { Text(stringResource(R.string.menu)) },
         query = "",
-        onSearchClicked = {},
         onQueryChanged = {},
-      )
-    },
-    floatingActionButton = {
-      AddFab {
+        actions = {
+          IconButton(onClick = { /*TODO*/ }) {
+            Icon(
+              painterResource(R.drawable.ic_add_white_24dp),
+              stringResource(R.string.add_new_item)
+            )
+          }
 
-      }
+          if (state.addedItems.isNotEmpty()) {
+            IconButton(onClick = { orderSheetExpanded = true }) {
+              Icon(
+                painter = painterResource(id = R.drawable.ic_order),
+                contentDescription = stringResource(R.string.view_selected_items),
+              )
+            }
+          }
+        }
+      )
     }
   ) { paddingValues ->
+
     Row {
       val lazyState = rememberLazyListState()
 
@@ -122,17 +161,13 @@ fun CreateSuborderScreen(
       ) {
         items(state.menuItems) { menuItem ->
           MenuItem(item = menuItem, onItemClicked = {
-            onEvent(CreateSuborderEvent.MenuItemClicked(it.id))
+            onEvent(CreateSuborderEvent.MenuItemClicked(it.priceId))
           })
-          Divider()
+          HorizontalDivider()
         }
       }
 
-      Divider(
-        modifier = Modifier
-          .fillMaxHeight()
-          .width(1.dp)
-      )
+      VerticalDivider()
 
       //TODO A big is causing state value inside the lambda to always be the first value (empty menu items)
       // So we will only show the index when it is no empty. Investigate later
@@ -150,24 +185,54 @@ fun CreateSuborderScreen(
       }
     }
   }
+}
 
-  ModalBottomSheet(
-    onDismissRequest = { },
-    sheetState = sheetState,
-    content = {
-      if (state.openedOrderItemState != null) {
-        AddOrderItem(
-          state = state.openedOrderItemState,
-          onQuantityChanged = {
-            onEvent(CreateSuborderEvent.QuantityChanged(it))
-          },
-          onConfirm = {
-            onEvent(CreateSuborderEvent.OnSaveMenuItemClicked)
-          }
+@Preview(showBackground = true)
+@Composable
+private fun PreviewUserOrderItems() {
+  AppTheme {
+    UserOrderItems(listOf(
+      OrderItem(0L, 1, "Name", 20.money),
+      OrderItem(0L, 1, "Name", 20.money),
+      OrderItem(0L, 1, "Name", 20.money),
+    ),)
+  }
+}
+@Composable
+private fun UserOrderItems(
+  items: List<OrderItem>
+) {
+
+  Column {
+    items.forEach { item ->
+      Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+          .clickable { }
+          .padding(vertical = 12.dp, horizontal = 16.dp)
+      ) {
+
+        Text(
+          text = item.quantity.toString(),
+          style = AppTheme.types.title
+        )
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Text(
+          text = item.name,
+          style = AppTheme.types.title
+        )
+
+        Spacer(Modifier.weight(1F))
+
+        Text(
+          text = item.total.format(),
+          style = AppTheme.types.title
         )
       }
     }
-  )
+  }
 }
 
 @Composable
@@ -283,7 +348,9 @@ private fun AddOrderItem(
     modifier = Modifier
       .padding(16.dp),
   ) {
-    Row {
+    Row(
+      verticalAlignment = Alignment.CenterVertically
+    ) {
       Text(
         text = stringResource(R.string.quantity),
         style = AppTheme.types.title

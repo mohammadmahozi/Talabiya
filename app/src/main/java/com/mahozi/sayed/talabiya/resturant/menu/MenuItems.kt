@@ -84,7 +84,7 @@ data class MenuItemsScreen(val restaurantId: Long) : Screen
 @Composable private fun PreviewMenuItemsScreen(){
   Preview {
     val state = MenuItemsState(
-      listOf(MenuItem(0, "Item 1", "Category", 12.money))
+      listOf(MenuItem(0, "Item 1", "Category", 0L, 12.money))
     )
     MenuItemsScreen(state = state, onEvent = {})
   }
@@ -138,8 +138,9 @@ private fun PreviewMenuItem() {
       MenuItem(
         0L,
         "Pizza",
-        "Pastery",
-        15.0.money
+        "Pastry",
+        0L,
+        15.0.money,
       )
     ){}
   }

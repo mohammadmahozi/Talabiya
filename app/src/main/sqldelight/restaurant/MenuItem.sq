@@ -57,7 +57,7 @@ VALUES (?, ?, ?);
 
 menuItemsEntity:
 SELECT MenuItemEntity.id, MenuItemEntity.name, MenuItemPriceEntity.price, max(MenuItemPriceEntity.datetime),
-CategoryEntity.name
+MenuItemPriceEntity.id, CategoryEntity.name
 FROM MenuItemEntity
 JOIN MenuItemPriceEntity ON MenuItemEntity.id = MenuItemPriceEntity.menuItemId
 JOIN CategoryEntity ON MenuItemEntity.category = CategoryEntity.name

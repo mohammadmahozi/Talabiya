@@ -70,6 +70,24 @@ class OrderStore @Inject constructor(
       }
   }
 
+  fun getUserOrderItems(
+    orderId: Long,
+    userId: Long,
+  ): Flow<List<OrderItem>> {
+    return orderQueries.selectUserOrderItems(orderId, userId)
+      .asFlow()
+      .map { query ->
+        query.executeAsList().map { item ->
+          OrderItem(
+            item.id,
+            item.quantity.toInt(),
+            item.name,
+            item.total.money
+          )
+        }
+      }
+  }
+
   suspend fun createOrder(
     restaurantId: Long,
     date: LocalDate,
@@ -80,6 +98,19 @@ class OrderStore @Inject constructor(
       orderQueries.insert(
         restaurantId = restaurantId,
         createdAt = instant
+      )
+    }
+  }
+
+  suspend fun insertOrderItem(
+    orderId: Long,
+    customerId: Long,
+    quantity: Long,
+    menuItemPriceId: Long
+  ) {
+    withContext(dispatcher) {
+      orderQueries.insertOrderItem(
+        orderId, customerId, quantity, menuItemPriceId
       )
     }
   }

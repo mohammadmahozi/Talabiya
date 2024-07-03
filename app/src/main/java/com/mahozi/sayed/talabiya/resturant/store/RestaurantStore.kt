@@ -8,7 +8,6 @@ import com.mahozi.sayed.talabiya.core.Cent
 import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase.Companion.getDatabase
 import com.mahozi.sayed.talabiya.core.money
-import com.mahozi.sayed.talabiya.resturant.menu.Category
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 import com.mahozi.sayed.talabiya.resturant.option.FoodOption
 import kotlinx.coroutines.CoroutineDispatcher
@@ -35,11 +34,12 @@ class RestaurantStore @Inject constructor(
   fun menuItems(restaurantId: Long): Flow<List<MenuItem>> = menuItemQueries
     .menuItemsEntity(
       restaurantId = restaurantId,
-      mapper = { id, name, price, _, category ->
+      mapper = { id, name, price, _, priceId, category ->
         MenuItem(
           id = id,
           name = name,
           category = category,
+          priceId = priceId,
           price = Cent(price).money
         )
       }

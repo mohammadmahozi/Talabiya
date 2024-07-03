@@ -48,6 +48,7 @@ fun PreviewBar() {
       TalabiyaBar(
         title = R.string.app_name,
         actions = {
+
           Icon(imageVector = Icons.Default.Call, contentDescription = null)
         },
         overFlowActions = {
@@ -124,30 +125,27 @@ fun TalabiyaBar(
 @Composable
 private fun PreviewSearchBar() {
   AppTheme {
-    SearchBar(
-      title = R.string.orders,
+    TalabiyaSearchBar(
+      title = { Text("Orders") },
       query = "Test",
-      onSearchClicked = { },
       onQueryChanged = {}
     )
   }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(
-  @StringRes title: Int,
+fun TalabiyaSearchBar(
+  title: @Composable () -> Unit,
   query: String,
-  onSearchClicked: () -> Unit,
   onQueryChanged: (String) -> Unit,
   modifier: Modifier = Modifier,
+  actions: @Composable RowScope.() -> Unit = {},
 ) {
   var isSearching by remember { mutableStateOf(false) }
 
-  if (isSearching) {
-    TopAppBar(
-      modifier = modifier,
-      title = {
+  TalabiyaBar(
+    title = {
+      if (isSearching) {
         Row {
           SearchField(
             query = query,
@@ -168,21 +166,21 @@ fun SearchBar(
               }
           )
         }
-      },
-    )
-  } else {
-    TalabiyaBar(
-      title = title,
-      actions = {
-        SearchAction(
-          onClick = {
-            onSearchClicked()
-            isSearching = true
-          }
-        )
+      } else {
+        title()
       }
-    )
-  }
+    },
+    actions = {
+      actions()
+
+      SearchAction(
+        onClick = {
+          isSearching = true
+        }
+      )
+    },
+    modifier = modifier,
+  )
 }
 
 @Composable
@@ -211,10 +209,14 @@ fun SearchAction(
   onClick: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
-  Icon(
-    imageVector = Icons.Default.Search,
-    contentDescription = stringResource(R.string.search_by_food_name),
+  IconButton(
+    onClick = onClick,
     modifier = modifier
-      .clickable(onClick = onClick)
-  )
+  ) {
+    Icon(
+      imageVector = Icons.Default.Search,
+      contentDescription = stringResource(R.string.search_by_food_name),
+    )
+  }
+
 }
