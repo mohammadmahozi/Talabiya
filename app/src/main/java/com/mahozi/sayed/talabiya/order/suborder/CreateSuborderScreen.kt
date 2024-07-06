@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -21,13 +22,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,9 +46,12 @@ import androidx.compose.ui.window.Popup
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.navigation.LocalNavigator
+import com.mahozi.sayed.talabiya.core.navigation.NoOpNavigator
 import com.mahozi.sayed.talabiya.core.navigation.Screen
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaCenterAlignedTopBar
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaSearchBar
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
+import com.mahozi.sayed.talabiya.core.ui.components.zero
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
@@ -75,10 +77,14 @@ private fun PreviewCreateSuborderScreen() {
     )
   )
   AppTheme {
-    CreateSuborderScreen(
-      state = CreateSuborderState(menu, listOf(), null),
-      onEvent = {}
-    )
+    CompositionLocalProvider(
+      LocalNavigator provides NoOpNavigator()
+    ) {
+      CreateSuborderScreen(
+        state = CreateSuborderState(menu, listOf(), null),
+        onEvent = {}
+      )
+    }
   }
 }
 
@@ -119,7 +125,14 @@ fun CreateSuborderScreen(
     ModalBottomSheet(
       onDismissRequest = { orderSheetExpanded = false },
       sheetState = orderSheetState,
-      dragHandle = null,
+      dragHandle = {
+        TalabiyaCenterAlignedTopBar(
+          title = { Text(text = stringResource(id = R.string.current_order)) },
+          windowInsets = WindowInsets.zero
+        )
+      },
+      modifier = Modifier
+        .fillMaxHeight(.5F)
     ) {
       UserOrderItems(items = state.addedItems)
     }
@@ -156,7 +169,6 @@ fun CreateSuborderScreen(
       )
     }
   ) { paddingValues ->
-
     Row {
       val lazyState = rememberLazyListState()
 
@@ -198,13 +210,16 @@ fun CreateSuborderScreen(
 @Composable
 private fun PreviewUserOrderItems() {
   AppTheme {
-    UserOrderItems(listOf(
-      OrderItem(0L, 1, "Name", 20.money),
-      OrderItem(0L, 1, "Name", 20.money),
-      OrderItem(0L, 1, "Name", 20.money),
-    ),)
+    UserOrderItems(
+      listOf(
+        OrderItem(0L, 1, "Name", 20.money),
+        OrderItem(0L, 1, "Name", 20.money),
+        OrderItem(0L, 1, "Name", 20.money),
+      ),
+    )
   }
 }
+
 @Composable
 private fun UserOrderItems(
   items: List<OrderItem>

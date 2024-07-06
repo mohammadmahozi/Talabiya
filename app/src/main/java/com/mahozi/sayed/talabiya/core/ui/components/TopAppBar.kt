@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Call
@@ -257,6 +258,7 @@ fun TalabiyaCenterAlignedTopBar(
   navigationIcon: @Composable () -> Unit = {},
   actions: @Composable RowScope.() -> Unit = {},
   colors: TopAppBarColors = TalabiyaTopBarDefaults.primary(),
+  windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
   CenterAlignedTopAppBar(
     title = title,
@@ -264,6 +266,7 @@ fun TalabiyaCenterAlignedTopBar(
     navigationIcon = navigationIcon,
     actions = actions,
     colors = colors,
+    windowInsets = windowInsets
   )
 }
 

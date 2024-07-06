@@ -19,4 +19,12 @@ val LocalNavigator = staticCompositionLocalOf<Navigator> {
   error("Navigator is not provided")
 }
 
+class NoOpNavigator(): Navigator {
+  override fun goto(screen: Screen) {}
+
+  override fun back(screen: Screen?) {}
+
+  override fun replaceAll(screen: Screen) {}
+}
+
 

@@ -118,6 +118,7 @@
     <string name="enter_option_name">Enter option name</string>
     <string name="view_selected_items">View selected items</string>
     <string name="back">Back</string>
+    <string name="current_order">Current order</string>
 
 
 </resources>
