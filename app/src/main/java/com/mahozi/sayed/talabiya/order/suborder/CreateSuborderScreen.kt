@@ -28,6 +28,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -169,14 +170,15 @@ fun CreateSuborderScreen(
       )
     }
   ) { paddingValues ->
-    Row {
+    Row(
+      modifier = modifier
+        .padding(paddingValues)
+    ) {
       val lazyState = rememberLazyListState()
-
       LazyColumn(
         state = lazyState,
-        modifier = modifier
+        modifier = Modifier
           .weight(1F)
-          .padding(paddingValues)
       ) {
         items(state.menuItems) { menuItem ->
           MenuItem(item = menuItem, onItemClicked = {
@@ -289,7 +291,7 @@ private fun AlphabetIndex(
 ) {
   val letters = stringResource(R.string.alphabet).split(" ")
   var selectedLetter by remember { mutableStateOf("") }
-  var itemHeight by remember { mutableStateOf(0) }
+  var itemHeight by remember { mutableIntStateOf(0) }
 
   fun updateSelectedLetter(offset: Offset) {
     val indexOfTouchedLetter = (offset.y / itemHeight).toInt()
