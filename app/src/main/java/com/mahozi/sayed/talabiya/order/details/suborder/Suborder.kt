@@ -9,5 +9,4 @@ data class Suborder(
   val user: String,
   val items: List<OrderItem>,
   val total: Money,
-  val expanded: Boolean,
 )

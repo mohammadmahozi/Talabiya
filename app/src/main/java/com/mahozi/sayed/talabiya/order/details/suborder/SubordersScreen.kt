@@ -64,12 +64,10 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
       OrderItem(2, 12, "Item 3", 4000.money),
     ),
     total = 6000.money,
-    expanded = false
   )
   override val values: Sequence<Suborder>
     get() = sequenceOf(
       suborder,
-      suborder.copy(expanded = true)
     )
 }
 @Preview
@@ -152,16 +150,19 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   suborder: Suborder,
   onEditClicked: () -> Unit,
 ) {
+
+  var expanded by remember { mutableStateOf(false) }
+
   Column {
     Header(
       name = suborder.user,
-      onHeaderClicked = { },
-      onEditClicked = onEditClicked
+      onEditClicked = onEditClicked,
+      onHeaderClicked = { expanded = !expanded}
     )
 
     HorizontalDivider(color = AppTheme.colors.material.primary)
 
-    if (suborder.expanded) {
+    if (expanded) {
       suborder.items.forEach { orderItem ->
         OrderItem(orderItem)
         HorizontalDivider(color = AppTheme.colors.mediumBackground)
