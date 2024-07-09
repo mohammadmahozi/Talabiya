@@ -55,14 +55,15 @@ import user.UserEntity
 
 private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   private val suborder = Suborder(
-    0,
-    "Customer",
-    listOf(
+    id = 0,
+    userId = 0,
+    user = "Customer",
+    items = listOf(
       OrderItem(0, 1, "Item 1", 10.money),
       OrderItem(1, 575, "Item 2", 100.money),
       OrderItem(2, 12, "Item 3", 4000.money),
     ),
-    6000.money,
+    total = 6000.money,
     expanded = false
   )
   override val values: Sequence<Suborder>
@@ -130,7 +131,9 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
 
     ) {
       state.suborders.forEach {
-        Suborder(it)
+        Suborder(
+          suborder = it,
+          onEditClicked = { onEvent(SuborderEvent.EditSuborderClicked(it)) })
       }
     }
   }
@@ -141,16 +144,19 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   @PreviewParameter(SuborderPreviewParameter::class) suborder: Suborder
 ) {
   Preview {
-    Suborder(suborder)
+    Suborder(suborder = suborder, onEditClicked = {})
   }
 }
 
-@Composable private fun Suborder(suborder: Suborder) {
+@Composable private fun Suborder(
+  suborder: Suborder,
+  onEditClicked: () -> Unit,
+) {
   Column {
     Header(
-      name = suborder.customer,
+      name = suborder.user,
       onHeaderClicked = { },
-      onEditClicked = { }
+      onEditClicked = onEditClicked
     )
 
     HorizontalDivider(color = AppTheme.colors.material.primary)

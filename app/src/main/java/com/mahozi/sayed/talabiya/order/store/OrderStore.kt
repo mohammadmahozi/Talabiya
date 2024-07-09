@@ -61,11 +61,12 @@ class OrderStore @Inject constructor(
 
             Suborder(
               id,
+              orderItems.first().customerId,
               orderItems.first().name,
               orderItems.map { OrderItem(it.id, it.quantity.toInt(), it.name, it.total.money) },
               suborderTotal,
               false
-              )
+            )
         }
       }
   }

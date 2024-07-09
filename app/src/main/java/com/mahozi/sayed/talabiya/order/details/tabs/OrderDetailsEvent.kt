@@ -1,5 +1,6 @@
 package com.mahozi.sayed.talabiya.order.details.tabs
 
+import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
 import user.UserEntity
 import java.time.LocalDate
 
@@ -18,5 +19,6 @@ sealed interface OrderDetailsEvent {
 
     sealed interface SuborderEvent: OrderDetailsEvent {
         data class UserClicked(val user: UserEntity): SuborderEvent
+        data class EditSuborderClicked(val suborder: Suborder) : SuborderEvent
     }
 }

@@ -40,6 +40,9 @@ class OrderDetailsPresenter @AssistedInject constructor(
           OrderDetailsEvent.OrderInfoEvent.StatusClicked -> TODO()
           OrderDetailsEvent.OrderInfoEvent.TimeClicked -> TODO()
           is OrderDetailsEvent.SuborderEvent.UserClicked -> navigator.goto(CreateSuborderScreen(orderId, event.user.id))
+          is OrderDetailsEvent.SuborderEvent.EditSuborderClicked -> {
+            navigator.goto(CreateSuborderScreen(orderId, event.suborder.userId))
+          }
         }
       }
     }
