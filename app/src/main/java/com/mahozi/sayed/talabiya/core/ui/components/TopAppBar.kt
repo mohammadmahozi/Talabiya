@@ -31,10 +31,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -163,24 +162,25 @@ fun TalabiyaSearchBar(
   TalabiyaBar(
     title = {
       if (isSearching) {
-        Row {
+        Row(
+          verticalAlignment = Alignment.CenterVertically
+        ) {
           SearchField(
             query = query,
             onQueryChanged = onQueryChanged,
             Modifier.weight(1F)
           )
 
-          Icon(
+          TalabiyaIconButton(
             imageVector = Icons.Default.Close,
             contentDescription = stringResource(R.string.cancel_search),
-            modifier = Modifier
-              .clickable {
-                if (query.isBlank()) {
-                  isSearching = false
-                } else {
-                  onQueryChanged("")
-                }
+            onClick = {
+              if (query.isBlank()) {
+                isSearching = false
+              } else {
+                onQueryChanged("")
               }
+            },
           )
         }
       } else {
@@ -189,13 +189,17 @@ fun TalabiyaSearchBar(
     },
     navigationIcon = navigationIcon,
     actions = {
-      actions()
+      if (!isSearching) {
+        actions()
 
-      SearchAction(
-        onClick = {
-          isSearching = true
-        }
-      )
+        TalabiyaIconButton(
+          imageVector = Icons.Default.Search,
+          contentDescription = stringResource(R.string.search_by_food_name),
+          onClick = {
+            isSearching = true
+          }
+        )
+      }
     },
     modifier = modifier,
   )
@@ -211,29 +215,24 @@ private fun SearchField(
     value = query,
     onValueChange = onQueryChanged,
     modifier = modifier,
+    placeholder = {
+      Text(
+        text = stringResource(id = R.string.search_),
+        color = Color.White
+      )
+    },
     colors = TextFieldDefaults.colors(
       focusedContainerColor = Color.Transparent,
       unfocusedContainerColor = Color.Transparent,
       disabledIndicatorColor = Color.Transparent,
       errorIndicatorColor = Color.Transparent,
       focusedIndicatorColor = Color.Transparent,
-      unfocusedIndicatorColor = Color.Transparent
+      unfocusedIndicatorColor = Color.Transparent,
+      focusedTextColor = Color.White,
+      unfocusedTextColor = Color.White,
+      cursorColor = Color.White,
     )
   )
-}
-
-@Composable
-private fun SearchAction(
-  onClick: () -> Unit,
-) {
-  IconButton(
-    onClick = onClick,
-  ) {
-    Icon(
-      imageVector = Icons.Default.Search,
-      contentDescription = stringResource(R.string.search_by_food_name),
-    )
-  }
 }
 
 @Preview

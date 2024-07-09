@@ -31,9 +31,10 @@ class RestaurantStore @Inject constructor(
     .asFlow()
     .mapToList(dispatcher)
 
-  fun menuItems(restaurantId: Long): Flow<List<MenuItem>> = menuItemQueries
+  fun menuItems(restaurantId: Long, query: String = ""): Flow<List<MenuItem>> = menuItemQueries
     .menuItemsEntity(
       restaurantId = restaurantId,
+      query,
       mapper = { id, name, price, _, priceId, category ->
         MenuItem(
           id = id,

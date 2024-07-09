@@ -4,6 +4,7 @@ import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 
 data class CreateSuborderState(
+  val query: String,
   val menuItems: List<MenuItem>,
   val addedItems: List<OrderItem>,
   val openedOrderItemState: OpenedOrderItemState?
@@ -15,6 +16,7 @@ sealed interface CreateSuborderEvent {
   data class QuantityChanged(val newQuantity: Int): CreateSuborderEvent
   object OnSaveMenuItemClicked: CreateSuborderEvent
   object OnCancelAddingMenuItem: CreateSuborderEvent
+  data class QueryChanged(val query: String): CreateSuborderEvent
 }
 
 data class OpenedOrderItemState(

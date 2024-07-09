@@ -82,7 +82,12 @@ private fun PreviewCreateSuborderScreen() {
       LocalNavigator provides NoOpNavigator()
     ) {
       CreateSuborderScreen(
-        state = CreateSuborderState(menu, listOf(), null),
+        state = CreateSuborderState(
+          query = "",
+          menuItems = menu,
+          addedItems = listOf(),
+          openedOrderItemState = null
+        ),
         onEvent = {}
       )
     }
@@ -145,8 +150,8 @@ fun CreateSuborderScreen(
     topBar = {
       TalabiyaSearchBar(
         title = { Text(stringResource(R.string.menu)) },
-        query = "",
-        onQueryChanged = {},
+        query = state.query,
+        onQueryChanged = { onEvent(CreateSuborderEvent.QueryChanged(it)) },
         navigationIcon = {
           TalabiyaTopBarDefaults.BackIcon(onClick = { navigator.back() })
         },

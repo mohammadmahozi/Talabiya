@@ -119,6 +119,7 @@
     <string name="view_selected_items">View selected items</string>
     <string name="back">Back</string>
     <string name="current_order">Current order</string>
+    <string name="search_">Search...</string>
 
 
 </resources>

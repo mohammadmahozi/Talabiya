@@ -29,10 +29,12 @@ class CreateSuborderPresenter @AssistedInject constructor(
 ): Presenter<CreateSuborderEvent, CreateSuborderState> {
 
   @Composable override fun start(events: Flow<CreateSuborderEvent>): CreateSuborderState {
-    val menuItems by remember { getMenuItems() }.collectAsState(initial = emptyList())
+    var query by remember { mutableStateOf("") }
+    val menuItems by remember(query) { getMenuItems(query) }.collectAsState(initial = emptyList())
     val addedItems by remember {
       orderStore.getUserOrderItems(orderId = screen.orderId, userId = screen.userid)
     }.collectAsState(initial = emptyList())
+
     var openedMenuItem by remember { mutableStateOf(null as OpenedOrderItemState?) }
 
     CollectEvents(events) { event ->
@@ -61,10 +63,12 @@ class CreateSuborderPresenter @AssistedInject constructor(
           }
         }
         is CreateSuborderEvent.OnCancelAddingMenuItem -> openedMenuItem = null
+        is CreateSuborderEvent.QueryChanged -> query = event.query
       }
     }
 
     return CreateSuborderState(
+      query = query,
       menuItems = menuItems,
       addedItems = addedItems,
       openedOrderItemState = openedMenuItem
@@ -72,10 +76,10 @@ class CreateSuborderPresenter @AssistedInject constructor(
   }
 
   //Todo not sure if this is a good way to deal with this
-  private fun getMenuItems(): Flow<List<MenuItem>> {
+  private fun getMenuItems(query: String): Flow<List<MenuItem>> {
     return runBlocking {
       val restaurantId = orderStore.getRestaurantId(screen.orderId)
-      restaurantStore.menuItems(restaurantId)
+      restaurantStore.menuItems(restaurantId, query)
     }
 
 
