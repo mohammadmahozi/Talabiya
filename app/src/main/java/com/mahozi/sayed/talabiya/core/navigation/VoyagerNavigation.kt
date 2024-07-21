@@ -107,8 +107,8 @@ private data class DelegatingVoyagerScreen(
 
     CompositionLocalProvider(
       LocalDateTimeFormatter provides mainGraph.formatter(),
-          com.mahozi.sayed.talabiya.core.navigation.LocalNavigator provides navigator
-      ) {
+      com.mahozi.sayed.talabiya.core.navigation.LocalNavigator provides navigator
+    ) {
       ModalNavigationDrawer(
         drawerContent = {
           ModalDrawerSheet {
