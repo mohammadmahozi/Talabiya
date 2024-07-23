@@ -14,12 +14,11 @@ import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -289,6 +288,19 @@ object TalabiyaTopBarDefaults {
     TalabiyaIconButton(
       imageVector = Icons.AutoMirrored.Default.ArrowBack,
       contentDescription = stringResource(id = R.string.back),
+      onClick = onClick,
+      modifier = modifier
+    )
+  }
+
+  @Composable
+  fun MenuIcon(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+  ) {
+    TalabiyaIconButton(
+      imageVector = Icons.Rounded.Menu,
+      contentDescription = stringResource(id = R.string.menu),
       onClick = onClick,
       modifier = modifier
     )

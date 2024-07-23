@@ -22,6 +22,7 @@ import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.order.list.Order
 import kotlinx.parcelize.Parcelize
@@ -40,7 +41,12 @@ fun OrdersUi(
 ) {
   Scaffold(
     topBar = {
-      TalabiyaBar(title = R.string.app_name)
+      TalabiyaBar(
+        title = R.string.app_name,
+        navigationIcon = {
+          TalabiyaTopBarDefaults.MenuIcon(onClick = {})
+        }
+      )
     },
     floatingActionButton = {
       AddFab {
