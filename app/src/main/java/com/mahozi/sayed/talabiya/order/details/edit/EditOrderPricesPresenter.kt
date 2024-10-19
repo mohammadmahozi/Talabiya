@@ -20,10 +20,10 @@ class EditOrderPricesPresenter @AssistedInject constructor(
   @Assisted private val orderId: Long,
   private val orderStore: OrderStore,
   private val navigator: Navigator,
-): Presenter<EditOrderScreenEvent, EditOrderScreenState> {
+): Presenter<EditOrderPricesScreenEvent, EditOrderPricesScreenState> {
 
   @Composable
-  override fun start(events: Flow<EditOrderScreenEvent>): EditOrderScreenState {
+  override fun start(events: Flow<EditOrderPricesScreenEvent>): EditOrderPricesScreenState {
     val items by remember { orderStore.getPricedOrderItems(orderId) }.collectAsState(listOf())
     var editingItem by remember { mutableStateOf(null as PricedOrderItem?) }
     var price by remember { mutableStateOf("") }
@@ -33,19 +33,19 @@ class EditOrderPricesPresenter @AssistedInject constructor(
 
     CollectEvents(events) { event ->
       when(event) {
-        is EditOrderScreenEvent.ItemClicked -> editingItem = event.item
-        EditOrderScreenEvent.CancelPriceChange -> editingItem = null
-        EditOrderScreenEvent.ConfirmPriceChange -> {
+        is EditOrderPricesScreenEvent.ItemClicked -> editingItem = event.item
+        EditOrderPricesScreenEvent.CancelPriceChange -> editingItem = null
+        EditOrderPricesScreenEvent.ConfirmPriceChange -> {
 
           editingItem = null
         }
-        is EditOrderScreenEvent.PriceChange -> price = event.price
-        is EditOrderScreenEvent.SetAsDefaultPriceChange -> { setAsDefaultPrice = event.setAsDefaultPrice }
-        is EditOrderScreenEvent.Back -> navigator.back()
+        is EditOrderPricesScreenEvent.PriceChange -> price = event.price
+        is EditOrderPricesScreenEvent.SetAsDefaultPriceChange -> { setAsDefaultPrice = event.setAsDefaultPrice }
+        is EditOrderPricesScreenEvent.Back -> navigator.back()
       }
     }
 
-    return EditOrderScreenState(
+    return EditOrderPricesScreenState(
       items = items,
       editingItem = editingItem,
       price = price,

@@ -27,16 +27,13 @@ import androidx.compose.ui.window.Dialog
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.Ui
 import com.mahozi.sayed.talabiya.core.money
-import com.mahozi.sayed.talabiya.core.navigation.LocalNavigator
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.HorizontalSpacer
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
-import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaCenterAlignedTopBar
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaCheckbox
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaOutlinedTextField
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTextButton
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
-import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import kotlinx.parcelize.Parcelize
 
@@ -45,12 +42,12 @@ data class EditOrderPricesScreen(
   val orderId: Long,
 ) : Screen
 
-class EditOrderPricesScreenUi : Ui<EditOrderScreenState, EditOrderScreenEvent> {
+class EditOrderPricesScreenUi : Ui<EditOrderPricesScreenState, EditOrderPricesScreenEvent> {
 
   @Composable
   override fun Content(
-    state: EditOrderScreenState,
-    onEvent: (EditOrderScreenEvent) -> Unit
+    state: EditOrderPricesScreenState,
+    onEvent: (EditOrderPricesScreenEvent) -> Unit
   ) {
     EditOrderScreen(
       state = state,
@@ -61,8 +58,8 @@ class EditOrderPricesScreenUi : Ui<EditOrderScreenState, EditOrderScreenEvent> {
 
 @Composable
 fun EditOrderScreen(
-  state: EditOrderScreenState,
-  onEvent: (EditOrderScreenEvent) -> Unit,
+  state: EditOrderPricesScreenState,
+  onEvent: (EditOrderPricesScreenEvent) -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Scaffold(
@@ -70,7 +67,7 @@ fun EditOrderScreen(
       TalabiyaBar(
         title = R.string.edit_prices,
         navigationIcon = {
-          TalabiyaTopBarDefaults.BackIcon({ onEvent(EditOrderScreenEvent.Back) })
+          TalabiyaTopBarDefaults.BackIcon({ onEvent(EditOrderPricesScreenEvent.Back) })
         }
       )
     }
@@ -80,11 +77,11 @@ fun EditOrderScreen(
       PriceDialog(
         state.editingItem,
         state.price,
-        onPriceChange = { onEvent(EditOrderScreenEvent.PriceChange(it)) },
+        onPriceChange = { onEvent(EditOrderPricesScreenEvent.PriceChange(it)) },
         setAsDefaultPrice = state.setAsDefaultPrice,
-        onSetAsDefaultPriceChange = { onEvent(EditOrderScreenEvent.SetAsDefaultPriceChange(it)) },
-        onDismissRequest = { onEvent(EditOrderScreenEvent.CancelPriceChange) },
-        onConfirmPriceChange = { onEvent(EditOrderScreenEvent.ConfirmPriceChange) }
+        onSetAsDefaultPriceChange = { onEvent(EditOrderPricesScreenEvent.SetAsDefaultPriceChange(it)) },
+        onDismissRequest = { onEvent(EditOrderPricesScreenEvent.CancelPriceChange) },
+        onConfirmPriceChange = { onEvent(EditOrderPricesScreenEvent.ConfirmPriceChange) }
       )
     }
     LazyColumn(
@@ -94,7 +91,7 @@ fun EditOrderScreen(
       items(state.items) { item ->
         Item(
           item = item,
-          onClick = { onEvent(EditOrderScreenEvent.ItemClicked(item)) }
+          onClick = { onEvent(EditOrderPricesScreenEvent.ItemClicked(item)) }
         )
       }
     }
