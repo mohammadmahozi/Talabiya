@@ -1,5 +1,6 @@
 package com.mahozi.sayed.talabiya.order.suborder
 
+import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 
@@ -11,7 +12,7 @@ data class CreateSuborderState(
 )
 
 sealed interface CreateSuborderEvent {
-  data class MenuItemClicked(val priceId: Long): CreateSuborderEvent
+  data class MenuItemClicked(val item: MenuItem): CreateSuborderEvent
   object AddMenuItemClicked: CreateSuborderEvent
   data class QuantityChanged(val newQuantity: Int): CreateSuborderEvent
   object OnSaveMenuItemClicked: CreateSuborderEvent
@@ -20,6 +21,7 @@ sealed interface CreateSuborderEvent {
 }
 
 data class OpenedOrderItemState(
-  val menuItemPriceId: Long,
+  val menuItemId: Long,
   val quantity: Int,
+  val price: Money,
 )

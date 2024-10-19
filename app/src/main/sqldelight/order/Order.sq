@@ -11,16 +11,25 @@ CREATE TABLE OrderEntity(
     FOREIGN KEY (payerId) REFERENCES UserEntity(id)
 );
 
-CREATE TABLE OrderItemEntity(
+CREATE TABLE OrderItemPriceEntity (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     orderId INTEGER NOT NULL,
+    price INTEGER NOT NULL,
+    menuItemId INTEGER NOT NULL,
+    datetime INTEGER AS Instant NOT NULL,
+    FOREIGN KEY (orderId) REFERENCES OrderEntity(id),
+    FOREIGN KEY (menuItemId) REFERENCES MenuItemEntity(id),
+    UNIQUE(orderId, menuItemId)
+);
+
+CREATE TABLE OrderItemEntity(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     customerId INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
-    menuItemPriceId INTEGER NOT NULL,
+    orderItemPriceId INTEGER NOT NULL,
     FOREIGN KEY (customerId) REFERENCES UserEntity(id),
-    FOREIGN KEY (orderId) REFERENCES OrderEntity(id),
-    FOREIGN KEY (menuItemPriceId) REFERENCES MenuItemPriceEntity(id),
-    UNIQUE(customerId, orderId, menuItemPriceId)
+    FOREIGN KEY (orderItemPriceId) REFERENCES OrderItemPriceEntity(id),
+    UNIQUE(customerId, orderItemPriceId)
 );
 
 CREATE TABLE OrderItemOptionsEntity(
@@ -39,20 +48,6 @@ CREATE TABLE OrderPayment(
     FOREIGN KEY (paymentId) REFERENCES UserPayment(id)
 );
 
--- insert:
--- INSERT INTO hockeyPlayer(player_number, full_name)
--- VALUES (?, ?);
-
--- CREATE INDEX hockeyPlayer_full_name ON hockeyPlayer(full_name);
---
--- INSERT INTO hockeyPlayer (player_number, full_name)
--- VALUES (15, 'Ryan Getzlaf');
---
--- selectAll:
--- SELECT *
--- FROM hockeyPlayer;
---
-
 insert:
 INSERT INTO OrderEntity(restaurantId, createdAt)
 VALUES (?, ?);
@@ -64,46 +59,59 @@ JOIN RestaurantEntity ON OrderEntity.id = RestaurantEntity.id;
 
 selectById:
 SELECT OrderEntity.id, OrderEntity.createdAt, RestaurantEntity.name AS restaurant, UserEntity.name AS payer,
-sum(MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total, OrderEntity.note
+sum(OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total, OrderEntity.note
 FROM OrderEntity
 JOIN RestaurantEntity ON OrderEntity.restaurantId = RestaurantEntity.id
 LEFT JOIN UserEntity ON OrderEntity.payerId = UserEntity.id
-LEFT JOIN OrderItemEntity ON OrderEntity.id = OrderItemEntity.orderId
-LEFT JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
+LEFT JOIN OrderItemPriceEntity ON OrderEntity.id = OrderItemPriceEntity.orderId
+LEFT JOIN OrderItemEntity ON OrderItemPriceEntity.id = OrderItemEntity.orderItemPriceId
 WHERE OrderEntity.id = ?;
 
 selectAllOrderItems:
-SELECT OrderItemEntity.id, OrderItemEntity.customerId, UserEntity.name , MenuItemPriceEntity.price, OrderItemEntity.quantity,
-(MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total
+SELECT OrderItemEntity.id, OrderItemEntity.customerId, UserEntity.name , OrderItemPriceEntity.price, OrderItemEntity.quantity,
+(OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total
 FROM OrderItemEntity
 JOIN UserEntity ON OrderItemEntity.customerId = UserEntity.id
-JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
-JOIN MenuItemEntity ON MenuItemPriceEntity.id = MenuItemEntity.id
-WHERE OrderItemEntity.orderId = ?;
+JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
+JOIN MenuItemEntity ON OrderItemPriceEntity.menuItemId = MenuItemEntity.id
+WHERE OrderItemPriceEntity.orderId = ?;
 
 selectUserOrderItems:
-SELECT OrderItemEntity.id, OrderItemEntity.customerId, MenuItemPriceEntity.price,
-OrderItemEntity.quantity, MenuItemEntity.name, (MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total
+SELECT OrderItemEntity.id, OrderItemEntity.customerId, OrderItemPriceEntity.price,
+OrderItemEntity.quantity, MenuItemEntity.name, (OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total
 FROM OrderItemEntity
 JOIN UserEntity ON OrderItemEntity.customerId = UserEntity.id
-JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
-JOIN MenuItemEntity ON MenuItemPriceEntity.id = MenuItemEntity.id
-WHERE OrderItemEntity.orderId = :orderId AND UserEntity.id = :userId;
+JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
+JOIN MenuItemEntity ON OrderItemPriceEntity.menuItemId = MenuItemEntity.id
+WHERE OrderItemPriceEntity.orderId = :orderId AND UserEntity.id = :userId;
 
 selectOrderItems:
-SELECT OrderItemEntity.id, MenuItemPriceEntity.price,
-OrderItemEntity.quantity, MenuItemEntity.name, (MenuItemPriceEntity.price * OrderItemEntity.quantity) AS total
+SELECT OrderItemEntity.id, OrderItemPriceEntity.price,
+OrderItemEntity.quantity, MenuItemEntity.name, (OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total
 FROM OrderItemEntity
-JOIN MenuItemPriceEntity ON OrderItemEntity.menuItemPriceId = MenuItemPriceEntity.id
-JOIN MenuItemEntity ON MenuItemPriceEntity.id = MenuItemEntity.id
-WHERE OrderItemEntity.orderId = :orderId;
+JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
+JOIN MenuItemEntity ON OrderItemPriceEntity.menuItemId = MenuItemEntity.id
+WHERE OrderItemPriceEntity.orderId = :orderId;
+
+insertOrderItemPrice:
+INSERT OR IGNORE INTO OrderItemPriceEntity(orderId, menuItemId, price, datetime)
+VALUES(?, ?, ?, ?);
 
 insertOrderItem:
-INSERT OR REPLACE INTO OrderItemEntity(orderId, customerId, quantity, menuItemPriceId)
-VALUES (?, ?, ?, ?);
+INSERT OR REPLACE INTO OrderItemEntity(customerId, quantity, orderItemPriceId)
+VALUES (?, ?, ?);
 
 selectRestaurantId:
 SELECT restaurantId
 FROM OrderEntity
 WHERE id = ?;
+
+updateOrderItemsPrice:
+UPDATE OrderItemPriceEntity
+SET price = ?;
+
+selectOrderItemPriceId:
+SELECT id
+FROM OrderItemPriceEntity
+WHERE orderId = :orderId AND menuItemId = :menuItemId;
 

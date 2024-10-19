@@ -5,6 +5,7 @@ import androidx.sqlite.db.SimpleSQLiteQuery
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
+import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.order.details.edit.PricedOrderItem
 import com.mahozi.sayed.talabiya.order.details.info.OrderInfo
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import order.OrderQueries
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -120,13 +122,21 @@ class OrderStore @Inject constructor(
   suspend fun insertOrderItem(
     orderId: Long,
     customerId: Long,
+    menuItemId: Long,
     quantity: Long,
-    menuItemPriceId: Long
+    price: Money,
   ) {
     withContext(dispatcher) {
-      orderQueries.insertOrderItem(
-        orderId, customerId, quantity, menuItemPriceId
-      )
+      orderQueries.transaction {
+        orderQueries.insertOrderItemPrice(orderId, menuItemId, price.toLong(), Instant.now())
+
+        val priceId = orderQueries.selectOrderItemPriceId(orderId, menuItemId).executeAsOne()
+        orderQueries.insertOrderItem(
+          customerId,
+          quantity,
+          priceId
+        )
+      }
     }
   }
 

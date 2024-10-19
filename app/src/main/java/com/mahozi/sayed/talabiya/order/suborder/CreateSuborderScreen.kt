@@ -187,7 +187,7 @@ fun CreateSuborderScreen(
       ) {
         items(state.menuItems) { menuItem ->
           MenuItem(item = menuItem, onItemClicked = {
-            onEvent(CreateSuborderEvent.MenuItemClicked(it.priceId))
+            onEvent(CreateSuborderEvent.MenuItemClicked(it))
           })
           HorizontalDivider()
         }
@@ -359,7 +359,7 @@ private fun AlphabetIndex(
 private fun PreviewAddOrderItem() {
   AppTheme {
     AddOrderItem(
-      state = OpenedOrderItemState(1, 13),
+      state = OpenedOrderItemState(1, 13, 15.money),
       onQuantityChanged = {},
       onConfirm = {}
     )
