@@ -5,6 +5,8 @@ import user.UserEntity
 import java.time.LocalDate
 
 sealed interface OrderDetailsEvent {
+    object EditPricesClicked: OrderDetailsEvent
+
     sealed interface OrderInfoEvent: OrderDetailsEvent {
         object DateClicked: OrderInfoEvent
         data class DateSelected(val date: LocalDate): OrderInfoEvent

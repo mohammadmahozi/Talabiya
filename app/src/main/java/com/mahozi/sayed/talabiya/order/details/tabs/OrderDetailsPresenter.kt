@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.order.OrderStatus
+import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesScreen
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderScreen
 import com.mahozi.sayed.talabiya.user.data.UserStore
@@ -30,6 +31,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
     LaunchedEffect(events) {
       events.collect { event ->
         when(event) {
+          OrderDetailsEvent.EditPricesClicked -> { navigator.goto(EditOrderPricesScreen(orderId)) }
           OrderDetailsEvent.OrderInfoEvent.AddInvoiceClicked -> TODO()
           OrderDetailsEvent.OrderInfoEvent.DateClicked -> showDatePicker = true
           OrderDetailsEvent.OrderInfoEvent.DateDialogDismissed -> showDatePicker = false

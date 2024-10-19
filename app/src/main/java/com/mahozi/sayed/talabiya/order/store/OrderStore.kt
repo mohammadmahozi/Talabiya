@@ -6,6 +6,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
 import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.order.details.edit.PricedOrderItem
 import com.mahozi.sayed.talabiya.order.details.info.OrderInfo
 import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
@@ -83,6 +84,20 @@ class OrderStore @Inject constructor(
             item.quantity.toInt(),
             item.name,
             item.total.money
+          )
+        }
+      }
+  }
+
+  fun getPricedOrderItems(orderId: Long): Flow<List<PricedOrderItem>> {
+    return orderQueries.selectOrderItems(orderId)
+      .asFlow()
+      .map { query ->
+        query.executeAsList().map { item ->
+          PricedOrderItem(
+            item.id,
+            item.name,
+            item.price.money
           )
         }
       }

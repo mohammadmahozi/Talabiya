@@ -120,6 +120,10 @@
     <string name="back">Back</string>
     <string name="current_order">Current order</string>
     <string name="search_">Search...</string>
+    <string name="edit_prices">Edit prices</string>
+    <string name="change_price_of">Change price of %s</string>
+    <string name="new_price">New price</string>
+    <string name="set_as_default_price">Set as default price</string>
 
 
 </resources>

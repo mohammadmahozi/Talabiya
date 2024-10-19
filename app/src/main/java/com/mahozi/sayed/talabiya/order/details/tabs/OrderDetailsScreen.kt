@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
@@ -20,14 +22,30 @@ import kotlinx.parcelize.Parcelize
 data class OrderDetailsScreen(val orderId: Long) : Screen
 
 @Composable
-fun OrderDetailsUi(state: OrderDetailsState, onEvent: (OrderDetailsEvent) -> Unit) {
+fun OrderDetailsUi(
+  state: OrderDetailsState,
+  onEvent: (OrderDetailsEvent) -> Unit,
+  modifier: Modifier = Modifier
+) {
   Scaffold(
-    topBar = { TalabiyaBar(R.string.order_number) }
+    topBar = {
+      TalabiyaBar(
+        title = R.string.order_number,
+        overFlowActions = {
+          DropdownMenuItem(
+            text = {
+              Text(text = stringResource(id = R.string.edit_prices))
+            },
+            onClick = { onEvent(OrderDetailsEvent.EditPricesClicked) }
+          )
+        }
+      )
+    }
   ) {
     Box(
-      modifier = Modifier.padding(it)
+      modifier = modifier.padding(it)
     ) {
-      var selectedTabIndex by remember { mutableStateOf(0) }
+      var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
       val tab = OrderDetailsTab.tab(selectedTabIndex)
 
       Column {
@@ -47,7 +65,7 @@ fun OrderDetailsUi(state: OrderDetailsState, onEvent: (OrderDetailsEvent) -> Uni
 }
 
 @Composable
-fun Tabs(
+private fun Tabs(
   selectedTabIndex: Int,
   onTabSelected: (index: Int) -> Unit
 ) {

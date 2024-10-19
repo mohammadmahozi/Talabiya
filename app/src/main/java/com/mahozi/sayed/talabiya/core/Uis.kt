@@ -7,6 +7,11 @@ import com.mahozi.sayed.talabiya.order.create.CreateOrderEvent
 import com.mahozi.sayed.talabiya.order.create.CreateOrderScreen
 import com.mahozi.sayed.talabiya.order.create.CreateOrderState
 import com.mahozi.sayed.talabiya.order.create.CreateOrderUi
+import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesScreen
+import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesScreenUi
+import com.mahozi.sayed.talabiya.order.details.edit.EditOrderScreen
+import com.mahozi.sayed.talabiya.order.details.edit.EditOrderScreenEvent
+import com.mahozi.sayed.talabiya.order.details.edit.EditOrderScreenState
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsScreen
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsState
@@ -96,6 +101,9 @@ fun Uis(
     is CreateOptionScreen -> ui<CreateOptionState, CreateOptionEvent> { state, onEvent ->
       CreateOptionScreen(state = state, onEvent = onEvent)
     }
+
+    is EditOrderPricesScreen -> EditOrderPricesScreenUi()
+
     else -> throw IllegalStateException("Unknown screen $screen")
   }
 }
