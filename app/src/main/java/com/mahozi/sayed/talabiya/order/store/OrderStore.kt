@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import order.OrderQueries
+import restaurant.MenuItemQueries
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -27,6 +28,7 @@ import javax.inject.Inject
 class OrderStore @Inject constructor(
   private val orderDao: OrderDao,
   private val orderQueries: OrderQueries,
+  private val menuQueries: MenuItemQueries,
   private val dispatcher: CoroutineDispatcher,
 ) {
 
@@ -92,14 +94,15 @@ class OrderStore @Inject constructor(
   }
 
   fun getPricedOrderItems(orderId: Long): Flow<List<PricedOrderItem>> {
-    return orderQueries.selectOrderItems(orderId)
+    return orderQueries.selectOrderItemsPrices(orderId)
       .asFlow()
       .map { query ->
         query.executeAsList().map { item ->
           PricedOrderItem(
-            item.id,
-            item.name,
-            item.price.money
+            orderItemId = item.id,
+            menuItemId = item.menuItemId,
+            name = item.name,
+            price = item.price.money
           )
         }
       }
@@ -135,6 +138,29 @@ class OrderStore @Inject constructor(
           customerId,
           quantity,
           priceId
+        )
+      }
+    }
+  }
+
+  suspend fun updateOrderItemPrice(
+    orderId: Long,
+    itemId: Long,
+    price: Money,
+    setAsDefaultPrice: Boolean,
+  ) {
+    withContext(dispatcher) {
+      orderQueries.updateOrderItemsPrice(
+        price = price.toLong(),
+        orderId = orderId,
+        menuItemId = itemId
+      )
+
+      if (setAsDefaultPrice) {
+        menuQueries.insertPrice(
+          menuItemId = itemId,
+          datetime = Instant.now(),
+          price = price.toLong()
         )
       }
     }

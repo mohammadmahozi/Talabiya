@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -104,7 +106,8 @@ private fun PreviewItem() {
   AppTheme {
     Item(
       item = PricedOrderItem(
-        id = 1L,
+        orderItemId = 1L,
+        menuItemId = 1L,
         name = "Sample Item",
         price = 12.99.money
       ),
@@ -139,7 +142,8 @@ fun PriceDialogPreview() {
   AppTheme {
     PriceDialog(
       item = PricedOrderItem(
-        id = 1L,
+        orderItemId = 1L,
+        menuItemId = 1L,
         name = "Sample Item",
         price = 12.99.money
       ),
@@ -185,6 +189,9 @@ private fun PriceDialog(
         price,
         onPriceChange,
         label = { Text(stringResource(R.string.new_price)) },
+        keyboardOptions = KeyboardOptions.Default.copy(
+          keyboardType = KeyboardType.Decimal
+        ),
         modifier = Modifier
           .focusRequester(focusRequester)
       )

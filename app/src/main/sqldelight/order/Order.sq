@@ -85,11 +85,9 @@ JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEn
 JOIN MenuItemEntity ON OrderItemPriceEntity.menuItemId = MenuItemEntity.id
 WHERE OrderItemPriceEntity.orderId = :orderId AND UserEntity.id = :userId;
 
-selectOrderItems:
-SELECT OrderItemEntity.id, OrderItemPriceEntity.price,
-OrderItemEntity.quantity, MenuItemEntity.name, (OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total
-FROM OrderItemEntity
-JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
+selectOrderItemsPrices:
+SELECT OrderItemPriceEntity.id, OrderItemPriceEntity.price, MenuItemEntity.name, MenuItemEntity.id AS menuItemId
+FROM OrderItemPriceEntity
 JOIN MenuItemEntity ON OrderItemPriceEntity.menuItemId = MenuItemEntity.id
 WHERE OrderItemPriceEntity.orderId = :orderId;
 
@@ -108,7 +106,8 @@ WHERE id = ?;
 
 updateOrderItemsPrice:
 UPDATE OrderItemPriceEntity
-SET price = ?;
+SET price = :price
+WHERE orderId = :orderId AND menuItemId = :menuItemId;
 
 selectOrderItemPriceId:
 SELECT id

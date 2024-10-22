@@ -8,12 +8,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
+import com.mahozi.sayed.talabiya.core.isDecimal
+import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 
 class EditOrderPricesPresenter @AssistedInject constructor(
@@ -34,12 +37,25 @@ class EditOrderPricesPresenter @AssistedInject constructor(
     CollectEvents(events) { event ->
       when(event) {
         is EditOrderPricesScreenEvent.ItemClicked -> editingItem = event.item
-        EditOrderPricesScreenEvent.CancelPriceChange -> editingItem = null
-        EditOrderPricesScreenEvent.ConfirmPriceChange -> {
-
+        EditOrderPricesScreenEvent.CancelPriceChange -> {
           editingItem = null
+          price = ""
         }
-        is EditOrderPricesScreenEvent.PriceChange -> price = event.price
+        EditOrderPricesScreenEvent.ConfirmPriceChange -> {
+          launch {
+            orderStore.updateOrderItemPrice(
+              orderId = orderId,
+              itemId = editingItem!!.menuItemId,
+              price = price.money,
+              setAsDefaultPrice = setAsDefaultPrice
+            )
+            price = ""
+            editingItem = null
+          }
+        }
+        is EditOrderPricesScreenEvent.PriceChange -> {
+          if (event.price.isDecimal()) price = event.price
+        }
         is EditOrderPricesScreenEvent.SetAsDefaultPriceChange -> { setAsDefaultPrice = event.setAsDefaultPrice }
         is EditOrderPricesScreenEvent.Back -> navigator.back()
       }
