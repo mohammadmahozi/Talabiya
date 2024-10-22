@@ -2,13 +2,15 @@ package com.mahozi.sayed.talabiya.order.details.tabs
 
 import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.order.OrderStatus
+import com.mahozi.sayed.talabiya.order.details.full.FullOrderItem
 import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
 import user.UserEntity
 import java.time.Instant
 
 data class OrderDetailsState(
     val info: OrderInfoState?,
-    val subordersState: SubordersState?
+    val subordersState: SubordersState?,
+    val fullOrderItems: List<FullOrderItem>
 )
 
 data class OrderInfoState(

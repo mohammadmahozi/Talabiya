@@ -8,6 +8,7 @@ import app.cash.sqldelight.coroutines.mapToOne
 import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.order.details.edit.PricedOrderItem
+import com.mahozi.sayed.talabiya.order.details.full.FullOrderItem
 import com.mahozi.sayed.talabiya.order.details.info.OrderInfo
 import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
@@ -103,6 +104,20 @@ class OrderStore @Inject constructor(
             menuItemId = item.menuItemId,
             name = item.name,
             price = item.price.money
+          )
+        }
+      }
+  }
+
+  fun getFullOrderItems(orderId: Long): Flow<List<FullOrderItem>> {
+    return orderQueries.selectFullOrderItem(orderId)
+      .asFlow()
+      .map { query ->
+        query.executeAsList().map { item ->
+          FullOrderItem(
+            id = item.id,
+            name = item.name,
+            quantity = item.quantity!!.toInt()
           )
         }
       }

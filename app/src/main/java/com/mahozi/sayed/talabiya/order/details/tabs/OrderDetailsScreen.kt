@@ -14,6 +14,7 @@ import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
+import com.mahozi.sayed.talabiya.order.details.full.FullOrderScreen
 import com.mahozi.sayed.talabiya.order.details.info.OrderInfoScreen
 import com.mahozi.sayed.talabiya.order.details.suborder.SubordersScreen
 import kotlinx.parcelize.Parcelize
@@ -57,7 +58,7 @@ fun OrderDetailsUi(
         when (tab) {
           OrderDetailsTab.INFO -> if (state.info != null) OrderInfoScreen(state.info, onEvent)
           OrderDetailsTab.SUBORDERS -> if (state.subordersState != null) SubordersScreen(state.subordersState, onEvent)
-          OrderDetailsTab.FULL -> {}
+          OrderDetailsTab.FULL -> FullOrderScreen(state.fullOrderItems)
         }
       }
     }

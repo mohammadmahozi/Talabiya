@@ -24,6 +24,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
   override fun start(events: Flow<OrderDetailsEvent>): OrderDetailsState {
     val orderState by remember { orderStore.getOrderDetails(orderId) }.collectAsState(initial = null)
     val suborders by remember { orderStore.getSuborders(orderId) }.collectAsState(initial = emptyList())
+    val fullOrderItems by remember { orderStore.getFullOrderItems(orderId) }.collectAsState(initial = emptyList())
     val users by remember { userStore.users }.collectAsState(initial = emptyList())
 
     var showDatePicker by remember { mutableStateOf(false) }
@@ -51,9 +52,9 @@ class OrderDetailsPresenter @AssistedInject constructor(
 
     val order = orderState
     return when (order) {
-      null -> OrderDetailsState(null, null)
+      null -> OrderDetailsState(null, null, listOf())
       else -> OrderDetailsState(
-        OrderInfoState(
+        info = OrderInfoState(
           order.createdAt,
           order.total,
           order.payer,
@@ -61,7 +62,8 @@ class OrderDetailsPresenter @AssistedInject constructor(
           order.note,
           showDatePicker
         ),
-        SubordersState(suborders, users)
+        subordersState = SubordersState(suborders, users),
+        fullOrderItems = fullOrderItems
       )
     }
   }

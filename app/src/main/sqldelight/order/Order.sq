@@ -114,3 +114,13 @@ SELECT id
 FROM OrderItemPriceEntity
 WHERE orderId = :orderId AND menuItemId = :menuItemId;
 
+selectFullOrderItem:
+SELECT OrderItemEntity.id, MenuItemEntity.name, sum(OrderItemEntity.quantity) AS quantity
+FROM OrderItemEntity
+JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
+JOIN MenuItemEntity ON OrderItemPriceEntity.menuItemId = MenuItemEntity.id
+JOIN CategoryEntity ON MenuItemEntity.category = CategoryEntity.name
+WHERE OrderItemPriceEntity.orderId = :orderId
+GROUP BY OrderItemPriceEntity.id
+ORDER BY CategoryEntity.number, MenuItemEntity.name;
+
