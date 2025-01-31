@@ -24,6 +24,17 @@ data class TalabiyaColorScheme(
   val darkBackground: Color,
 ) {
   val primary get() = material.primary
+  val onPrimary get() = material.onPrimary
+  val primaryContainer get() = material.primaryContainer
+  val onPrimaryContainer get() = material.onPrimaryContainer
+  val background get() = material.background
+  val onBackground get() = material.onBackground
+  val surface get() = material.surface
+  val surfaceVariant get() = material.surfaceVariant
+  val error get() = material.error
+  val outline get() = material.outline
+  val outlineVariant get() = material.outlineVariant
+
 }
 
 val lightColors = TalabiyaColorScheme(

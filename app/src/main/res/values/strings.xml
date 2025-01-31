@@ -124,10 +124,24 @@
     <string name="view_selected_items">View selected items</string>
     <string name="back">Back</string>
     <string name="current_order">Current order</string>
-    <string name="search_">Search...</string>
+    <string name="search_">Search…</string>
     <string name="edit_prices">Edit prices</string>
     <string name="change_price_of">Change price of %s</string>
     <string name="new_price">New price</string>
     <string name="set_as_default_price">Set as default price</string>
+    <string name="enter_amount">Enter amount to be paid</string>
+    <string name="number_of_orders">Number of orders</string>
+    <string name="orders_total">Orders total</string>
+    <string name="payer_in">Payer in</string>
+    <string name="order_summary">Order summary</string>
+    <string name="orders_placed">Orders placed</string>
+    <string name="orders_covered">Orders covered</string>
+    <string name="view_selected_orders">View selected orders</string>
+    <string name="payment_total">Payment total</string>
+    <string name="placed_orders_total">Placed order total</string>
+    <string name="covered_orders_total">Covered orders total</string>
+    <string name="orders_net_total">Orders net total</string>
+    <string name="balance_used">Balance used</string>
+    <string name="balance_recharge">Balance recharge</string>
 
 </resources>

@@ -42,12 +42,6 @@ CREATE TABLE OrderItemOptionsEntity(
     UNIQUE(orderItemId, optionId)
 );
 
-CREATE TABLE OrderPayment(
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    paymentId INTEGER NOT NULL,
-    FOREIGN KEY (paymentId) REFERENCES UserPayment(id)
-);
-
 insert:
 INSERT INTO OrderEntity(restaurantId, createdAt)
 VALUES (?, ?);

@@ -3,13 +3,6 @@ CREATE TABLE UserEntity(
     name TEXT NOT NULL
 );
 
-CREATE TABLE UserPayment(
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    amount INTEGER NOT NULL,
-    createdAt INTEGER NOT NULL,
-    status TEXT NOT NULL
-);
-
 selectAll:
 SELECT id, name
 FROM UserEntity

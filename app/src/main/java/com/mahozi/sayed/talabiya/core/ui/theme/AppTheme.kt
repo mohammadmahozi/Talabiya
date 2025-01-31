@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
@@ -28,6 +29,11 @@ private val LocalShapes = staticCompositionLocalOf { AppShapes() }
 @SuppressLint("ComposeCompositionLocalUsage")
 private val LocalTypes = staticCompositionLocalOf { AppTypes() }
 
+@SuppressLint("ComposeCompositionLocalUsage")
+private val LocalTypography = staticCompositionLocalOf {
+    Typography()
+}
+
 @Composable fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
@@ -45,7 +51,8 @@ private val LocalTypes = staticCompositionLocalOf { AppTypes() }
             shapes = Shapes(
                 small = RoundedCornerShape(5.dp),
                 medium = RoundedCornerShape(5.dp),
-            )
+            ),
+            typography = LocalTypography.current
         )
     }
 }
@@ -56,4 +63,6 @@ object AppTheme {
     val shapes @Composable get() = LocalShapes.current
 
     val types @Composable get() = LocalTypes.current
+
+    val typography @Composable get() = LocalTypography.current
 }
