@@ -172,7 +172,7 @@ private fun MenuItem(
     Text(
       text = menuItem.category,
       fontSize = 12.sp,
-      color = AppTheme.colors.secondaryText
+      color = AppTheme.colors.onSurfaceVariant
     )
   }
 }

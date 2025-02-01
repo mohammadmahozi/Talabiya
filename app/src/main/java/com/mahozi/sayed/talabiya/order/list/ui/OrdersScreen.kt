@@ -93,7 +93,7 @@ private fun OrderRow(order: Order, onClick: (Order) -> Unit) {
   Row(
     Modifier
       .fillMaxWidth()
-      .background(AppTheme.colors.lightBackground)
+      .background(AppTheme.colors.surface)
       .clickable { onClick(order) }
       .padding(vertical = 8.dp)) {
 
@@ -109,7 +109,7 @@ private fun OrderRow(order: Order, onClick: (Order) -> Unit) {
 
       Text(
         text = formatter.formatShortDateWithDay(order.createdAt),
-        color = AppTheme.colors.secondaryText,
+        color = AppTheme.colors.onSurfaceVariant,
         fontSize = 12.sp,
       )
     }

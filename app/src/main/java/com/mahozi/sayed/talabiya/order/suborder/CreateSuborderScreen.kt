@@ -396,7 +396,7 @@ private fun AddOrderItem(
           modifier = Modifier
             .clickable { onQuantityChanged(state.quantity - 1) }
             .padding(2.dp)
-            .background(color = AppTheme.colors.mediumBackground, AppTheme.shapes.circle)
+            .background(AppTheme.colors.surfaceContainerHigh, AppTheme.shapes.circle)
         )
 
         Text(
@@ -412,7 +412,7 @@ private fun AddOrderItem(
           modifier = Modifier
             .clickable { onQuantityChanged(state.quantity + 1) }
             .padding(2.dp)
-            .background(color = AppTheme.colors.mediumBackground, shape = AppTheme.shapes.circle)
+            .background(color = AppTheme.colors.surfaceContainerHigh, shape = AppTheme.shapes.circle)
         )
       }
     }

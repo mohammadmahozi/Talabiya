@@ -105,7 +105,7 @@ private fun PreviewRestaurant() {
   ) {
     Text(
       text = restaurant.id.toString(),
-      color = AppTheme.colors.primaryText,
+      color = AppTheme.colors.onSurface,
       fontSize = 14.sp,
     )
 
@@ -113,7 +113,7 @@ private fun PreviewRestaurant() {
 
     Text(
       text = restaurant.name,
-      color = AppTheme.colors.primaryText,
+      color = AppTheme.colors.onSurface,
       fontSize = 14.sp,
     )
 

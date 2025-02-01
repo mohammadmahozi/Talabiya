@@ -114,6 +114,6 @@ class OptionsPresenter @AssistedInject constructor(
     Text(
       text = categories,
       fontSize = 12.sp,
-      color = AppTheme.colors.secondaryText)
+      color = AppTheme.colors.onSurfaceVariant)
   }
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -78,7 +79,7 @@ fun OrderInfoScreen(
       iconDescription = R.string.time
     ) { onEvent(OrderInfoEvent.TimeClicked) }
 
-    Divider(color = AppTheme.colors.mediumBackground)
+    HorizontalDivider()
 
     InfoTextRow(
       text = model.total.format(),
@@ -98,7 +99,7 @@ fun OrderInfoScreen(
       iconDescription = R.string.status
     ) { onEvent(OrderInfoEvent.StatusClicked) }
 
-    Divider(color = AppTheme.colors.mediumBackground)
+    HorizontalDivider()
 
     InfoRow(
       icon = R.drawable.ic_baseline_notes_24,
@@ -142,7 +143,7 @@ private fun InfoTextRow(
   ) {
     Text(
       text = text,
-      color = AppTheme.colors.primaryText
+      color = AppTheme.colors.onSurface
     )
   }
 
@@ -165,7 +166,7 @@ private fun InfoRow(
     Image(
       painter = painterResource(icon),
       contentDescription = string(iconDescription),
-      colorFilter = ColorFilter.tint(AppTheme.colors.primaryText),
+      colorFilter = ColorFilter.tint(AppTheme.colors.onSurface),
       modifier = Modifier
         .size(24.dp)
     )

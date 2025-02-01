@@ -72,8 +72,8 @@ private fun Tabs(
 ) {
   TabRow(
     selectedTabIndex = selectedTabIndex,
-    containerColor = AppTheme.colors.lightBackground,
-    contentColor = AppTheme.colors.primaryText,
+    containerColor = AppTheme.colors.surface,
+    contentColor = AppTheme.colors.onSurface,
     indicator = @Composable { tabPositions ->
       TabRowDefaults.Indicator(
         modifier = Modifier

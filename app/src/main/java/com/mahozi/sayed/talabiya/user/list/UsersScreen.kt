@@ -106,7 +106,7 @@ private fun PreviewUser() {
   ) {
     Text(
       text = user.id.toString(),
-      color = AppTheme.colors.primaryText,
+      color = AppTheme.colors.onSurface,
       fontSize = 14.sp,
     )
 
@@ -114,7 +114,7 @@ private fun PreviewUser() {
 
     Text(
       text = user.name,
-      color = AppTheme.colors.primaryText,
+      color = AppTheme.colors.onSurface,
       fontSize = 14.sp,
     )
 

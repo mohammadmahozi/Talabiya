@@ -165,7 +165,7 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
     if (expanded) {
       suborder.items.forEach { orderItem ->
         OrderItem(orderItem)
-        HorizontalDivider(color = AppTheme.colors.mediumBackground)
+        HorizontalDivider()
       }
     }
 
@@ -259,7 +259,7 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .background(color = AppTheme.colors.lightBackground)
+      .background(color = AppTheme.colors.surface)
       .padding(8.dp)
   ) {
     Text(
@@ -302,7 +302,7 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   ) {
     Text(
       text = user.id.toString(),
-      color = AppTheme.colors.primaryText,
+      color = AppTheme.colors.onSurface,
       fontSize = 14.sp,
     )
 
@@ -310,7 +310,7 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
 
     Text(
       text = user.name,
-      color = AppTheme.colors.primaryText,
+      color = AppTheme.colors.onSurface,
       fontSize = 14.sp,
     )
   }

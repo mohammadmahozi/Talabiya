@@ -91,7 +91,7 @@ fun CreateOrderUi(
         padding = PaddingValues(horizontal = 8.dp, vertical = 16.dp),
         modifier = Modifier
           .background(
-            color = AppTheme.colors.lightBackground,
+            color = AppTheme.colors.surface,
             shape = AppTheme.shapes.small
           )
       )
@@ -104,7 +104,7 @@ fun CreateOrderUi(
         padding = PaddingValues(horizontal = 8.dp, vertical = 16.dp),
         modifier = Modifier
           .background(
-            color = AppTheme.colors.lightBackground,
+            color = AppTheme.colors.surface,
             shape = AppTheme.shapes.small
           )
       )
@@ -149,8 +149,8 @@ private fun Restaurants(
         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
       },
       colors = ExposedDropdownMenuDefaults.textFieldColors(
-        unfocusedContainerColor = AppTheme.colors.lightBackground,
-        focusedContainerColor = AppTheme.colors.lightBackground
+        unfocusedContainerColor = AppTheme.colors.surface,
+        focusedContainerColor = AppTheme.colors.surface
       ),
       modifier = Modifier
         .fillMaxWidth()
