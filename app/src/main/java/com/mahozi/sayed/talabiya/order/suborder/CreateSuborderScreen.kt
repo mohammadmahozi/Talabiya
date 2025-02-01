@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -396,7 +397,7 @@ private fun AddOrderItem(
           modifier = Modifier
             .clickable { onQuantityChanged(state.quantity - 1) }
             .padding(2.dp)
-            .background(AppTheme.colors.surfaceContainerHigh, AppTheme.shapes.circle)
+            .background(AppTheme.colors.surfaceContainerHigh, CircleShape)
         )
 
         Text(
@@ -412,7 +413,7 @@ private fun AddOrderItem(
           modifier = Modifier
             .clickable { onQuantityChanged(state.quantity + 1) }
             .padding(2.dp)
-            .background(color = AppTheme.colors.surfaceContainerHigh, shape = AppTheme.shapes.circle)
+            .background(color = AppTheme.colors.surfaceContainerHigh, shape = CircleShape)
         )
       }
     }
