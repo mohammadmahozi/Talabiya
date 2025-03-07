@@ -225,7 +225,7 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   ) {
     Text(
       text = item.quantity.toString(),
-      style = AppTheme.types.title,
+      style = AppTheme.type.title,
       modifier = Modifier
         .width(32.dp)
     )
@@ -234,14 +234,14 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
 
     Text(
       text = item.name,
-      style = AppTheme.types.title
+      style = AppTheme.type.title
     )
 
     Spacer(Modifier.weight(1F))
 
     Text(
       text = item.total.format(),
-      style = AppTheme.types.title
+      style = AppTheme.type.title
     )
   }
 }
@@ -264,7 +264,7 @@ private class SuborderPreviewParameter: PreviewParameterProvider<Suborder> {
   ) {
     Text(
       text = total.format(),
-      style = AppTheme.types.title
+      style = AppTheme.type.title
     )
   }
 }

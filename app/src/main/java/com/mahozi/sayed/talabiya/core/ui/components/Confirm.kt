@@ -28,14 +28,14 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
     title = {
       Text(
         text = title,
-        style = AppTheme.types.title
+        style = AppTheme.type.title
       )
     },
     text = {
       if (text != null) {
         Text(
           text = text,
-          style = AppTheme.types.subtitle
+          style = AppTheme.type.subtitle
         )
       }
     },

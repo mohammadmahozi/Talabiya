@@ -244,21 +244,21 @@ private fun UserOrderItems(
 
         Text(
           text = item.quantity.toString(),
-          style = AppTheme.types.title
+          style = AppTheme.type.title
         )
 
         Spacer(modifier = Modifier.width(16.dp))
 
         Text(
           text = item.name,
-          style = AppTheme.types.title
+          style = AppTheme.type.title
         )
 
         Spacer(Modifier.weight(1F))
 
         Text(
           text = item.total.format(),
-          style = AppTheme.types.title
+          style = AppTheme.type.title
         )
       }
     }
@@ -279,14 +279,14 @@ private fun MenuItem(
 
     Text(
       text = item.name,
-      style = AppTheme.types.title
+      style = AppTheme.type.title
     )
 
     Spacer(Modifier.weight(1F))
 
     Text(
       text = item.price.format(),
-      style = AppTheme.types.title
+      style = AppTheme.type.title
     )
   }
 }
@@ -383,7 +383,7 @@ private fun AddOrderItem(
     ) {
       Text(
         text = stringResource(R.string.quantity),
-        style = AppTheme.types.title
+        style = AppTheme.type.title
       )
 
       Spacer(Modifier.weight(1F))
@@ -402,7 +402,7 @@ private fun AddOrderItem(
 
         Text(
           text = state.quantity.toString(),
-          style = AppTheme.types.title,
+          style = AppTheme.type.title,
           modifier = Modifier
             .padding(horizontal = 4.dp)
         )

@@ -2,14 +2,12 @@ package com.mahozi.sayed.talabiya.core.ui.theme
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.unit.dp
 
 @SuppressLint("ComposeCompositionLocalUsage")
 private val LocalColors = staticCompositionLocalOf { lightColors }
@@ -18,12 +16,7 @@ private val LocalColors = staticCompositionLocalOf { lightColors }
 private val LocalShapes = staticCompositionLocalOf { defaultTlbShapes }
 
 @SuppressLint("ComposeCompositionLocalUsage")
-private val LocalTypes = staticCompositionLocalOf { AppTypes() }
-
-@SuppressLint("ComposeCompositionLocalUsage")
-private val LocalTypography = staticCompositionLocalOf {
-    Typography()
-}
+private val LocalTypes = staticCompositionLocalOf { TlbType() }
 
 @Composable fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -31,11 +24,12 @@ private val LocalTypography = staticCompositionLocalOf {
 ) {
     val colors = if (darkTheme) darkColors else lightColors
     val shapes = defaultTlbShapes
+    val type = LocalTypes.current
 
     CompositionLocalProvider(
         LocalColors provides colors,
         LocalShapes provides shapes,
-        LocalTypes provides AppTypes()
+        LocalTypes provides TlbType()
     ) {
         MaterialTheme(
             content = content,
@@ -47,17 +41,29 @@ private val LocalTypography = staticCompositionLocalOf {
                 large = shapes.large,
                 extraLarge = shapes.extraLarge
             ),
-            typography = LocalTypography.current
+            typography = Typography(
+                displayLarge = type.displayLarge,
+                displayMedium = type.displayMedium,
+                displaySmall = type.displaySmall,
+                headlineLarge = type.headlineLarge,
+                headlineMedium = type.headlineMedium,
+                headlineSmall = type.headlineSmall,
+                titleLarge = type.titleLarge,
+                titleMedium = type.titleMedium,
+                titleSmall = type.titleSmall,
+                bodyLarge = type.bodyLarge,
+                bodyMedium = type.bodyMedium,
+                bodySmall = type. bodySmall,
+                labelLarge = type.labelLarge,
+                labelMedium = type.labelMedium,
+                labelSmall = type.labelSmall
+            )
         )
     }
 }
 
 object AppTheme {
     val colors @Composable get() = LocalColors.current
-
     val shapes @Composable get() = LocalShapes.current
-
-    val types @Composable get() = LocalTypes.current
-
-    val typography @Composable get() = LocalTypography.current
+    val type @Composable get() = LocalTypes.current
 }

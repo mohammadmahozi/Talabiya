@@ -49,7 +49,7 @@ private fun CreateUserPaymentScreen(
 @Preview(showBackground = true)
 @Composable
 private fun SelectedOrders(
-  
+
 ) {
   Row(
     verticalAlignment = Alignment.CenterVertically,
@@ -148,33 +148,34 @@ private fun PaymentRow(
   total: String,
   totalColor: Color,
 ) {
-    Row(
-      modifier = Modifier
-        .padding(8.dp)
-    ) {
-      Text(stringResource(label))
-      HorizontalSpacer(1f)
-      Text(
-        text = total,
-        color = totalColor,
-        style = AppTheme.typography.labelMedium
-      )
-    }
+  Row(
+    modifier = Modifier
+      .padding(8.dp)
+  ) {
+    Text(stringResource(label))
+    HorizontalSpacer(1f)
+    Text(
+      text = total,
+      color = totalColor,
+      style = AppTheme.type.labelMedium
+    )
+  }
 }
+
 @Composable
 private fun LabeledText(
   label: Int,
   text: String,
   modifier: Modifier = Modifier
 ) {
-    Column(
-      modifier = modifier
-    ) {
-      Text(
-        text = stringResource(label),
-        style = AppTheme.typography.labelSmall
-        )
-      VerticalSpacer(8.dp)
-      Text(text = text)
-    }
+  Column(
+    modifier = modifier
+  ) {
+    Text(
+      text = stringResource(label),
+      style = AppTheme.type.labelSmall
+    )
+    VerticalSpacer(8.dp)
+    Text(text = text)
+  }
 }
