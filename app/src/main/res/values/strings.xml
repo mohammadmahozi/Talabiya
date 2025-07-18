@@ -143,5 +143,7 @@
     <string name="orders_net_total">Orders net total</string>
     <string name="balance_used">Balance used</string>
     <string name="balance_recharge">Balance recharge</string>
+    <string name="pay">Pay</string>
+    <string name="create_payment_for">Create payment for %s</string>
 
 </resources>

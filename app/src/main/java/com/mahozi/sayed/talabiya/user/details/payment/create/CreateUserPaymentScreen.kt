@@ -1,6 +1,8 @@
 package com.mahozi.sayed.talabiya.user.details.payment.create
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -12,52 +14,104 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaOutlinedTextField
 import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.core.Money
+import com.mahozi.sayed.talabiya.core.datetime.AppDateTimeFormatter
+import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
+import com.mahozi.sayed.talabiya.core.datetime.ProvideDateTimeFormatter
+import com.mahozi.sayed.talabiya.core.extensions.locale
+import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.HorizontalSpacer
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
+import com.mahozi.sayed.talabiya.core.ui.components.TlbButton
 import com.mahozi.sayed.talabiya.core.ui.components.VerticalSpacer
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
+import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
+
+
+@Parcelize
+data class CreateUserPaymentScreen(
+  val userId: Long,
+) : Screen
 
 @Composable
 private fun CreateUserPaymentScreen(
-
+  state: CreatePaymentState,
+  onEvent: (CreatePaymentEvent) -> Unit,
+  onBack: () -> Unit,
 ) {
-  Column {
-    TalabiyaOutlinedTextField(
-      value = "50", //default is order total - balance - order he paid for
-      onValueChange = {},
-      placeholder = {
-        Text(text = stringResource(R.string.enter_amount))
-      }
-    )
+  Scaffold(
+    topBar = {
+      TalabiyaBar(
+        title = { Text(stringResource(R.string.create_payment_for, state.user))},
+        navigationIcon = { TalabiyaTopBarDefaults.BackIcon(onBack) }
+      )
+    }
+  ) {
+    Column(
+      verticalArrangement = Arrangement.spacedBy(8.dp),
+      modifier = Modifier
+        .padding(it)
+        .padding(16.dp)
+    ) {
+      SelectedOrders(
+        title = "All orders selected",
+        onClick = {}
+      )
 
-    //Some way to select orders. All by default.
+      //OrdersSummary()
 
-    //Button -> "Pay"
+      //PaymentSummary()
+
+      TlbButton(
+        text = stringResource(R.string.pay),
+        onClick = {},
+        modifier = Modifier.fillMaxWidth()
+      )
+    }
   }
 }
 
 @Preview(showBackground = true)
 @Composable
+private fun PreviewSelectedOrders() {
+  AppTheme {
+    SelectedOrders(
+      title = "All orders selected",
+      onClick = {}
+    )
+  }
+}
+@Composable
 private fun SelectedOrders(
-
+  title: String,
+  onClick: () -> Unit,
 ) {
   Row(
     verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier
       .clip(AppTheme.shapes.medium)
+      .background(AppTheme.colors.primaryContainer)
+      .clickable { onClick() }
       .padding(8.dp)
   ) {
-    Text("All orders selected (52), 50 orders selected")
+    Text(
+      text = title
+    )
     HorizontalSpacer(1F)
     Icon(
       imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
@@ -67,16 +121,35 @@ private fun SelectedOrders(
 }
 
 @Preview(showBackground = true)
+@Composable
+private fun PreviewOrdersSummary() {
+  AppTheme {
+    ProvideDateTimeFormatter(AppDateTimeFormatter(LocalContext.current.locale)) {
+      OrdersSummary(
+        from = LocalDate.now(),
+        to = LocalDate.now(),
+        ordersPlaced = 10,
+        placedOrdersTotal = 100.money,
+        coveredOrders = 5,
+        coveredOrdersTotal = 50.money
+      )
+    }
+  }
+}
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun OrderSummary(
-
+private fun OrdersSummary(
+  from: LocalDate,
+  to: LocalDate,
+  ordersPlaced: Int,
+  placedOrdersTotal: Money,
+  coveredOrders: Int,
+  coveredOrdersTotal: Money,
 ) {
+  val formatter = LocalDateTimeFormatter.current
   Column {
     Text(stringResource(R.string.order_summary))
     VerticalSpacer(8.dp)
-
-
     FlowRow(
       horizontalArrangement = Arrangement.spacedBy(8.dp),
       verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -86,12 +159,36 @@ private fun OrderSummary(
         .padding(8.dp)
     ) {
       val itemModifier = Modifier.weight(1F)
-      LabeledText(R.string.from, "2023-01-01", modifier = itemModifier)
-      LabeledText(R.string.to, "2024-01-01", modifier = itemModifier)
-      LabeledText(R.string.orders_placed, "50", modifier = itemModifier)
-      LabeledText(R.string.orders_total, "200", modifier = itemModifier)
-      LabeledText(R.string.orders_covered, "2", modifier = itemModifier)
-      LabeledText(R.string.total_paid, "100", modifier = itemModifier)
+      LabeledText(
+        label = R.string.from,
+        text = formatter.formatShortDate(from),
+        modifier = itemModifier
+      )
+      LabeledText(
+        label = R.string.to,
+        text = formatter.formatShortDate(to),
+        modifier = itemModifier
+      )
+      LabeledText(
+        label = R.string.orders_placed,
+        text = ordersPlaced.toString(),
+        modifier = itemModifier
+      )
+      LabeledText(
+        label = R.string.orders_total,
+        text = placedOrdersTotal.format(),
+        modifier = itemModifier
+      )
+      LabeledText(
+        label = R.string.orders_covered,
+        text = coveredOrders.toString(),
+        modifier = itemModifier
+      )
+      LabeledText(
+        label = R.string.total_paid,
+        text = coveredOrdersTotal.format(),
+        modifier = itemModifier
+      )
     }
   }
 }
