@@ -1,24 +1,22 @@
 CREATE TABLE Payment (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    customerId INTEGER NOT NULL,
+    userId INTEGER NOT NULL,
     amount INTEGER NOT NULL,
     createdAt INTEGER NOT NULL,
     status TEXT NOT NULL, -- Completed, Canceled
     type TEXT NOT NULL, -- Credit, Debit
-    FOREIGN KEY (customerId) REFERENCES UserEntity(id)
+    FOREIGN KEY (userId) REFERENCES UserEntity(id)
 );
 
 CREATE TABLE UserOrderPayment(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     paymentId INTEGER NOT NULL,
     orderId INTEGER NOT NULL,
-    userId INTEGER NOT NULL,
     FOREIGN KEY (paymentId) REFERENCES Payment(id),
-    FOREIGN KEY (orderId) REFERENCES OrderEntity(id),
-    FOREIGN KEY (userId) REFERENCES UserEntity(id)
+    FOREIGN KEY (orderId) REFERENCES OrderEntity(id)
 );
 
-CREATE TABLE OrderPayment(
+CREATE TABLE OrderReimbursement(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     paymentId INTEGER NOT NULL,
     orderId INTEGER NOT NULL,
