@@ -1,5 +1,7 @@
 package com.mahozi.sayed.talabiya.core.datetime
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.mahozi.sayed.talabiya.core.di.SingleIn
 import com.mahozi.sayed.talabiya.core.main.MainScope
@@ -13,6 +15,15 @@ val LocalDateTimeFormatter = staticCompositionLocalOf<AppDateTimeFormatter> {
   error("AppLocalDateTimeFormatter is not provided")
 }
 
+@Composable
+fun ProvideDateTimeFormatter(
+  formatter: AppDateTimeFormatter,
+  content: @Composable () -> Unit,
+) {
+  CompositionLocalProvider(LocalDateTimeFormatter provides formatter) {
+    content()
+  }
+}
 @SingleIn(MainScope::class)
 class AppDateTimeFormatter @Inject constructor(
   private val locale: Locale
