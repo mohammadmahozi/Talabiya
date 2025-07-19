@@ -11,6 +11,7 @@ import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 import order.OrderEntity
 import order.OrderItemPriceEntity
+import payment.PaymentEntity
 import restaurant.MenuItemPriceEntity
 import javax.inject.Singleton
 
@@ -40,7 +41,8 @@ object DataModule {
             driver,
             MenuItemPriceEntity.Adapter(TypeAdapters.instantAdapter),
             OrderEntity.Adapter(TypeAdapters.instantAdapter),
-            OrderItemPriceEntity.Adapter(TypeAdapters.instantAdapter)
+            OrderItemPriceEntity.Adapter(TypeAdapters.instantAdapter),
+            PaymentEntity.Adapter(TypeAdapters.instantAdapter),
         )
     }
 

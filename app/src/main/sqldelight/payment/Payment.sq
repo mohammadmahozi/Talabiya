@@ -1,25 +1,41 @@
-CREATE TABLE Payment (
+import java.time.Instant;
+
+CREATE TABLE PaymentEntity (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     userId INTEGER NOT NULL,
     amount INTEGER NOT NULL,
-    createdAt INTEGER NOT NULL,
+    createdAt INTEGER AS Instant NOT NULL,
     status TEXT NOT NULL, -- Completed, Canceled
-    type TEXT NOT NULL, -- Credit, Debit
     FOREIGN KEY (userId) REFERENCES UserEntity(id)
 );
 
-CREATE TABLE UserOrderPayment(
+insertPayment:
+INSERT INTO PaymentEntity(userId, amount, createdAt, status)
+VALUES (?, ?, ?, ?);
+
+CREATE TABLE UserOrderPaymentEntity(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     paymentId INTEGER NOT NULL,
     orderId INTEGER NOT NULL,
-    FOREIGN KEY (paymentId) REFERENCES Payment(id),
+    FOREIGN KEY (paymentId) REFERENCES PaymentEntity(id),
     FOREIGN KEY (orderId) REFERENCES OrderEntity(id)
 );
 
-CREATE TABLE OrderReimbursement(
+insertUserOrderPayment:
+INSERT INTO UserOrderPaymentEntity(paymentId, orderId)
+VALUES (?, ?);
+
+CREATE TABLE OrderReimbursementEntity(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     paymentId INTEGER NOT NULL,
     orderId INTEGER NOT NULL,
-    FOREIGN KEY (paymentId) REFERENCES Payment(id),
+    FOREIGN KEY (paymentId) REFERENCES PaymentEntity(id),
     FOREIGN KEY (orderId) REFERENCES OrderEntity(id)
 );
+
+insertOrderReimbursement:
+INSERT INTO OrderReimbursementEntity(paymentId, orderId)
+VALUES (?, ?);
+
+lastInsertRowId:
+SELECT last_insert_rowid();
