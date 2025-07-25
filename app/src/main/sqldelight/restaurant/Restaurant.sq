@@ -12,3 +12,6 @@ SELECT id, name FROM RestaurantEntity ORDER BY name;
 
 delete:
 DELETE FROM RestaurantEntity WHERE id = ?;
+
+lastInsertRowId:
+SELECT last_insert_rowid();

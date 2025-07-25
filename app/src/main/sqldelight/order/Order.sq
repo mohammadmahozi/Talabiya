@@ -118,3 +118,5 @@ WHERE OrderItemPriceEntity.orderId = :orderId
 GROUP BY OrderItemPriceEntity.id
 ORDER BY CategoryEntity.number, MenuItemEntity.name;
 
+lastInsertRowId:
+SELECT last_insert_rowid();
