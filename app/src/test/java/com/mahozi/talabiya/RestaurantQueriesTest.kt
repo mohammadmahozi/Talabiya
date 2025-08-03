@@ -1,27 +1,18 @@
 package com.mahozi.talabiya
 
-import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
-import com.mahozi.sayed.talabiya.core.data.TypeAdapters
-import order.OrderEntity
+import com.mahozi.talabiya.database.createDatabase
 import org.junit.Before
 import org.junit.Test
-import restaurant.MenuItemPriceEntity
 import java.time.Instant
 
 class RestaurantQueriesTest {
-
 
   private lateinit var database: Database
   private val restaurantQueries get() = database.restaurantQueries
   private val menuItemQueries get() = database.menuItemQueries
 
   @Before fun before() {
-    val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-    Database.Schema.create(driver)
-    database = Database(
-      driver,
-      MenuItemPriceEntity.Adapter(TypeAdapters.instantAdapter),
-      OrderEntity.Adapter(TypeAdapters.instantAdapter))
+    database = createDatabase()
   }
 
   @Test fun menuItemsHaveTheMostRecentPrice() {
