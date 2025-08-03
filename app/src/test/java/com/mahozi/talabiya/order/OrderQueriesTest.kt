@@ -4,8 +4,10 @@ import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import com.mahozi.sayed.talabiya.core.data.TypeAdapters
 import com.mahozi.talabiya.Database
 import order.OrderEntity
+import order.OrderItemPriceEntity
 import org.junit.Before
 import org.junit.Test
+import payment.PaymentEntity
 import restaurant.MenuItemPriceEntity
 import java.time.Instant
 import java.util.Properties
@@ -24,17 +26,34 @@ class OrderQueriesTest {
     database = Database(
       driver,
       MenuItemPriceEntity.Adapter(TypeAdapters.instantAdapter),
-      OrderEntity.Adapter(TypeAdapters.instantAdapter)
+      OrderEntity.Adapter(TypeAdapters.instantAdapter),
+      OrderItemPriceEntity.Adapter(TypeAdapters.instantAdapter),
+      PaymentEntity.Adapter(TypeAdapters.instantAdapter),
     )
   }
 
   @Test fun selectOrderById() {
     val time = Instant.now()
     database.restaurantQueries.insert("Restaurant")
-    database.menuItemQueries.insert(1, "Name", "Pastry")
-    database.menuItemQueries.insertPrice(1, time, 100)
-    orderQueries.insert(1, time)
-    orderQueries.insertOrderItem(1, 1, 1, 1)
+    database.menuItemQueries.insert(
+      restaurantId = 1,
+      name = "Name",
+      category = "Pastry"
+    )
+    database.menuItemQueries.insertPrice(
+      menuItemId = 1,
+      datetime = time,
+      price = 100
+    )
+    orderQueries.insert(
+      restaurantId = 1,
+      createdAt = time
+    )
+    orderQueries.insertOrderItem(
+      customerId = 1,
+      quantity = 1,
+      orderItemPriceId = 1,
+    )
     val order = orderQueries.selectById(1).executeAsOne()
     println(order)
   }
@@ -42,20 +61,40 @@ class OrderQueriesTest {
   @Test fun selectAllSuborders() {
     val time = Instant.now()
     database.restaurantQueries.insert("Restaurant")
-    database.menuItemQueries.insert(1, "Item 1", "Pastry")
-    database.menuItemQueries.insertPrice(1, time, 100)
+    database.menuItemQueries.insert(
+      restaurantId = 1,
+      name = "Item 1",
+      category = "Pastry"
+    )
+    database.menuItemQueries.insertPrice(
+      menuItemId = 1,
+      datetime = time,
+      price = 100
+    )
+    database.menuItemQueries.lastInsertRowId()
 
-    database.menuItemQueries.insert(1, "Item 2", "Pastry")
-    database.menuItemQueries.insertPrice(2, time, 200)
+    database.menuItemQueries.insert(
+      restaurantId = 1,
+      name = "Item 2",
+      category = "Pastry"
+    )
+    database.menuItemQueries.insertPrice(
+      menuItemId = 2,
+      datetime = time,
+      price = 200
+    )
 
-    orderQueries.insert(1, time)
+    orderQueries.insert(
+      restaurantId = 1,
+      createdAt = time
+    )
 
     database.userQueries.insert("Customer 1")
-    orderQueries.insertOrderItem(1, 1, 1, 1)
-    orderQueries.insertOrderItem(1, 1, 5, 2)
+    orderQueries.insertOrderItem(1, 1, 1)
+    orderQueries.insertOrderItem(1, 5, 2)
 
     database.userQueries.insert("Customer 2")
-    orderQueries.insertOrderItem(1, 2, 10, 1)
+    orderQueries.insertOrderItem(2, 10, 1)
 
     orderQueries.selectAllOrderItems(1).executeAsList().forEach(::println)
   }
