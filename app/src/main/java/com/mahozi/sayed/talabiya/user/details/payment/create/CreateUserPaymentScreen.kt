@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
-import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.datetime.AppDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.datetime.ProvideDateTimeFormatter
@@ -40,6 +39,7 @@ import com.mahozi.sayed.talabiya.core.ui.components.TlbButton
 import com.mahozi.sayed.talabiya.core.ui.components.VerticalSpacer
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import kotlinx.parcelize.Parcelize
+import java.time.Instant
 import java.time.LocalDate
 
 
@@ -50,8 +50,8 @@ data class CreateUserPaymentScreen(
 
 @Composable
 private fun CreateUserPaymentScreen(
-  state: CreatePaymentState,
-  onEvent: (CreatePaymentEvent) -> Unit,
+  state: CreateUserPaymentState,
+  onEvent: (CreateUserPaymentEvent) -> Unit,
   onBack: () -> Unit,
 ) {
   Scaffold(
@@ -122,29 +122,25 @@ private fun SelectedOrders(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewOrdersSummary() {
+private fun PreviewPaymentSummary() {
   AppTheme {
     ProvideDateTimeFormatter(AppDateTimeFormatter(LocalContext.current.locale)) {
-      OrdersSummary(
-        from = LocalDate.now(),
-        to = LocalDate.now(),
+      val summary = PaymentSummary(
+        from = Instant.now(),
+        to = Instant.now(),
         ordersPlaced = 10,
         placedOrdersTotal = 100.money,
         coveredOrders = 5,
         coveredOrdersTotal = 50.money
       )
+      PaymentSummary(summary)
     }
   }
 }
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun OrdersSummary(
-  from: LocalDate,
-  to: LocalDate,
-  ordersPlaced: Int,
-  placedOrdersTotal: Money,
-  coveredOrders: Int,
-  coveredOrdersTotal: Money,
+private fun PaymentSummary(
+  summary: PaymentSummary,
 ) {
   val formatter = LocalDateTimeFormatter.current
   Column {
@@ -161,32 +157,32 @@ private fun OrdersSummary(
       val itemModifier = Modifier.weight(1F)
       LabeledText(
         label = R.string.from,
-        text = formatter.formatShortDate(from),
+        text = formatter.formatShortDate(summary.from),
         modifier = itemModifier
       )
       LabeledText(
         label = R.string.to,
-        text = formatter.formatShortDate(to),
+        text = formatter.formatShortDate(summary.to),
         modifier = itemModifier
       )
       LabeledText(
         label = R.string.orders_placed,
-        text = ordersPlaced.toString(),
+        text = summary.ordersPlaced.toString(),
         modifier = itemModifier
       )
       LabeledText(
         label = R.string.orders_total,
-        text = placedOrdersTotal.format(),
+        text = summary.placedOrdersTotal.format(),
         modifier = itemModifier
       )
       LabeledText(
         label = R.string.orders_covered,
-        text = coveredOrders.toString(),
+        text = summary.coveredOrders.toString(),
         modifier = itemModifier
       )
       LabeledText(
         label = R.string.total_paid,
-        text = coveredOrdersTotal.format(),
+        text = summary.coveredOrdersTotal.format(),
         modifier = itemModifier
       )
     }
@@ -195,7 +191,7 @@ private fun OrdersSummary(
 
 @Preview(showBackground = true)
 @Composable
-private fun PaymentSummary() {
+private fun PaymentTotals() {
   Column(
     modifier = Modifier
       .fillMaxWidth()

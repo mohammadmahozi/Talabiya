@@ -37,5 +37,24 @@ insertOrderReimbursement:
 INSERT INTO OrderReimbursementEntity(paymentId, orderId)
 VALUES (?, ?);
 
+unpaidOrdersEntity:
+SELECT OrderEntity.id AS orderId, OrderEntity.createdAt, RestaurantEntity.name AS restaurant,
+  -- Total for the full order (all users)
+  SUM(OrderItemPriceEntity.price * OrderItemEntity.quantity) AS fullOrderTotal,
+
+  -- Total just for the current user
+  SUM(CASE WHEN OrderItemEntity.customerId = :userId
+           THEN OrderItemPriceEntity.price * OrderItemEntity.quantity
+           ELSE 0 END) AS userOrderTotal
+FROM OrderEntity
+LEFT JOIN UserOrderPaymentEntity ON OrderEntity.id = UserOrderPaymentEntity.orderId
+LEFT JOIN OrderReimbursementEntity ON OrderEntity.id = OrderReimbursementEntity.orderId
+LEFT JOIN PaymentEntity ON UserOrderPaymentEntity.paymentId = PaymentEntity.id AND PaymentEntity.status = 'Completed' AND PaymentEntity.userId = :userId
+JOIN RestaurantEntity ON OrderEntity.restaurantId = RestaurantEntity.id
+JOIN OrderItemPriceEntity ON OrderEntity.id = OrderItemPriceEntity.orderId
+JOIN OrderItemEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
+WHERE PaymentEntity.id IS NULL
+GROUP BY OrderEntity.id;
+
 lastInsertRowId:
 SELECT last_insert_rowid();

@@ -16,6 +16,8 @@ data class Money constructor(private val amount: BigDecimal){
 
   operator fun div(money: Money): Money = (this.amount / money.amount).money
 
+  operator fun compareTo(money: Money) = this.amount.compareTo(money.amount)
+
   fun format(): String = format.format(amount)
 
   fun toLong(): Long = (amount * BigDecimal.valueOf(100)).longValueExact()
@@ -29,4 +31,12 @@ val Cent.money: Money get() {
   val centsInBigDecimal = cents.toBigDecimal()
   val money = centsInBigDecimal / BigDecimal.valueOf(100)
   return Money(money)
+}
+
+inline fun <T> Iterable<T>.sumOf(selector: (T) -> Money): Money {
+  var sum = 0.money
+  for (element in this) {
+    sum += selector(element)
+  }
+  return sum
 }

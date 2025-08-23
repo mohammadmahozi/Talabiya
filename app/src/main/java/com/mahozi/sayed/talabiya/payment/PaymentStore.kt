@@ -1,6 +1,8 @@
 package com.mahozi.sayed.talabiya.payment
 
 import com.mahozi.sayed.talabiya.core.Money
+import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.user.details.payment.create.UnpaidOrder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import payment.PaymentQueries
@@ -42,7 +44,7 @@ class PaymentStore @Inject constructor(
     withContext(dispatcher) {
       paymentQueries.transaction {
         paymentQueries.insertPayment(
-          userId,
+          userId = userId,
           amount = amount.toLong(),
           createdAt = Instant.now(),
           status = PaymentStatus.Completed.name
@@ -53,6 +55,25 @@ class PaymentStore @Inject constructor(
           orderId = orderId
         )
       }
+    }
+  }
+
+  suspend fun getUnpaidOrders(userId: Long): List<UnpaidOrder> {
+    return withContext(dispatcher) {
+      val orders = paymentQueries.unpaidOrdersEntity(
+        userId = userId,
+        mapper = { orderId, createdAt, restaurant, fullOrderTotal, userOrderTotal ->
+          UnpaidOrder(
+            orderId = orderId,
+            createdAt = createdAt,
+            restaurant = restaurant,
+            fullOrderTotal = (fullOrderTotal ?: 0L).money,
+            userOrderTotal = (userOrderTotal ?: 0L).money,
+            selected = false
+          )
+        }
+      ).executeAsList()
+      orders
     }
   }
 }
