@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.core.Ui
 import com.mahozi.sayed.talabiya.core.datetime.AppDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.datetime.ProvideDateTimeFormatter
@@ -47,6 +48,20 @@ import java.time.LocalDate
 data class CreateUserPaymentScreen(
   val userId: Long,
 ) : Screen
+
+class CreateUserPaymentScreenUi: Ui<CreateUserPaymentState, CreateUserPaymentEvent> {
+  @Composable
+  override fun Content(
+    state: CreateUserPaymentState,
+    onEvent: (CreateUserPaymentEvent) -> Unit
+  ) {
+    CreateUserPaymentScreen(
+      state = state,
+      onEvent = onEvent,
+      onBack = {}
+    )
+  }
+}
 
 @Composable
 private fun CreateUserPaymentScreen(
@@ -96,6 +111,7 @@ private fun PreviewSelectedOrders() {
     )
   }
 }
+
 @Composable
 private fun SelectedOrders(
   title: String,

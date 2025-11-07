@@ -11,6 +11,7 @@ import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.sumOf
 import com.mahozi.sayed.talabiya.payment.PaymentStore
 import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 
@@ -56,5 +57,10 @@ class CreateUserPaymentPresenter @AssistedInject constructor(
       summary = summary,
       totals = totals,
     )
+  }
+
+  @AssistedFactory
+  interface Factory {
+    fun create(screen: CreateUserPaymentScreen): CreateUserPaymentPresenter
   }
 }
