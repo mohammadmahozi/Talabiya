@@ -14,35 +14,52 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
+import java.time.Instant
 
 class CreateUserPaymentPresenter @AssistedInject constructor(
   @Assisted private val screen: CreateUserPaymentScreen,
   private val paymentStore: PaymentStore,
-): Presenter<CreateUserPaymentEvent, CreateUserPaymentState> {
+) : Presenter<CreateUserPaymentEvent, CreateUserPaymentState> {
 
   @Composable
   override fun start(events: Flow<CreateUserPaymentEvent>): CreateUserPaymentState {
 
     var orders by remember { mutableStateOf(listOf<UnpaidOrder>()) }
-    var summary by remember { mutableStateOf(null as PaymentSummary?) }
-    var totals by remember { mutableStateOf(null as PaymentTotals?) }
+    var summary by remember {
+      mutableStateOf(
+        PaymentSummary(
+          from = Instant.now(),
+          to = Instant.now(),
+          ordersPlaced = 0,
+          ordersCovered = 0,
+        )
+      )
+    }
+    var totals by remember {
+      mutableStateOf(
+        PaymentTotals(
+          coveredOrdersTotal = 0.money,
+          placedOrdersTotal = 0.money,
+          finalTotal = 0.money,
+        )
+      )
+    }
 
     LaunchedEffect(Unit) {
       orders = paymentStore.getUnpaidOrders(screen.userId)
-      val placedOrders = orders.filter { it.userOrderTotal > 0.money  }
+      val selectedOrders = orders.selected
+      val placedOrders = selectedOrders.filter { it.userOrderTotal > 0.money }
       val placedOrdersTotal = placedOrders.sumOf { it.userOrderTotal }
 
-      val coveredOrders = orders.filter { it.fullOrderTotal > 0.money }
+      val coveredOrders = selectedOrders.filter { it.fullOrderTotal > 0.money }
       val coveredOrdersTotal = coveredOrders.sumOf { it.fullOrderTotal }
 
-      if (orders.isNotEmpty()) {
+      if (selectedOrders.isNotEmpty()) {
         summary = PaymentSummary(
-          from = orders.first().createdAt,
-          to = orders.last().createdAt,
+          from = selectedOrders.first().createdAt,
+          to = selectedOrders.last().createdAt,
           ordersPlaced = placedOrders.size,
-          placedOrdersTotal = placedOrdersTotal,
-          coveredOrders = coveredOrders.size,
-          coveredOrdersTotal = coveredOrdersTotal,
+          ordersCovered = coveredOrders.size,
         )
         totals = PaymentTotals(
           coveredOrdersTotal = coveredOrdersTotal,
@@ -54,10 +71,15 @@ class CreateUserPaymentPresenter @AssistedInject constructor(
 
     return CreateUserPaymentState(
       user = "",
+      numberOfSelectedOrders = orders.selected.size,
+      allOrdersSelected = orders.all { it.selected },
       summary = summary,
       totals = totals,
+      showPay = orders.any { it.selected }
     )
   }
+
+  private val List<UnpaidOrder>.selected get() = filter { it.selected }
 
   @AssistedFactory
   interface Factory {

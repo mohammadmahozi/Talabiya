@@ -41,7 +41,6 @@ import com.mahozi.sayed.talabiya.core.ui.components.VerticalSpacer
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import kotlinx.parcelize.Parcelize
 import java.time.Instant
-import java.time.LocalDate
 
 
 @Parcelize
@@ -83,20 +82,32 @@ private fun CreateUserPaymentScreen(
         .padding(it)
         .padding(16.dp)
     ) {
+      val ordersTitle = when(state.allOrdersSelected) {
+        true -> stringResource(R.string.all_orders_selected, state.numberOfSelectedOrders)
+        false -> stringResource(R.string.n_orders_selected, state.numberOfSelectedOrders)
+      }
       SelectedOrders(
-        title = "All orders selected",
-        onClick = {}
+        title = ordersTitle,
+        onClick = { onEvent(CreateUserPaymentEvent.SelectOrders)}
       )
 
-      //OrdersSummary()
-
-      //PaymentSummary()
-
-      TlbButton(
-        text = stringResource(R.string.pay),
-        onClick = {},
-        modifier = Modifier.fillMaxWidth()
+      PaymentSummary(
+        summary = state.summary
       )
+
+      PaymentTotals(
+        totals = state.totals
+      )
+
+      VerticalSpacer(1F)
+
+      if (state.showPay) {
+        TlbButton(
+          text = stringResource(R.string.pay),
+          onClick = {},
+          modifier = Modifier.fillMaxWidth()
+        )
+      }
     }
   }
 }
@@ -145,9 +156,7 @@ private fun PreviewPaymentSummary() {
         from = Instant.now(),
         to = Instant.now(),
         ordersPlaced = 10,
-        placedOrdersTotal = 100.money,
-        coveredOrders = 5,
-        coveredOrdersTotal = 50.money
+        ordersCovered = 5,
       )
       PaymentSummary(summary)
     }
@@ -187,18 +196,8 @@ private fun PaymentSummary(
         modifier = itemModifier
       )
       LabeledText(
-        label = R.string.orders_total,
-        text = summary.placedOrdersTotal.format(),
-        modifier = itemModifier
-      )
-      LabeledText(
         label = R.string.orders_covered,
-        text = summary.coveredOrders.toString(),
-        modifier = itemModifier
-      )
-      LabeledText(
-        label = R.string.total_paid,
-        text = summary.coveredOrdersTotal.format(),
+        text = summary.ordersCovered.toString(),
         modifier = itemModifier
       )
     }
@@ -207,45 +206,39 @@ private fun PaymentSummary(
 
 @Preview(showBackground = true)
 @Composable
-private fun PaymentTotals() {
+private fun PreviewPaymentTotals() {
+  AppTheme {
+    PaymentTotals(
+      totals = PaymentTotals(
+        placedOrdersTotal = 300.money,
+        coveredOrdersTotal = 200.money,
+        finalTotal = 100.money
+      )
+    )
+  }
+}
+@Composable
+private fun PaymentTotals(
+  totals: PaymentTotals,
+) {
   Column(
     modifier = Modifier
       .fillMaxWidth()
   ) {
     PaymentRow(
-      R.string.covered_orders_total,
-      "+ 200",
-      AppTheme.colors.primary
-    )
-
-    PaymentRow(
       R.string.placed_orders_total,
-      "- 300",
+      totals.placedOrdersTotal.format(),
       AppTheme.colors.primary
     )
-
     PaymentRow(
-      R.string.orders_net_total,
-      "100",
+      R.string.covered_orders_total,
+      totals.coveredOrdersTotal.format(),
       AppTheme.colors.primary
     )
-
     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
     PaymentRow(
       R.string.payment_total,
-      "500",
-      AppTheme.colors.primary
-    )
-    PaymentRow(
-      R.string.balance_used,
-      "0",
-      AppTheme.colors.primary
-    )
-
-    PaymentRow(
-      R.string.balance_recharge,
-      "400",
+      totals.finalTotal.format(),
       AppTheme.colors.primary
     )
   }

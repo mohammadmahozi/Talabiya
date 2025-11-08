@@ -69,7 +69,7 @@ class PaymentStore @Inject constructor(
             restaurant = restaurant,
             fullOrderTotal = (fullOrderTotal ?: 0L).money,
             userOrderTotal = (userOrderTotal ?: 0L).money,
-            selected = false
+            selected = true
           )
         }
       ).executeAsList()

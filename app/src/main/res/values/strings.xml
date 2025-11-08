@@ -145,5 +145,7 @@
     <string name="balance_recharge">Balance recharge</string>
     <string name="pay">Pay</string>
     <string name="create_payment_for">Create payment for %s</string>
+    <string name="all_orders_selected">All orders selected (%d)</string>
+    <string name="n_orders_selected">(%s) orders selected</string>
 
 </resources>
