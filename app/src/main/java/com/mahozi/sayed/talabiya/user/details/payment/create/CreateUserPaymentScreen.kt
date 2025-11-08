@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
-import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -39,6 +37,7 @@ import com.mahozi.sayed.talabiya.core.ui.components.HorizontalSpacer
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
 import com.mahozi.sayed.talabiya.core.ui.components.TlbButton
+import com.mahozi.sayed.talabiya.core.ui.components.TlbCard
 import com.mahozi.sayed.talabiya.core.ui.components.VerticalSpacer
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import kotlinx.parcelize.Parcelize
@@ -171,7 +170,7 @@ private fun PaymentSummary(
 ) {
   val formatter = LocalDateTimeFormatter.current
   TlbCard(
-    title = R.string.order_summary
+    title = { TlbCardTitle(R.string.order_summary) }
   ) {
     FlowRow(
       horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -224,7 +223,7 @@ private fun PaymentTotals(
   totals: PaymentTotals,
 ) {
   TlbCard(
-    title = R.string.total
+    title = { TlbCardTitle(R.string.total) }
   ){
     PaymentRow(
       R.string.placed_orders_total,
@@ -280,26 +279,5 @@ private fun LabeledText(
     )
     VerticalSpacer(8.dp)
     Text(text = text)
-  }
-}
-
-@Composable
-private fun TlbCard(
-  title: Int,
-  content: @Composable (ColumnScope.() -> Unit)
-) {
-  Card {
-    Column(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(8.dp)
-    ) {
-      Text(
-        text = stringResource(title),
-      )
-      VerticalSpacer(8.dp)
-
-      content()
-    }
   }
 }
