@@ -1,6 +1,8 @@
 package com.mahozi.sayed.talabiya.user.details.payment.create
 
 import com.mahozi.sayed.talabiya.core.Money
+import com.mahozi.sayed.talabiya.user.details.order.list.SelectUnpaidOrdersEvent
+import com.mahozi.sayed.talabiya.user.details.order.list.SelectUnpaidOrderState
 import java.time.Instant
 
 data class CreateUserPaymentState(
@@ -10,6 +12,7 @@ data class CreateUserPaymentState(
   val summary: PaymentSummary,
   val totals: PaymentTotals,
   val showPay: Boolean,
+  val selectUnpaidOrderState: SelectUnpaidOrderState?,
 )
 
 data class PaymentSummary(
@@ -28,4 +31,5 @@ data class PaymentTotals(
 sealed interface CreateUserPaymentEvent {
   object SelectOrders : CreateUserPaymentEvent
   object Pay : CreateUserPaymentEvent
+  data class UnpaidOrder(val event: SelectUnpaidOrdersEvent): CreateUserPaymentEvent
 }

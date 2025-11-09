@@ -40,6 +40,7 @@ import com.mahozi.sayed.talabiya.core.ui.components.TlbButton
 import com.mahozi.sayed.talabiya.core.ui.components.TlbCard
 import com.mahozi.sayed.talabiya.core.ui.components.VerticalSpacer
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
+import com.mahozi.sayed.talabiya.user.details.order.list.SelectUnpaidOrdersDialog
 import kotlinx.parcelize.Parcelize
 import java.time.Instant
 
@@ -76,11 +77,17 @@ private fun CreateUserPaymentScreen(
         navigationIcon = { TalabiyaTopBarDefaults.BackIcon(onBack) }
       )
     }
-  ) {
+  ) { paddingValues ->
+    if (state.selectUnpaidOrderState != null) {
+      SelectUnpaidOrdersDialog(
+        state = state.selectUnpaidOrderState,
+        onEvent = { onEvent(CreateUserPaymentEvent.UnpaidOrder(it))}
+      )
+    }
     Column(
       verticalArrangement = Arrangement.spacedBy(8.dp),
       modifier = Modifier
-        .padding(it)
+        .padding(paddingValues)
         .padding(16.dp)
     ) {
       val ordersTitle = when(state.allOrdersSelected) {

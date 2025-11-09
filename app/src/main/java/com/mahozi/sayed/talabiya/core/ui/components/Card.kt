@@ -1,5 +1,6 @@
 package com.mahozi.sayed.talabiya.core.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,11 +37,15 @@ class TlbCardScope internal constructor() {
 fun TlbCard(
   modifier: Modifier = Modifier,
   title: (@Composable TlbCardScope.() -> Unit)? = null,
-  content: @Composable (ColumnScope.() -> Unit)
+  border: BorderStroke? = null,
+  content: @Composable (ColumnScope.() -> Unit),
 ) {
-  Card {
+  Card(
+    modifier = modifier,
+    border = border,
+  ) {
     Column(
-      modifier = modifier
+      modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp)
     ) {

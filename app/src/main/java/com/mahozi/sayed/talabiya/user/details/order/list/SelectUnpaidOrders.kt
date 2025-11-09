@@ -1,13 +1,23 @@
 package com.mahozi.sayed.talabiya.user.details.order.list
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,9 +38,37 @@ import com.mahozi.sayed.talabiya.core.ui.theme.onSurfaceVariant
 import com.mahozi.sayed.talabiya.user.details.payment.create.UnpaidOrder
 import java.time.Instant
 
+data class SelectUnpaidOrderState(
+  val orders: List<UnpaidOrder>,
+)
+
+sealed interface SelectUnpaidOrdersEvent {
+  data class SelectOrder(val order: UnpaidOrder) : SelectUnpaidOrdersEvent
+  object Dismiss : SelectUnpaidOrdersEvent
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SelectUnpaidOrdersDialog(
+  state: SelectUnpaidOrderState,
+  onEvent: (SelectUnpaidOrdersEvent) -> Unit,
+) {
+  val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+  ModalBottomSheet(
+    sheetState = sheetState,
+    onDismissRequest = { onEvent(SelectUnpaidOrdersEvent.Dismiss) },
+    modifier = Modifier.fillMaxHeight(.8F)
+  ) {
+    SelectUnpaidOrdersScreen(
+      state = state,
+      onEvent = onEvent
+    )
+  }
+}
+
 @Preview
 @Composable
-private fun PreviewUnpaidOrder() {
+private fun PreviewUnpaidOrdersScreen() {
   AppTheme {
     val order = UnpaidOrder(
       orderId = 1L,
@@ -41,9 +79,27 @@ private fun PreviewUnpaidOrder() {
       selected = false
     )
     ProvideDateTimeFormatter(AppDateTimeFormatter(LocalContext.current.locale)) {
+      SelectUnpaidOrdersScreen(
+        state = SelectUnpaidOrderState(listOf(order)),
+        onEvent = {},
+      )
+    }
+  }
+}
+
+@Composable
+fun SelectUnpaidOrdersScreen(
+  state: SelectUnpaidOrderState,
+  onEvent: (SelectUnpaidOrdersEvent) -> Unit,
+) {
+  LazyColumn(
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+  ) {
+    items(state.orders) {
       UnpaidOrder(
-        order = order,
-        onClick = {},
+        order = it,
+        onClick = { onEvent(SelectUnpaidOrdersEvent.SelectOrder(it)) },
       )
     }
   }
@@ -55,6 +111,10 @@ internal fun UnpaidOrder(
   onClick: () -> Unit,
 ) {
   TlbCard(
+    border = BorderStroke(
+      width = 1.dp,
+      color = if (order.selected) AppTheme.colors.primary else AppTheme.colors.surfaceContainer
+    ),
     modifier = Modifier
       .clickable(onClick = onClick)
   ) {
