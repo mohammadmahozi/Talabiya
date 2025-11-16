@@ -40,6 +40,7 @@ import com.mahozi.sayed.talabiya.payment.Payment
 import com.mahozi.sayed.talabiya.payment.PaymentStatus
 import com.mahozi.sayed.talabiya.payment.background
 import com.mahozi.sayed.talabiya.payment.title
+import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentScreen
 import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsEvent
 import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsState
 import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsTab
@@ -66,11 +67,15 @@ fun UserDetailsScreen(
     Column(
       modifier = modifier
         .padding(paddingValues)
-        .padding(16.dp)
     ) {
       TlbTabRow(
         selectedTabIndex = state.tab.ordinal,
       ) {
+        TlbTab(
+          selected = state.tab == UserDetailsTab.CreatePayment,
+          text = { Text(stringResource(R.string.pay)) },
+          onClick = { onEvent(UserDetailsEvent.SelectTab(UserDetailsTab.CreatePayment)) }
+        )
         TlbTab(
           selected = state.tab == UserDetailsTab.Payments,
           text = { Text(stringResource(R.string.payments)) },
@@ -83,12 +88,23 @@ fun UserDetailsScreen(
         )
       }
 
-      when (state.tab) {
-        UserDetailsTab.Payments -> {
-          Payments(state.payments)
-        }
-        UserDetailsTab.Orders -> {
-          UserOrders(state.orders)
+      Column(
+        modifier = Modifier
+          .padding(16.dp)
+      ) {
+        when (state.tab) {
+          UserDetailsTab.CreatePayment -> {
+            CreateUserPaymentScreen(
+              state = state.createUserPaymentState,
+              onEvent = { onEvent(UserDetailsEvent.CreatePaymentEvent(it)) }
+            )
+          }
+          UserDetailsTab.Payments -> {
+            Payments(state.payments)
+          }
+          UserDetailsTab.Orders -> {
+            UserOrders(state.orders)
+          }
         }
       }
     }
@@ -107,6 +123,7 @@ private fun Payments(
     }
   }
 }
+
 @Composable
 private fun Payment(
   payment: Payment
@@ -127,7 +144,8 @@ private fun Payment(
           .background(
             color = AppTheme.colors.surfaceContainerHighest,
             shape = CircleShape
-          ).padding(2.dp)
+          )
+          .padding(2.dp)
       )
       Text(
         text = payment.amount.format(),
@@ -141,7 +159,8 @@ private fun Payment(
           .background(
             color = payment.status.background,
             shape = AppTheme.shapes.medium,
-          ).padding(8.dp)
+          )
+          .padding(8.dp)
       )
     }
 

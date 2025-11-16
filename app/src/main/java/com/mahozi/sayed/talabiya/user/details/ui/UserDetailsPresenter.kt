@@ -11,34 +11,47 @@ import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import com.mahozi.sayed.talabiya.payment.PaymentStore
 import com.mahozi.sayed.talabiya.user.details.UserDetailsScreen
+import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentEvent
+import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentPresenter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 
 
 class UserDetailsPresenter @AssistedInject constructor(
   @Assisted private val screen: UserDetailsScreen,
   private val orderStore: OrderStore,
   private val paymentStore: PaymentStore,
+  createUserPaymentPresenterFactory: CreateUserPaymentPresenter.Factory,
 ) : Presenter<UserDetailsEvent, UserDetailsState> {
+
+  private val createUserPaymentPresenter = createUserPaymentPresenterFactory.create(screen.userId)
 
   @Composable
   override fun start(events: Flow<UserDetailsEvent>): UserDetailsState {
-    var tab by remember { mutableStateOf(UserDetailsTab.Payments) }
+    var tab by remember { mutableStateOf(UserDetailsTab.CreatePayment) }
     val payments by paymentStore.getUserPayments(screen.userId).collectAsState(listOf())
     val orders by orderStore.getUserOrders(screen.userId).collectAsState(listOf())
+
+    val createPaymentEvents = remember { MutableSharedFlow<CreateUserPaymentEvent>(extraBufferCapacity = 5) }
+    val createPaymentState = createUserPaymentPresenter.start(createPaymentEvents)
 
     CollectEvents(events) { event ->
       when (event) {
         is UserDetailsEvent.SelectTab -> tab = event.tab
+        is UserDetailsEvent.CreatePaymentEvent -> {
+          launch { createPaymentEvents.emit(event.event) }
+        }
       }
     }
 
     return UserDetailsState(
       userName = "",
       tab = tab,
+      createUserPaymentState = createPaymentState,
       payments = payments,
       orders = orders
     )

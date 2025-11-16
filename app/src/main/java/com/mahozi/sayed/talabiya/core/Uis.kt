@@ -42,8 +42,6 @@ import com.mahozi.sayed.talabiya.user.create.CreateUserEvent
 import com.mahozi.sayed.talabiya.user.create.CreateUserScreen
 import com.mahozi.sayed.talabiya.user.create.CreateUserState
 import com.mahozi.sayed.talabiya.user.details.UserDetailsScreen
-import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentScreen
-import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentScreenUi
 import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsEvent
 import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsState
 import com.mahozi.sayed.talabiya.user.list.UsersEvent
@@ -105,8 +103,6 @@ fun Uis(
     }
 
     is EditOrderPricesScreen -> EditOrderPricesScreenUi()
-
-    is CreateUserPaymentScreen -> CreateUserPaymentScreenUi()
 
     is UserDetailsScreen -> ui<UserDetailsState, UserDetailsEvent> { state, onEvent ->  UserDetailsScreen(state = state, onEvent = onEvent) }
     else -> throw IllegalStateException("Unknown screen $screen")

@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
 class CreateUserPaymentPresenter @AssistedInject constructor(
-  @Assisted private val screen: CreateUserPaymentScreen,
+  @Assisted private val userId: Long,
   private val paymentStore: PaymentStore,
 ) : Presenter<CreateUserPaymentEvent, CreateUserPaymentState> {
 
@@ -29,7 +29,7 @@ class CreateUserPaymentPresenter @AssistedInject constructor(
 
     var orders by remember { mutableStateOf(listOf<UnpaidOrder>()) }
     LaunchedEffect(Unit) {
-      orders = paymentStore.getUnpaidOrders(screen.userId)
+      orders = paymentStore.getUnpaidOrders(userId)
     }
 
     var summary by remember(orders) {
@@ -97,6 +97,6 @@ class CreateUserPaymentPresenter @AssistedInject constructor(
 
   @AssistedFactory
   interface Factory {
-    fun create(screen: CreateUserPaymentScreen): CreateUserPaymentPresenter
+    fun create(userId: Long,): CreateUserPaymentPresenter
   }
 }

@@ -68,7 +68,6 @@ class Presenters @Inject constructor(
       is OptionsScreen -> optionsPresenter.create(screen.restaurantId)
       is CreateOptionScreen -> createOptionPresenter.create(screen.restaurantId)
       is EditOrderPricesScreen -> editOrderPricesPresenter.create(screen.orderId)
-      is CreateUserPaymentScreen -> createUserPaymentPresenter.create(screen)
       is UserDetailsScreen -> userDetailsPresenter.create(screen)
       else -> throw IllegalStateException("Unknown screen $screen")
     }

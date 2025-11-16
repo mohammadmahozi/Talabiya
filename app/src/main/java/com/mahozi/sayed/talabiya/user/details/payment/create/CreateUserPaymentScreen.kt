@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,96 +25,61 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
-import com.mahozi.sayed.talabiya.core.Ui
 import com.mahozi.sayed.talabiya.core.datetime.AppDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.datetime.ProvideDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.extensions.locale
 import com.mahozi.sayed.talabiya.core.money
-import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.HorizontalSpacer
-import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
-import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
 import com.mahozi.sayed.talabiya.core.ui.components.TlbButton
 import com.mahozi.sayed.talabiya.core.ui.components.TlbCard
 import com.mahozi.sayed.talabiya.core.ui.components.VerticalSpacer
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.user.details.order.list.SelectUnpaidOrdersDialog
-import kotlinx.parcelize.Parcelize
 import java.time.Instant
 
 
-@Parcelize
-data class CreateUserPaymentScreen(
-  val userId: Long,
-) : Screen
-
-class CreateUserPaymentScreenUi: Ui<CreateUserPaymentState, CreateUserPaymentEvent> {
-  @Composable
-  override fun Content(
-    state: CreateUserPaymentState,
-    onEvent: (CreateUserPaymentEvent) -> Unit
-  ) {
-    CreateUserPaymentScreen(
-      state = state,
-      onEvent = onEvent,
-      onBack = {}
-    )
-  }
-}
-
 @Composable
-private fun CreateUserPaymentScreen(
+fun CreateUserPaymentScreen(
   state: CreateUserPaymentState,
   onEvent: (CreateUserPaymentEvent) -> Unit,
-  onBack: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
-  Scaffold(
-    topBar = {
-      TalabiyaBar(
-        title = { Text(stringResource(R.string.create_payment_for, state.user))},
-        navigationIcon = { TalabiyaTopBarDefaults.BackIcon(onBack) }
-      )
+  if (state.selectUnpaidOrderState != null) {
+    SelectUnpaidOrdersDialog(
+      state = state.selectUnpaidOrderState,
+      onEvent = { onEvent(CreateUserPaymentEvent.UnpaidOrder(it)) }
+    )
+  }
+  Column(
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+    modifier = modifier
+  ) {
+    val ordersTitle = when (state.allOrdersSelected) {
+      true -> stringResource(R.string.all_orders_selected, state.numberOfSelectedOrders)
+      false -> stringResource(R.string.n_orders_selected, state.numberOfSelectedOrders)
     }
-  ) { paddingValues ->
-    if (state.selectUnpaidOrderState != null) {
-      SelectUnpaidOrdersDialog(
-        state = state.selectUnpaidOrderState,
-        onEvent = { onEvent(CreateUserPaymentEvent.UnpaidOrder(it))}
-      )
-    }
-    Column(
-      verticalArrangement = Arrangement.spacedBy(8.dp),
-      modifier = Modifier
-        .padding(paddingValues)
-        .padding(16.dp)
-    ) {
-      val ordersTitle = when(state.allOrdersSelected) {
-        true -> stringResource(R.string.all_orders_selected, state.numberOfSelectedOrders)
-        false -> stringResource(R.string.n_orders_selected, state.numberOfSelectedOrders)
-      }
-      SelectedOrders(
-        title = ordersTitle,
-        onClick = { onEvent(CreateUserPaymentEvent.SelectOrders)}
-      )
+    SelectedOrders(
+      title = ordersTitle,
+      onClick = { onEvent(CreateUserPaymentEvent.SelectOrders) }
+    )
 
-      PaymentSummary(
-        summary = state.summary
+    PaymentSummary(
+      summary = state.summary
+    )
+
+    PaymentTotals(
+      totals = state.totals
+    )
+
+    VerticalSpacer(1F)
+
+    if (state.showPay) {
+      TlbButton(
+        text = stringResource(R.string.pay),
+        onClick = {},
+        modifier = Modifier.fillMaxWidth()
       )
-
-      PaymentTotals(
-        totals = state.totals
-      )
-
-      VerticalSpacer(1F)
-
-      if (state.showPay) {
-        TlbButton(
-          text = stringResource(R.string.pay),
-          onClick = {},
-          modifier = Modifier.fillMaxWidth()
-        )
-      }
     }
   }
 }
@@ -170,6 +134,7 @@ private fun PreviewPaymentSummary() {
     }
   }
 }
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun PaymentSummary(
@@ -225,13 +190,14 @@ private fun PreviewPaymentTotals() {
     )
   }
 }
+
 @Composable
 private fun PaymentTotals(
   totals: PaymentTotals,
 ) {
   TlbCard(
     title = { TlbCardTitle(R.string.total) }
-  ){
+  ) {
     PaymentRow(
       R.string.placed_orders_total,
       totals.placedOrdersTotal.format(),
