@@ -1,9 +1,12 @@
 package com.mahozi.sayed.talabiya.payment
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.user.details.payment.create.UnpaidOrder
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import payment.PaymentQueries
 import java.time.Instant
@@ -13,6 +16,23 @@ class PaymentStore @Inject constructor(
   private val paymentQueries: PaymentQueries,
   private val dispatcher: CoroutineDispatcher,
 ) {
+
+  fun getUserPayments(userId: Long): Flow<List<Payment>> {
+    return paymentQueries
+      .selectUserPayments(
+        userId = userId,
+        mapper = { id, amount, createdAt, status ->
+          Payment(
+            id = id,
+            amount = amount.money,
+            createdAt = createdAt,
+            status = PaymentStatus.valueOf(status),
+            userId = userId
+          )
+        }
+      ).asFlow()
+      .mapToList(dispatcher)
+  }
 
   suspend fun createUserOrderPayment(
     orderId: Long,

@@ -9,7 +9,7 @@ import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.user.create.CreateUserScreen
 import com.mahozi.sayed.talabiya.user.data.UserStore
-import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentScreen
+import com.mahozi.sayed.talabiya.user.details.UserDetailsScreen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,7 +31,7 @@ class UsersPresenter @Inject constructor(
           }
         }
         is UsersEvent.UserClicked -> {
-          navigator.goto(CreateUserPaymentScreen(event.user.id))
+          navigator.goto(UserDetailsScreen(event.user.id))
         }
       }
     }

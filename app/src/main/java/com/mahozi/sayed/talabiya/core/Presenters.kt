@@ -25,8 +25,10 @@ import com.mahozi.sayed.talabiya.resturant.option.OptionsPresenter
 import com.mahozi.sayed.talabiya.resturant.option.OptionsScreen
 import com.mahozi.sayed.talabiya.user.create.CreateUserPresenter
 import com.mahozi.sayed.talabiya.user.create.CreateUserScreen
+import com.mahozi.sayed.talabiya.user.details.UserDetailsScreen
 import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentPresenter
 import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentScreen
+import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsPresenter
 import com.mahozi.sayed.talabiya.user.list.UsersPresenter
 import com.mahozi.sayed.talabiya.user.list.UsersScreen
 import javax.inject.Inject
@@ -47,7 +49,8 @@ class Presenters @Inject constructor(
   private val optionsPresenter: OptionsPresenter.Factory,
   private val createOptionPresenter: CreateOptionPresenter.CreateOptionPresenterFactory,
   private val editOrderPricesPresenter: EditOrderPricesPresenter.Factory,
-  private val createUserPaymentPresenter: CreateUserPaymentPresenter.Factory
+  private val createUserPaymentPresenter: CreateUserPaymentPresenter.Factory,
+  private val userDetailsPresenter: UserDetailsPresenter.Factory,
 ) {
 
   fun create(screen: Screen): Presenter<*, *> {
@@ -66,6 +69,7 @@ class Presenters @Inject constructor(
       is CreateOptionScreen -> createOptionPresenter.create(screen.restaurantId)
       is EditOrderPricesScreen -> editOrderPricesPresenter.create(screen.orderId)
       is CreateUserPaymentScreen -> createUserPaymentPresenter.create(screen)
+      is UserDetailsScreen -> userDetailsPresenter.create(screen)
       else -> throw IllegalStateException("Unknown screen $screen")
     }
   }

@@ -13,6 +13,7 @@ import com.mahozi.sayed.talabiya.order.details.info.OrderInfo
 import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
 import com.mahozi.sayed.talabiya.order.list.Order
+import com.mahozi.sayed.talabiya.userorder.UserOrder
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -56,6 +57,22 @@ class OrderStore @Inject constructor(
       .mapToOne(dispatcher)
   }
 
+  fun getUserOrders(userId: Long): Flow<List<UserOrder>> {
+    return orderQueries.selectUserOrders(
+      userId = userId,
+      mapper = { orderId, userId, restaurant, createdAt ->
+        UserOrder(
+          orderId = orderId,
+          userId = userId,
+          user = "",
+          restaurant = restaurant,
+          createdAt = createdAt,
+          total = 0.money,
+        )
+      }
+    ).asFlow()
+    .mapToList(dispatcher)
+  }
   fun getSuborders(id: Long): Flow<List<Suborder>> {
     return orderQueries.selectAllOrderItems(id)
       .asFlow()

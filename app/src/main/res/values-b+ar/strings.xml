@@ -143,6 +143,9 @@
     <string name="all_orders_selected">All orders selected (%d)</string>
     <string name="n_orders_selected">(%s) orders selected</string>
     <string name="expense">Expense</string>
+    <string name="payments">Payments</string>
+    <string name="completed">Completed</string>
+    <string name="canceled">Canceled</string>
 
 
 </resources>

@@ -37,6 +37,15 @@ insertOrderReimbursement:
 INSERT INTO OrderReimbursementEntity(paymentId, orderId)
 VALUES (?, ?);
 
+selectUserPayments:
+SELECT
+    PaymentEntity.id,
+    PaymentEntity.amount,
+    PaymentEntity.createdAt,
+    PaymentEntity.status
+FROM PaymentEntity
+WHERE PaymentEntity.userId = ?;
+
 unpaidOrdersEntity:
 SELECT OrderEntity.id AS orderId, OrderEntity.createdAt, RestaurantEntity.name AS restaurant,
   -- Total for the full order (all users)

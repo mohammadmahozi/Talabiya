@@ -42,6 +42,30 @@ CREATE TABLE OrderItemOptionsEntity(
     UNIQUE(orderItemId, optionId)
 );
 
+CREATE VIEW OrderItemView AS
+SELECT
+    OrderItemEntity.id AS orderItemId,
+    OrderItemEntity.customerId AS userId,
+    OrderItemEntity.quantity AS quantity,
+    OrderItemPriceEntity.price AS price,
+    MenuItemEntity.name AS name,
+    (quantity * price) AS total
+FROM OrderItemEntity
+JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
+JOIN MenuItemEntity ON OrderItemPriceEntity.menuItemId = MenuItemEntity.id;
+
+CREATE VIEW UserOrderView AS
+SELECT
+    OrderEntity.id AS orderId,
+    OrderItemEntity.customerId AS userId,
+    RestaurantEntity.name AS restaurant,
+    OrderEntity.createdAt AS createdAt
+FROM OrderItemEntity
+JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
+JOIN OrderEntity ON OrderItemPriceEntity.orderId = OrderEntity.id
+JOIN RestaurantEntity ON OrderEntity.restaurantId = RestaurantEntity.id
+GROUP BY OrderEntity.id, OrderItemEntity.customerId;
+
 insert:
 INSERT INTO OrderEntity(restaurantId, createdAt)
 VALUES (?, ?);
@@ -117,6 +141,11 @@ JOIN CategoryEntity ON MenuItemEntity.category = CategoryEntity.name
 WHERE OrderItemPriceEntity.orderId = :orderId
 GROUP BY OrderItemPriceEntity.id
 ORDER BY CategoryEntity.number, MenuItemEntity.name;
+
+selectUserOrders:
+SELECT *
+FROM UserOrderView
+WHERE userId = ?;
 
 lastInsertRowId:
 SELECT last_insert_rowid();
