@@ -73,7 +73,8 @@ VALUES (?, ?);
 selectAll:
 SELECT OrderEntity.id, OrderEntity.createdAt, RestaurantEntity.name
 FROM OrderEntity
-JOIN RestaurantEntity ON OrderEntity.id = RestaurantEntity.id;
+JOIN RestaurantEntity ON OrderEntity.restaurantId = RestaurantEntity.id
+ORDER BY createdAt DESC;
 
 selectById:
 SELECT OrderEntity.id, OrderEntity.createdAt, RestaurantEntity.name AS restaurant, UserEntity.name AS payer,
