@@ -34,6 +34,38 @@ class PaymentStore @Inject constructor(
       .mapToList(dispatcher)
   }
 
+  suspend fun createPayment(
+    userId: Long,
+    amount: Money,
+    orders: List<UnpaidOrder>
+  ) {
+    withContext(dispatcher) {
+      paymentQueries.transaction {
+        paymentQueries.insertPayment(
+          userId,
+          amount = amount.toLong(),
+          createdAt = Instant.now(),
+          status = PaymentStatus.Completed.name
+        )
+        val paymentId = paymentQueries.lastInsertRowId().executeAsOne()
+        orders.forEach { order ->
+          if (order.userOrderTotal > 0.money) {
+            paymentQueries.insertUserOrderPayment(
+              paymentId = paymentId,
+              orderId = order.orderId
+            )
+          }
+          if (order.fullOrderTotal > 0.money) {
+            paymentQueries.insertOrderReimbursement(
+              paymentId = paymentId,
+              orderId = order.orderId
+            )
+          }
+        }
+      }
+    }
+  }
+
   suspend fun createUserOrderPayment(
     orderId: Long,
     userId: Long,
