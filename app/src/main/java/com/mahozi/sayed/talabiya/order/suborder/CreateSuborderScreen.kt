@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,8 +46,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.money
-import com.mahozi.sayed.talabiya.core.navigation.LocalNavigator
-import com.mahozi.sayed.talabiya.core.navigation.NoOpNavigator
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaCenterAlignedTopBar
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaSearchBar
@@ -79,19 +76,16 @@ private fun PreviewCreateSuborderScreen() {
     )
   )
   AppTheme {
-    CompositionLocalProvider(
-      LocalNavigator provides NoOpNavigator()
-    ) {
-      CreateSuborderScreen(
-        state = CreateSuborderState(
-          query = "",
-          menuItems = menu,
-          addedItems = listOf(),
-          openedOrderItemState = null
-        ),
-        onEvent = {}
-      )
-    }
+    CreateSuborderScreen(
+      state = CreateSuborderState(
+        query = "",
+        menuItems = menu,
+        addedItems = listOf(),
+        openedOrderItemState = null
+      ),
+      onEvent = {},
+      onBack = {}
+    )
   }
 }
 
@@ -100,6 +94,7 @@ private fun PreviewCreateSuborderScreen() {
 fun CreateSuborderScreen(
   state: CreateSuborderState,
   onEvent: (CreateSuborderEvent) -> Unit,
+  onBack: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   val scope = rememberCoroutineScope()
@@ -145,8 +140,6 @@ fun CreateSuborderScreen(
     }
   }
 
-  val navigator = LocalNavigator.current
-
   Scaffold(
     topBar = {
       TalabiyaSearchBar(
@@ -154,7 +147,7 @@ fun CreateSuborderScreen(
         query = state.query,
         onQueryChanged = { onEvent(CreateSuborderEvent.QueryChanged(it)) },
         navigationIcon = {
-          TalabiyaTopBarDefaults.BackIcon(onClick = { navigator.back() })
+          TalabiyaTopBarDefaults.BackIcon(onClick = onBack)
         },
         actions = {
           IconButton(onClick = { onEvent(CreateSuborderEvent.AddMenuItemClicked) }) {

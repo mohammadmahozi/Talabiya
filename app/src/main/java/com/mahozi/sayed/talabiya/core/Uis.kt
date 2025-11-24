@@ -52,6 +52,7 @@ import com.mahozi.sayed.talabiya.user.list.UsersState
 @Composable
 fun Uis(
   screen: Screen,
+  onBack: () -> Unit,
 ): Ui<*, *> {
   return when (screen) {
     is OrdersScreen -> ui<OrdersState, OrdersEvent> { state, onEvent ->
@@ -83,7 +84,7 @@ fun Uis(
     }
 
     is CreateSuborderScreen -> ui<CreateSuborderState, CreateSuborderEvent> { state, onEvent ->
-      CreateSuborderScreen(state, onEvent)
+      CreateSuborderScreen(state, onEvent, onBack)
     }
 
     is UsersScreen -> ui<UsersState, UsersEvent> { state, onEvent ->
