@@ -77,7 +77,7 @@ fun CreateUserPaymentScreen(
     if (state.showPay) {
       TlbButton(
         text = stringResource(R.string.pay),
-        onClick = {},
+        onClick = { onEvent(CreateUserPaymentEvent.Pay) },
         modifier = Modifier.fillMaxWidth()
       )
     }

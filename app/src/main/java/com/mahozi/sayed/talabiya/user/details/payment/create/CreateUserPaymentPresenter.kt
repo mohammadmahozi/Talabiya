@@ -17,6 +17,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import java.time.Instant
 
 class CreateUserPaymentPresenter @AssistedInject constructor(
@@ -62,7 +63,6 @@ class CreateUserPaymentPresenter @AssistedInject constructor(
     CollectEvents(events) { event ->
       when (event) {
         CreateUserPaymentEvent.SelectOrders -> showSelectOrders = true
-        CreateUserPaymentEvent.Pay -> {}
         is CreateUserPaymentEvent.UnpaidOrder -> {
           when (event.event) {
             SelectUnpaidOrdersEvent.Dismiss -> showSelectOrders = false
@@ -75,6 +75,17 @@ class CreateUserPaymentPresenter @AssistedInject constructor(
                 }
               }
             }
+          }
+        }
+        CreateUserPaymentEvent.Pay -> {
+          val selectedOrders = orders.selected
+          launch {
+            paymentStore.createPayment(
+              userId = userId,
+              orders = selectedOrders,
+              amount = totals.finalTotal,
+            )
+            orders = paymentStore.getUnpaidOrders(userId)
           }
         }
       }
