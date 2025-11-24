@@ -1,5 +1,6 @@
 package com.mahozi.sayed.talabiya.order.list.ui
 
+import android.R.attr.onClick
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -14,11 +15,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mahozi.sayed.talabiya.R
+import com.mahozi.sayed.talabiya.core.datetime.AppDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
+import com.mahozi.sayed.talabiya.core.datetime.ProvideDateTimeFormatter
+import com.mahozi.sayed.talabiya.core.extensions.locale
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
@@ -78,14 +83,18 @@ private fun Orders(orders: List<Order>, onClick: (Order) -> Unit) {
 @Preview
 @Composable
 private fun PreviewOrderRow() {
-  OrderRow(
-    order = Order(
-      1L,
-      "Tannoor",
-      Instant.now()
-    ),
-    onClick = {}
-  )
+  AppTheme {
+    ProvideDateTimeFormatter(AppDateTimeFormatter(LocalContext.current.locale)) {
+      OrderRow(
+        order = Order(
+          1L,
+          "Tannoor",
+          Instant.now()
+        ),
+        onClick = {}
+      )
+    }
+  }
 }
 
 @Composable
