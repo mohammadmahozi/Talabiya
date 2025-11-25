@@ -1,6 +1,5 @@
 package com.mahozi.sayed.talabiya.order.list.ui
 
-import android.R.attr.onClick
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -42,6 +41,7 @@ object OrdersScreen : Screen
 fun OrdersUi(
   state: OrdersState,
   onEvent: (OrdersEvent) -> Unit,
+  onOpenNavDrawer: () -> Unit,
   modifier: Modifier = Modifier
 ) {
   Scaffold(
@@ -49,7 +49,7 @@ fun OrdersUi(
       TalabiyaBar(
         title = R.string.app_name,
         navigationIcon = {
-          TalabiyaTopBarDefaults.MenuIcon(onClick = {})
+          TalabiyaTopBarDefaults.MenuIcon(onClick = onOpenNavDrawer)
         }
       )
     },

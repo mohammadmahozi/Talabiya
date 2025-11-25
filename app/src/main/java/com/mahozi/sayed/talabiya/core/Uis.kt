@@ -53,10 +53,11 @@ import com.mahozi.sayed.talabiya.user.list.UsersState
 fun Uis(
   screen: Screen,
   onBack: () -> Unit,
+  onToggleDrawer: () -> Unit,
 ): Ui<*, *> {
   return when (screen) {
     is OrdersScreen -> ui<OrdersState, OrdersEvent> { state, onEvent ->
-      OrdersUi(state, onEvent)
+      OrdersUi(state, onEvent, onToggleDrawer)
     }
 
     is OrderDetailsScreen -> ui<OrderDetailsState, OrderDetailsEvent> { state, onEvent ->
