@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.order.details.full.FullOrderScreen
@@ -26,12 +27,16 @@ data class OrderDetailsScreen(val orderId: Long) : Screen
 fun OrderDetailsUi(
   state: OrderDetailsState,
   onEvent: (OrderDetailsEvent) -> Unit,
+  onBack: () -> Unit,
   modifier: Modifier = Modifier
 ) {
   Scaffold(
     topBar = {
       TalabiyaBar(
         title = R.string.order_number,
+        navigationIcon = {
+          TalabiyaTopBarDefaults.BackIcon(onBack)
+        },
         overFlowActions = {
           DropdownMenuItem(
             text = {

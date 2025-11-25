@@ -61,7 +61,7 @@ fun Uis(
     }
 
     is OrderDetailsScreen -> ui<OrderDetailsState, OrderDetailsEvent> { state, onEvent ->
-      OrderDetailsUi(state, onEvent)
+      OrderDetailsUi(state, onEvent, onBack)
     }
 
     is CreateOrderScreen -> ui<CreateOrderState, CreateOrderEvent> { state, onEvent ->
