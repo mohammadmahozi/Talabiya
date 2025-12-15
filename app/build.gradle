@@ -65,7 +65,7 @@ dependencies {
     debugImplementation(libs.compose.tooling)
     implementation 'androidx.compose.animation:animation:1.10.0'
 
-
+    testImplementation(libs.assertk)
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.7.1'

@@ -7,3 +7,5 @@ compose-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-activity = "androidx.activity:activity-compose:1.12.1"
+
+assertk = "com.willowtreeapps.assertk:assertk:0.28.1"
