@@ -55,6 +55,9 @@ android {
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'com.google.android.material:material:1.13.0'
 
     def composeBom = platform(libs.compose.bom)
     implementation(composeBom)
@@ -63,34 +66,12 @@ dependencies {
     implementation libs.compose.android
     implementation(libs.compose.preview)
     debugImplementation(libs.compose.tooling)
-    implementation 'androidx.compose.animation:animation:1.10.0'
 
     testImplementation(libs.assertk)
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'com.google.android.material:material:1.13.0'
-    implementation 'androidx.recyclerview:recyclerview:1.4.0'
-
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.10.0'
-
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation "androidx.test.ext:junit:1.1.5"
-
-    def nav_version = "2.5.1"
-    implementation "androidx.navigation:navigation-fragment:$nav_version"
-    implementation "androidx.navigation:navigation-ui:$nav_version"
-
-    testImplementation 'junit:junit:4.13.2'
-
-
-    implementation 'com.github.luizgrp:SectionedRecyclerViewAdapter:v2.1.0'
-
-    implementation 'commons-net:commons-net:3.6'
 
     implementation 'com.google.dagger:dagger:2.44'
     kapt 'com.google.dagger:dagger-compiler:2.44'
