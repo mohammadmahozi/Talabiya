@@ -41,7 +41,7 @@ object CreateOrderScreen : Screen
 
 @Preview
 @Composable
-fun PreviewCreateOrderUi() {
+private fun PreviewCreateOrderUi() {
   Preview {
     CreateOrderUi(
       state = CreateOrderState(
@@ -114,7 +114,7 @@ fun CreateOrderUi(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewRestaurants() {
+private fun PreviewRestaurants() {
   Restaurants(
     selectedRestaurant = null,
     restaurants = listOf(

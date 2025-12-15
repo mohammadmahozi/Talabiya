@@ -8,11 +8,11 @@ apply plugin: "app.cash.sqldelight"
 
 
 android {
-    compileSdk 34
+    compileSdk 36
     defaultConfig {
         applicationId "com.mahozi.sayed.talabiya"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -54,20 +54,26 @@ android {
 
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.activity:activity-compose:1.8.2'
-    implementation "androidx.compose.material3:material3:1.2.1"
-    implementation 'androidx.compose.animation:animation:1.6.1'
-    implementation 'androidx.compose.ui:ui-tooling:1.6.1'
+    implementation 'androidx.core:core-ktx:1.17.0'
+
+    def composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
+    implementation(libs.compose.activity)
+    implementation libs.compose.material3
+    implementation libs.compose.android
+    implementation(libs.compose.preview)
+    debugImplementation(libs.compose.tooling)
+    implementation 'androidx.compose.animation:animation:1.10.0'
+
 
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'com.google.android.material:material:1.7.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
 
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.10.0'
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
@@ -99,7 +105,7 @@ dependencies {
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
-    lintChecks("com.slack.lint.compose:compose-lint-checks:1.2.0")
+    lintChecks("com.slack.lint.compose:compose-lint-checks:1.4.2")
 
     implementation("app.cash.sqldelight:android-driver:2.0.0")
     implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")

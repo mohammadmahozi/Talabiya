@@ -1,20 +1,11 @@
 package com.mahozi.sayed.talabiya.core.ui.components
 
-import android.R.attr.fontFamily
-import android.R.attr.fontStyle
-import android.R.attr.fontWeight
-import android.R.attr.letterSpacing
-import android.R.attr.lineHeight
-import android.R.attr.maxLines
-import android.R.attr.minLines
-import android.R.attr.text
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -41,13 +32,14 @@ import com.mahozi.sayed.talabiya.R
 
 class TlbTextScope internal constructor() {
   @Composable fun TlbTextIcon(
-    imageVector: ImageVector,
-    contentDescription: String?
+    painter: Painter,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
   ) {
     Icon(
-      imageVector = imageVector,
+      painter = painter,
       contentDescription = contentDescription,
-      modifier = Modifier
+      modifier = modifier
           .size(12.dp)
     )
   }
@@ -126,7 +118,7 @@ fun TlbText(
 }
 @Preview
 @Composable
-fun PreviewIconText() {
+private fun PreviewIconText() {
   IconText(text = "Test", painter = painterResource(R.drawable.ic_date), contentDescription = null)
 }
 

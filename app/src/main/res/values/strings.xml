@@ -151,5 +151,6 @@
     <string name="payments">Payments</string>
     <string name="completed">Completed</string>
     <string name="canceled">Canceled</string>
+    <string name="income">Income</string>
 
 </resources>

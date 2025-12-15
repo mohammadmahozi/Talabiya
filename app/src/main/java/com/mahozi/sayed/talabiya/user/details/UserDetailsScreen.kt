@@ -8,15 +8,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -224,7 +222,7 @@ private fun UserOrder(order: UserOrder) {
             style = AppTheme.type.bodySmall,
             leadingIcon = {
               TlbTextIcon(
-                imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
+                painter = painterResource(R.drawable.arrow_forward_rounded),
                 contentDescription = stringResource(R.string.expense)
               )
             }
@@ -235,8 +233,8 @@ private fun UserOrder(order: UserOrder) {
             style = AppTheme.type.bodySmall,
             leadingIcon = {
               TlbTextIcon(
-                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                contentDescription = stringResource(R.string.expense)
+                painter = painterResource(R.drawable.arrow_back_rounded),
+                contentDescription = stringResource(R.string.income)
               )
             }
           )

@@ -7,20 +7,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,12 +48,13 @@ sealed interface SelectUnpaidOrdersEvent {
 fun SelectUnpaidOrdersDialog(
   state: SelectUnpaidOrderState,
   onEvent: (SelectUnpaidOrdersEvent) -> Unit,
+  modifier: Modifier = Modifier
 ) {
   val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   ModalBottomSheet(
     sheetState = sheetState,
     onDismissRequest = { onEvent(SelectUnpaidOrdersEvent.Dismiss) },
-    modifier = Modifier.fillMaxHeight(.8F)
+    modifier = modifier.fillMaxHeight(.8F)
   ) {
     SelectUnpaidOrdersScreen(
       state = state,
@@ -88,7 +85,7 @@ private fun PreviewUnpaidOrdersScreen() {
 }
 
 @Composable
-fun SelectUnpaidOrdersScreen(
+private fun SelectUnpaidOrdersScreen(
   state: SelectUnpaidOrderState,
   onEvent: (SelectUnpaidOrdersEvent) -> Unit,
 ) {
@@ -136,7 +133,7 @@ internal fun UnpaidOrder(
             style = AppTheme.type.bodySmall,
             leadingIcon = {
               TlbTextIcon(
-                imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
+                painter = painterResource(R.drawable.arrow_forward_rounded),
                 contentDescription = stringResource(R.string.expense)
               )
             }
@@ -147,8 +144,8 @@ internal fun UnpaidOrder(
             style = AppTheme.type.bodySmall,
             leadingIcon = {
               TlbTextIcon(
-                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                contentDescription = stringResource(R.string.expense)
+                painter = painterResource(R.drawable.arrow_back_rounded),
+                contentDescription = stringResource(R.string.income)
               )
             }
           )

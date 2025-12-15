@@ -1,20 +1,12 @@
 package com.mahozi.sayed.talabiya.core.ui.components
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -33,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,7 +35,7 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
 @Preview
 @Composable
-fun PreviewBar() {
+private fun PreviewBar() {
   AppTheme {
     Column(
       verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -56,7 +49,7 @@ fun PreviewBar() {
         navigationIcon = { TalabiyaTopBarDefaults.BackIcon(onClick = { }) },
         actions = {
           TalabiyaIconButton(
-            imageVector = Icons.Default.Call,
+            painter = painterResource(R.drawable.check_rounded),
             contentDescription = null,
             onClick = {}
           )
@@ -112,7 +105,7 @@ fun TalabiyaBar(
 
       if (overFlowActions != null) {
         TalabiyaIconButton(
-          imageVector = Icons.Default.MoreVert,
+          painter = painterResource(R.drawable.more_vert),
           contentDescription = stringResource(R.string.show_menu),
           onClick = { showMenu = !showMenu }
         )
@@ -171,7 +164,7 @@ fun TalabiyaSearchBar(
           )
 
           TalabiyaIconButton(
-            imageVector = Icons.Default.Close,
+            painter = painterResource(R.drawable.close_rounded),
             contentDescription = stringResource(R.string.cancel_search),
             onClick = {
               if (query.isBlank()) {
@@ -192,7 +185,7 @@ fun TalabiyaSearchBar(
         actions()
 
         TalabiyaIconButton(
-          imageVector = Icons.Default.Search,
+          painter = painterResource(R.drawable.search_rounded),
           contentDescription = stringResource(R.string.search_by_food_name),
           onClick = {
             isSearching = true
@@ -216,7 +209,7 @@ private fun SearchField(
     modifier = modifier,
     placeholder = {
       Text(
-        text = stringResource(id = R.string.search_),
+        text = stringResource(R.string.search_),
         color = Color.White
       )
     },
@@ -286,8 +279,8 @@ object TalabiyaTopBarDefaults {
     modifier: Modifier = Modifier
   ) {
     TalabiyaIconButton(
-      imageVector = Icons.AutoMirrored.Default.ArrowBack,
-      contentDescription = stringResource(id = R.string.back),
+      painter = painterResource(R.drawable.arrow_back_rounded),
+      contentDescription = stringResource(R.string.back),
       onClick = onClick,
       modifier = modifier
     )
@@ -299,8 +292,8 @@ object TalabiyaTopBarDefaults {
     modifier: Modifier = Modifier
   ) {
     TalabiyaIconButton(
-      imageVector = Icons.Rounded.Menu,
-      contentDescription = stringResource(id = R.string.menu),
+      painter = painterResource(R.drawable.menu_rounded),
+      contentDescription = stringResource(R.string.menu),
       onClick = onClick,
       modifier = modifier
     )

@@ -2,8 +2,6 @@ package com.mahozi.sayed.talabiya.core.ui.components
 
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -18,7 +16,9 @@ import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
-@Preview @Composable fun PreviewAddFab() {
+@Preview
+@Composable
+private fun PreviewAddFab() {
     AppTheme {
         AddFab { }
     }
@@ -66,8 +66,8 @@ fun ConfirmFab(
 
     ){
         Icon(
-            Icons.Default.Check,
-            stringResource(R.string.create_order)
+          painter = painterResource(R.drawable.check_rounded),
+          contentDescription = stringResource(R.string.create_order)
         )
     }
 }
