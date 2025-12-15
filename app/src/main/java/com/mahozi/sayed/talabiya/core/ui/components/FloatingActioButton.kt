@@ -31,7 +31,7 @@ fun AddFab(
 ) {
   FloatingActionButton(
     onClick = { onClick() },
-    contentColor = Color.White,
+    contentColor = AppTheme.colors.primary,
     content = {
       Icon(
         painterResource(R.drawable.ic_add_white_24dp),
@@ -63,7 +63,7 @@ fun ConfirmFab(
     enabled = enabled,
     shape = CircleShape,
     colors = ButtonDefaults.buttonColors(
-      containerColor = AppTheme.colors.material.secondary
+      containerColor = AppTheme.colors.material.primary
     )
 
   ) {
