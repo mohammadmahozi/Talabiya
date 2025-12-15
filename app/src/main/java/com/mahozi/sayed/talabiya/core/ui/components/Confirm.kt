@@ -10,7 +10,8 @@ import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
 @Preview
-@Composable private fun PreviewConfirmDialog() {
+@Composable
+private fun PreviewConfirmDialog() {
   ConfirmDialog(
     title = "Are you sure?",
     text = "Are you really sure?",
@@ -18,12 +19,14 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
     onDismiss = {}
   )
 }
-@Composable fun ConfirmDialog(
+
+@Composable
+fun ConfirmDialog(
   onConfirm: () -> Unit,
   onDismiss: () -> Unit,
   title: String,
   text: String? = null,
-  ) {
+) {
   AlertDialog(
     title = {
       Text(
@@ -58,7 +61,5 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
         Text(stringResource(R.string.cancel))
       }
     }
-
-
   )
 }

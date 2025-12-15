@@ -40,6 +40,7 @@ private fun PreviewTlbTabRow() {
     )
   }
 }
+
 @Composable
 fun TlbTabRow(
   selectedTabIndex: Int,
@@ -47,7 +48,7 @@ fun TlbTabRow(
   containerColor: Color = AppTheme.colors.surface,
   contentColor: Color = AppTheme.colors.onSurface,
   tabs: @Composable () -> Unit
-  ) {
+) {
   TabRow(
     selectedTabIndex = selectedTabIndex,
     containerColor = containerColor,

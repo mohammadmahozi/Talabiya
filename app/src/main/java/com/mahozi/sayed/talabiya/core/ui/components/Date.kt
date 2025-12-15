@@ -34,7 +34,8 @@ import java.time.LocalDate
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
-@Composable fun DateField(
+@Composable
+fun DateField(
   selectedDate: LocalDate,
   onDateSelected: (LocalDate) -> Unit,
   modifier: Modifier = Modifier,
@@ -65,7 +66,7 @@ import androidx.compose.runtime.setValue
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewDatePickerDialog() {
+private fun PreviewDatePickerDialog() {
   AppTheme {
     DatePickerDialog({}, {})
   }
@@ -123,14 +124,14 @@ private fun DialogTextButton(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewCalendar() {
+private fun PreviewCalendar() {
   Calendar(LocalDate.now()) {}
 }
 
 @Composable
 fun Calendar(
   selectedDate: LocalDate,
-  onDateSelected: (LocalDate)  -> Unit
+  onDateSelected: (LocalDate) -> Unit
 ) {
   AndroidView(
     factory = { context ->

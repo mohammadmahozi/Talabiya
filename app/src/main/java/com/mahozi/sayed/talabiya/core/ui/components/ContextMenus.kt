@@ -13,7 +13,8 @@ import androidx.compose.ui.res.stringResource
 import com.mahozi.sayed.talabiya.R
 
 
-@Composable fun DeleteContextMenu(
+@Composable
+fun DeleteContextMenu(
   expanded: Boolean,
   onDelete: () -> Unit,
   onDismiss: () -> Unit,

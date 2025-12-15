@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 
 data class TlbShapes(
   val extraSmall: CornerBasedShape,
-  val small: CornerBasedShape ,
+  val small: CornerBasedShape,
   val medium: CornerBasedShape,
   val large: CornerBasedShape,
   val extraLarge: CornerBasedShape,

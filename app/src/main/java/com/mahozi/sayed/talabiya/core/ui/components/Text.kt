@@ -31,7 +31,8 @@ import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
 
 class TlbTextScope internal constructor() {
-  @Composable fun TlbTextIcon(
+  @Composable
+  fun TlbTextIcon(
     painter: Painter,
     contentDescription: String?,
     modifier: Modifier = Modifier,
@@ -40,10 +41,11 @@ class TlbTextScope internal constructor() {
       painter = painter,
       contentDescription = contentDescription,
       modifier = modifier
-          .size(12.dp)
+        .size(12.dp)
     )
   }
 }
+
 @Composable
 fun TlbText(
   text: String,
@@ -116,13 +118,15 @@ fun TlbText(
     }
   }
 }
+
 @Preview
 @Composable
 private fun PreviewIconText() {
   IconText(text = "Test", painter = painterResource(R.drawable.ic_date), contentDescription = null)
 }
 
-@Composable fun IconText(
+@Composable
+fun IconText(
   text: String,
   painter: Painter,
   contentDescription: String?,
@@ -138,7 +142,7 @@ private fun PreviewIconText() {
       contentDescription = contentDescription,
       tint = iconTint,
       modifier = Modifier
-          .size(16.dp)
+        .size(16.dp)
     )
 
     Spacer(modifier = Modifier.width(4.dp))

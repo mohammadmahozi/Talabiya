@@ -25,7 +25,8 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
 
 @Preview(showBackground = true)
-@Composable private fun PreviewDropDown() {
+@Composable
+private fun PreviewDropDown() {
   AppTheme {
     Box(
       contentAlignment = Alignment.Center,
@@ -47,7 +48,7 @@ fun <T> DropDown(
   itemContent: @Composable (T) -> Unit,
   modifier: Modifier = Modifier,
   startExpanded: Boolean = true,
-  ) {
+) {
   var expanded by remember { mutableStateOf(startExpanded) }
 
   ExposedDropdownMenuBox(

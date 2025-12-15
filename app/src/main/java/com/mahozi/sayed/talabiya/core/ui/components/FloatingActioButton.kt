@@ -19,55 +19,57 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 @Preview
 @Composable
 private fun PreviewAddFab() {
-    AppTheme {
-        AddFab { }
-    }
+  AppTheme {
+    AddFab { }
+  }
 }
+
 @Composable
 fun AddFab(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  onClick: () -> Unit,
 ) {
-    FloatingActionButton(
-        onClick = { onClick() },
-        contentColor = Color.White,
-        content = {
-            Icon(
-                painterResource(R.drawable.ic_add_white_24dp),
-                stringResource(R.string.create_order)
-            )
-        },
-      modifier = modifier
-    )
+  FloatingActionButton(
+    onClick = { onClick() },
+    contentColor = Color.White,
+    content = {
+      Icon(
+        painterResource(R.drawable.ic_add_white_24dp),
+        stringResource(R.string.create_order)
+      )
+    },
+    modifier = modifier
+  )
 }
 
 @Preview
 @Composable
 private fun PreviewConfirmFab() {
-    AppTheme {
-        ConfirmFab {
-        }
+  AppTheme {
+    ConfirmFab {
     }
+  }
 }
+
 @Composable
 fun ConfirmFab(
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    onClick: () -> Unit
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true,
+  onClick: () -> Unit
 ) {
-    Button(
-        onClick = { onClick() },
-        modifier = modifier.defaultMinSize(minWidth = 56.dp, minHeight = 56.dp),
-        enabled = enabled,
-        shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(
-          containerColor = AppTheme.colors.material.secondary
-        )
+  Button(
+    onClick = { onClick() },
+    modifier = modifier.defaultMinSize(minWidth = 56.dp, minHeight = 56.dp),
+    enabled = enabled,
+    shape = CircleShape,
+    colors = ButtonDefaults.buttonColors(
+      containerColor = AppTheme.colors.material.secondary
+    )
 
-    ){
-        Icon(
-          painter = painterResource(R.drawable.check_rounded),
-          contentDescription = stringResource(R.string.create_order)
-        )
-    }
+  ) {
+    Icon(
+      painter = painterResource(R.drawable.check_rounded),
+      contentDescription = stringResource(R.string.create_order)
+    )
+  }
 }

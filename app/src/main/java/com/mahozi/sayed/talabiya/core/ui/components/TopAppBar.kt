@@ -81,7 +81,8 @@ fun TalabiyaBar(
     modifier = modifier,
     navigationIcon = navigationIcon,
     actions = actions,
-    overFlowActions = overFlowActions)
+    overFlowActions = overFlowActions
+  )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

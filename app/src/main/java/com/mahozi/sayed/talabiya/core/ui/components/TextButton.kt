@@ -31,7 +31,7 @@ fun TalabiyaTextButton(
     onClick = onClick,
     modifier = modifier,
     enabled = enabled,
-    shape =shape,
+    shape = shape,
     colors = colors,
     elevation = elevation,
     border = border,

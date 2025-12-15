@@ -149,7 +149,8 @@ data class TlbType(
   )
 }
 
-val TextStyle.onSurfaceVariant: TextStyle @Composable get() =
-  copy(color = AppTheme.colors.onSurfaceVariant)
+val TextStyle.onSurfaceVariant: TextStyle
+  @Composable get() =
+    copy(color = AppTheme.colors.onSurfaceVariant)
 
 
