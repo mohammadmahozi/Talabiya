@@ -22,11 +22,6 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(context: Context) =
-        TalabiyaDatabase.getDatabase(context)
-
-    @Singleton
-    @Provides
     fun provideTalabiyaDatabase(context: Context): Database {
         val driver = AndroidSqliteDriver(
             schema = Database.Schema,

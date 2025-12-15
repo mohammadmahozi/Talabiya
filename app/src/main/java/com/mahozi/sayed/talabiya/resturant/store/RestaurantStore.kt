@@ -1,12 +1,9 @@
 package com.mahozi.sayed.talabiya.resturant.store
 
-import android.app.Application
-import androidx.lifecycle.LiveData
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.mahozi.sayed.talabiya.core.Cent
 import com.mahozi.sayed.talabiya.core.Money
-import com.mahozi.sayed.talabiya.core.data.TalabiyaDatabase.Companion.getDatabase
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 import com.mahozi.sayed.talabiya.resturant.option.FoodOption
@@ -24,7 +21,6 @@ class RestaurantStore @Inject constructor(
   private val menuItemQueries: MenuItemQueries,
   private val dispatcher: CoroutineDispatcher,
 ) {
-  private var mRestaurantDao: RestaurantDao? = null
 
   val restaurants: Flow<List<restaurant.RestaurantEntity>> = restaurantQueries
     .selectAll()
@@ -104,50 +100,7 @@ class RestaurantStore @Inject constructor(
     }
   }
 
-  fun init(application: Application?) {
-    val talabiyaDatabase = getDatabase(application!!)
-    mRestaurantDao = talabiyaDatabase.restaurantDao()
-  }
-
-  fun insertRestaurant(restaurantEntity: RestaurantEntity?) {
-    mRestaurantDao!!.insert(restaurantEntity)
-  }
-
-  fun selectAllRestaurants(): LiveData<List<RestaurantEntity>> {
-    return mRestaurantDao!!.selectAllRestaurants()
-  }
-
-  fun insertFood(menuItemEntity: MenuItemEntity?) {
-    mRestaurantDao!!.insert(menuItemEntity)
-  }
-
-  fun selectAllMenuItems(restaurantName: String?): LiveData<List<MenuItemEntity>> {
-    return mRestaurantDao!!.selectAllMenuItems(restaurantName)
-  }
-
   fun deleteRestaurant(restaurantId: Long) {
     restaurantQueries.delete(restaurantId)
-  }
-
-  fun deleteMenuItem(menuItemEntity: MenuItemEntity?) {
-    mRestaurantDao!!.deleteMenuItem(menuItemEntity)
-  }
-
-  fun updateRestaurant(restaurantEntity: RestaurantEntity?) {
-    mRestaurantDao!!.updateRestaurant(restaurantEntity)
-  }
-
-  fun updateMenuItem(menuItemEntity: MenuItemEntity?) {
-    mRestaurantDao!!.updateMenuItem(menuItemEntity)
-  }
-
-  companion object {
-    @Volatile
-    private var mRestaurantRepository: RestaurantStore? = null
-    @JvmStatic
-    val instance: RestaurantStore?
-      get() {
-        return null
-      }
   }
 }
