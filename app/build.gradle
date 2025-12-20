@@ -49,6 +49,10 @@ android {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     namespace 'com.mahozi.sayed.talabiya'
 }
 
@@ -68,6 +72,8 @@ dependencies {
     debugImplementation(libs.compose.tooling)
 
     testImplementation(libs.assertk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.4.0'
