@@ -29,6 +29,7 @@ import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.ConfirmFab
 import com.mahozi.sayed.talabiya.core.ui.components.DateField
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults.BackIcon
 import com.mahozi.sayed.talabiya.core.ui.components.TimeField
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import kotlinx.parcelize.Parcelize
@@ -50,7 +51,8 @@ private fun PreviewCreateOrderUi() {
         LocalDate.now(),
         LocalTime.now()
       ),
-      onEvent = {}
+      onEvent = {},
+      onBack = {}
     )
   }
 }
@@ -59,11 +61,15 @@ private fun PreviewCreateOrderUi() {
 fun CreateOrderUi(
   state: CreateOrderState,
   onEvent: (CreateOrderEvent) -> Unit,
+  onBack: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Scaffold(
     topBar = {
-      TalabiyaBar(title = R.string.app_name)
+      TalabiyaBar(
+        title = R.string.app_name,
+        navigationIcon = { BackIcon(onBack) }
+      )
     },
     floatingActionButton = {
       ConfirmFab {
