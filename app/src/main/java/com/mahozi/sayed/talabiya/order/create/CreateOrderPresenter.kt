@@ -22,7 +22,7 @@ class CreateOrderPresenter @Inject constructor(
   private val orderStore: OrderStore,
   private val restaurantStore: RestaurantStore,
   private val navigator: Navigator,
-): Presenter<CreateOrderEvent, CreateOrderState> {
+) : Presenter<CreateOrderEvent, CreateOrderState> {
 
   @Composable
   override fun start(events: Flow<CreateOrderEvent>): CreateOrderState {
@@ -34,8 +34,8 @@ class CreateOrderPresenter @Inject constructor(
 
     val canConfirm by remember(selectedRestaurant) { mutableStateOf(selectedRestaurant != null) }
 
-    CollectEvents(events) {event ->
-      when(event) {
+    CollectEvents(events) { event ->
+      when (event) {
         is CreateOrderEvent.RestaurantSelected -> selectedRestaurant = event.restaurant
         is CreateOrderEvent.DateSelected -> selectedDate = event.date
         is CreateOrderEvent.TimeSelected -> selectedTime = event.time
@@ -51,8 +51,8 @@ class CreateOrderPresenter @Inject constructor(
     return CreateOrderState(
       selectedRestaurant = selectedRestaurant,
       restaurants = restaurants,
-      date = LocalDate.now(),
-      time = LocalTime.now(),
+      date = selectedDate,
+      time = selectedTime,
       canConfirm = canConfirm
     )
   }
