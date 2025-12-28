@@ -1,39 +1,33 @@
 package com.mahozi.sayed.talabiya.core.ui.components
 
-import android.view.ContextThemeWrapper
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.window.Dialog
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import java.time.LocalTime
-import android.widget.TimePicker as TimePickerView
 
 @Preview(showBackground = true)
 @Composable
@@ -65,59 +59,90 @@ fun TimeField(
   )
 
   if (showDialog) {
-    TimePickerDialog(
-      selectedTime,
-      onConfirm = onTimeSelected,
-      onDismiss = { showDialog = false }
+    TlbTimePickerDialog(
+      onDismissRequest = { showDialog = false },
+      onConfirm = onTimeSelected
     )
   }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun PreviewTimePicker() {
-  TimePickerDialog(
-    selectedTime = LocalTime.now(),
-    onConfirm = {},
-    onDismiss = {}
+fun TlbTimePickerDialog(
+  onDismissRequest: () -> Unit,
+  modifier: Modifier = Modifier,
+  onConfirm: (LocalTime) -> Unit = { onDismissRequest() },
+  onTimeChanged: (LocalTime) -> Unit = {},
+  initialTime: LocalTime = LocalTime.now(),
+) {
+  var time by remember { mutableStateOf(initialTime) }
+
+  AlertDialog(
+    modifier = modifier,
+    onDismissRequest = onDismissRequest,
+    title = {
+      Text(
+        text = stringResource(R.string.select_time)
+      )
+    },
+    text = {
+      TlbTimePicker(
+        onTimeChanged = {
+          time = it
+          onTimeChanged(it)
+        },
+        initialTime = initialTime
+      )
+    },
+    confirmButton = {
+      DialogTextButton(
+        text = R.string.confirm,
+        onClick = {
+          onConfirm(time)
+          onDismissRequest()
+        }
+      )
+    },
+    dismissButton = {
+      DialogTextButton(
+        text = R.string.cancel,
+        onClick = onDismissRequest
+      )
+    }
   )
 }
 
+@Preview
 @Composable
-fun TimePickerDialog(
-  selectedTime: LocalTime,
-  onConfirm: (LocalTime) -> Unit,
-  onDismiss: () -> Unit,
-  modifier: Modifier = Modifier
-) {
-
-  var time = selectedTime
-
-  Dialog(onDismissRequest = { onDismiss() }) {
-    Column(
-      modifier = modifier
-        .background(
-          AppTheme.colors.material.background,
-          shape = AppTheme.shapes.small
-        )
-    ) {
-      TimePicker(time) {
-        time = it
-      }
-
-      Row(
-        modifier = Modifier.align(Alignment.End)
-      ) {
-        DialogTextButton(text = R.string.confirm) {
-          onConfirm(time)
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        DialogTextButton(text = R.string.cancel, onClick = onDismiss)
-        Spacer(modifier = Modifier.width(24.dp))
-      }
-    }
-
+private fun PreviewTlbTimePicker() {
+  MaterialTheme {
+    TlbTimePicker(
+      onTimeChanged = {}
+    )
   }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TlbTimePicker(
+  onTimeChanged: (LocalTime) -> Unit,
+  modifier: Modifier = Modifier,
+  initialTime: LocalTime = LocalTime.now(),
+) {
+  val state = rememberTimePickerState(
+    initialHour = initialTime.hour,
+    initialMinute = initialTime.minute,
+    is24Hour = false,
+  )
+
+  LaunchedEffect(state.hour, state.minute) {
+    val time = LocalTime.of(state.hour, state.minute)
+    onTimeChanged(time)
+  }
+
+  TimePicker(
+    state = state,
+    modifier = modifier
+  )
 }
 
 @Composable
@@ -133,24 +158,4 @@ private fun DialogTextButton(
       color = AppTheme.colors.material.onSurface
     )
   }
-}
-
-@Composable
-private fun TimePicker(
-  selectedTime: LocalTime,
-  onTimeSelected: (LocalTime) -> Unit,
-) {
-  AndroidView(
-    factory = { context ->
-      TimePickerView(ContextThemeWrapper(context, R.style.TimePickerView)).apply {
-        setOnTimeChangedListener { _, hourOfDay, minute ->
-          onTimeSelected(LocalTime.of(hourOfDay, minute))
-        }
-      }
-    },
-    update = {
-      it.hour = selectedTime.hour
-      it.minute = selectedTime.minute
-    }
-  )
 }
