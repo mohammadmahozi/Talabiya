@@ -5,19 +5,24 @@ import android.widget.CalendarView
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,13 +31,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
+import java.time.Instant
 import java.time.LocalDate
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 
 @Composable
 fun DateField(
@@ -41,7 +49,6 @@ fun DateField(
   modifier: Modifier = Modifier,
   padding: PaddingValues = PaddingValues(),
 ) {
-
   val formatter = LocalDateTimeFormatter.current
 
   var showDialog by remember { mutableStateOf(false) }
@@ -57,9 +64,13 @@ fun DateField(
   )
 
   if (showDialog) {
-    DatePickerDialog(
-      onConfirm = onDateSelected,
-      onDismiss = { showDialog = false }
+    TlbDatePickerDialog(
+      initial = selectedDate,
+      onDateSelected = {
+        onDateSelected(it.toLocalDate())
+        showDialog = false
+      },
+      onDismissRequest = { showDialog = false }
     )
   }
 }
@@ -68,42 +79,84 @@ fun DateField(
 @Composable
 private fun PreviewDatePickerDialog() {
   AppTheme {
-    DatePickerDialog({}, {})
+    TlbDatePickerDialog(
+      initial = LocalDate.now(),
+      onDateSelected = {},
+      onDismissRequest = {}
+    )
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerDialog(
-  onConfirm: (LocalDate) -> Unit,
-  onDismiss: () -> Unit,
-  modifier: Modifier = Modifier
+fun TlbDatePickerDialog(
+  initial: LocalDate,
+  onDateSelected: (LocalDateTime) -> Unit,
+  onDismissRequest: () -> Unit,
+  modifier: Modifier = Modifier,
+  minDate: LocalDate = LocalDate.now(),
+  maxDate: LocalDate = LocalDate.MAX,
 ) {
-  var date = LocalDate.now()
+  val initialOrMin = if (initial.isBefore(minDate)) minDate else initial
 
-  Dialog(onDismissRequest = { onDismiss() }) {
-    Column(
-      modifier = modifier
-        .background(
-          AppTheme.colors.material.background,
-          shape = RoundedCornerShape(5.dp)
-        )
-    ) {
-      Calendar(date) {
-        date = it
-      }
+  val initialMillis = initialOrMin
+    .atTime(LocalTime.now())
+    .atZone(ZoneId.systemDefault())
+    .toInstant()
+    .toEpochMilli()
 
-      Row(
-        modifier = Modifier.align(Alignment.End)
-      ) {
-        DialogTextButton(text = R.string.confirm) {
-          onConfirm(date)
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        DialogTextButton(text = R.string.cancel, onClick = onDismiss)
-        Spacer(modifier = Modifier.width(24.dp))
+  val state = rememberDatePickerState(
+    initialSelectedDateMillis = initialMillis,
+    selectableDates = object : SelectableDates {
+      override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+        val date = Instant
+          .ofEpochMilli(utcTimeMillis)
+          .atZone(ZoneId.systemDefault())
+          .toLocalDate()
+
+        return (date.isAfter(minDate) || date.isEqual(minDate)) && (date.isBefore(maxDate) || date.isEqual(
+          maxDate
+        ))
       }
     }
+  )
 
+  Dialog(
+    onDismissRequest = onDismissRequest,
+    properties = DialogProperties(usePlatformDefaultWidth = false)
+  ) {
+    Column(
+      verticalArrangement = Arrangement.spacedBy(16.dp),
+      modifier = modifier
+        .background(AppTheme.colors.surfaceContainerHigh, RoundedCornerShape(10.dp))
+        .padding(vertical = 16.dp)
+        .fillMaxWidth(.95F)
+    ) {
+      DatePicker(
+        state = state,
+        title = null,
+        headline = null,
+        showModeToggle = false,
+        modifier = Modifier.fillMaxWidth()
+      )
+
+      Row(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.align(Alignment.End)
+      ) {
+        DialogTextButton(text = R.string.cancel, onClick = onDismissRequest)
+        DialogTextButton(text = R.string.confirm) {
+          if (state.selectedDateMillis != null) {
+            val date = Instant
+              .ofEpochMilli(state.selectedDateMillis!!)
+              .atZone(ZoneId.systemDefault())
+              .toLocalDateTime()
+
+            onDateSelected(date)
+          }
+        }
+      }
+    }
   }
 }
 

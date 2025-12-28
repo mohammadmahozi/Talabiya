@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +26,7 @@ import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.money
-import com.mahozi.sayed.talabiya.core.ui.components.DatePickerDialog
+import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerDialog
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.order.OrderStatus
@@ -35,10 +34,11 @@ import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent.OrderInfoE
 import com.mahozi.sayed.talabiya.order.details.tabs.OrderInfoState
 import com.mahozi.sayed.talabiya.order.title
 import java.time.Instant
+import java.time.ZoneId
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewOrderInfoScreen() {
+private fun PreviewOrderInfoScreen() {
   Preview {
     OrderInfoScreen(
       model = OrderInfoState(
@@ -113,15 +113,16 @@ fun OrderInfoScreen(
       )
     }
   }
-  if (model.datePickerVisible) DatePickerDialog(
-    onConfirm = { onEvent(OrderInfoEvent.DateSelected(it)) },
-    onDismiss = { onEvent(OrderInfoEvent.DateDialogDismissed) }
+  if (model.datePickerVisible) TlbDatePickerDialog(
+    initial = model.datetime.atZone(ZoneId.systemDefault()).toLocalDate(),
+    onDateSelected = { onEvent(OrderInfoEvent.DateSelected(it.toLocalDate())) },
+    onDismissRequest = { onEvent(OrderInfoEvent.DateDialogDismissed) }
   )
 }
 
 @Preview
 @Composable
-fun PreviewRow() {
+private fun PreviewRow() {
   InfoTextRow(
     text = "Test",
     R.drawable.ic_date,
