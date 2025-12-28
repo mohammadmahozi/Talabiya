@@ -8,5 +8,6 @@ data class CreateOrderState(
   val selectedRestaurant: RestaurantEntity?,
   val restaurants: List<RestaurantEntity>,
   val date: LocalDate,
-  val time: LocalTime
+  val time: LocalTime,
+  val canConfirm: Boolean,
 )

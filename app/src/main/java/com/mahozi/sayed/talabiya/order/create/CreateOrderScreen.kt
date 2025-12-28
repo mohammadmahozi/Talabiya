@@ -46,10 +46,11 @@ private fun PreviewCreateOrderUi() {
   Preview {
     CreateOrderUi(
       state = CreateOrderState(
-        RestaurantEntity(1, "Name"),
-        listOf(),
-        LocalDate.now(),
-        LocalTime.now()
+        selectedRestaurant = RestaurantEntity(1, "Name"),
+        restaurants = listOf(),
+        date = LocalDate.now(),
+        time = LocalTime.now(),
+        canConfirm = true
       ),
       onEvent = {},
       onBack = {}
@@ -72,17 +73,17 @@ fun CreateOrderUi(
       )
     },
     floatingActionButton = {
-      ConfirmFab {
-        onEvent(CreateOrderEvent.CreateOrder)
-      }
+      ConfirmFab(
+        enabled = state.canConfirm,
+        onClick = { onEvent(CreateOrderEvent.CreateOrder) },
+      )
     }
   ) { paddingValues ->
     Column(
       modifier = modifier
         .padding(paddingValues)
         .padding(16.dp)
-    )
-    {
+    ) {
       Restaurants(
         selectedRestaurant = state.selectedRestaurant,
         restaurants = state.restaurants,

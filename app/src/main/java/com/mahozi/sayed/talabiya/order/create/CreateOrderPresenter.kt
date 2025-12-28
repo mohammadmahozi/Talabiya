@@ -49,10 +49,11 @@ class CreateOrderPresenter @Inject constructor(
     }
 
     return CreateOrderState(
-      selectedRestaurant,
-      restaurants,
-      LocalDate.now(),
-      LocalTime.now()
+      selectedRestaurant = selectedRestaurant,
+      restaurants = restaurants,
+      date = LocalDate.now(),
+      time = LocalTime.now(),
+      canConfirm = canConfirm
     )
   }
 }
