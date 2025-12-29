@@ -73,33 +73,38 @@ fun OrderInfoScreen(
       text = formatter.formatShortDateWithDay(model.datetime),
       icon = R.drawable.ic_date,
       iconDescription = R.string.date,
-    ) { onEvent(OrderInfoEvent.DateClicked) }
+      onclick = { onEvent(OrderInfoEvent.DateClicked) }
+    )
 
     InfoTextRow(
       text = formatter.formatTime(model.datetime),
       icon = R.drawable.ic_time,
-      iconDescription = R.string.time
-    ) { onEvent(OrderInfoEvent.TimeClicked) }
+      iconDescription = R.string.time,
+      onclick = { onEvent(OrderInfoEvent.TimeClicked) }
+    )
 
     HorizontalDivider()
 
     InfoTextRow(
       text = model.total.format(),
       icon = R.drawable.ic_money,
-      iconDescription = R.string.total
-    ) {}
+      iconDescription = R.string.total,
+      onclick = {}
+    )
 
     InfoTextRow(
       text = model.payer ?: string(R.string.select_payer),
       icon = R.drawable.ic_payer,
-      iconDescription = R.string.payer
-    ) { onEvent(OrderInfoEvent.PayerClicked) }
+      iconDescription = R.string.payer,
+      onclick = { onEvent(OrderInfoEvent.PayerClicked) }
+    )
 
     InfoTextRow(
       text = string(model.status.title),
       icon = R.drawable.ic_hourglass,
-      iconDescription = R.string.status
-    ) { onEvent(OrderInfoEvent.StatusClicked) }
+      iconDescription = R.string.status,
+      onclick = { onEvent(OrderInfoEvent.StatusClicked) }
+    )
 
     HorizontalDivider()
 
@@ -108,7 +113,6 @@ fun OrderInfoScreen(
       iconDescription = R.string.note,
       onclick = {}
     ) {
-
       BasicTextField(
         value = model.note,
         onValueChange = { note -> onEvent(OrderInfoEvent.NoteChanged(note)) }
@@ -127,9 +131,10 @@ fun OrderInfoScreen(
 private fun PreviewRow() {
   InfoTextRow(
     text = "Test",
-    R.drawable.ic_date,
-    R.string.date,
-  ) { }
+    icon = R.drawable.ic_date,
+    iconDescription = R.string.date,
+    onclick = { }
+  )
 }
 
 @Composable
@@ -149,7 +154,6 @@ private fun InfoTextRow(
       color = AppTheme.colors.onSurface
     )
   }
-
 }
 
 @Composable
@@ -160,11 +164,11 @@ private fun InfoRow(
   content: @Composable () -> Unit
 ) {
   Row(
+    verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier
       .fillMaxWidth()
       .clickable { onclick() }
-      .padding(vertical = 8.dp),
-    verticalAlignment = Alignment.CenterVertically
+      .padding(vertical = 8.dp)
   ) {
     Image(
       painter = painterResource(icon),
@@ -174,9 +178,7 @@ private fun InfoRow(
         .size(24.dp)
     )
 
-    Spacer(
-      modifier = Modifier.width(16.dp)
-    )
+    Spacer(modifier = Modifier.width(16.dp))
 
     content()
   }

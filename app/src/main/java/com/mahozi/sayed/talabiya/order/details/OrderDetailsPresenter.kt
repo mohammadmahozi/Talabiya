@@ -32,16 +32,16 @@ class OrderDetailsPresenter @AssistedInject constructor(
     LaunchedEffect(events) {
       events.collect { event ->
         when(event) {
-          OrderDetailsEvent.EditPricesClicked -> { navigator.goto(EditOrderPricesScreen(orderId)) }
-          OrderDetailsEvent.OrderInfoEvent.AddInvoiceClicked -> TODO()
           OrderDetailsEvent.OrderInfoEvent.DateClicked -> showDatePicker = true
           OrderDetailsEvent.OrderInfoEvent.DateDialogDismissed -> showDatePicker = false
           is OrderDetailsEvent.OrderInfoEvent.DateSelected -> {}
-          OrderDetailsEvent.OrderInfoEvent.InvoiceClicked -> TODO()
-          is OrderDetailsEvent.OrderInfoEvent.NoteChanged -> TODO()
-          OrderDetailsEvent.OrderInfoEvent.PayerClicked -> TODO()
-          OrderDetailsEvent.OrderInfoEvent.StatusClicked -> TODO()
           OrderDetailsEvent.OrderInfoEvent.TimeClicked -> TODO()
+          OrderDetailsEvent.OrderInfoEvent.InvoiceClicked -> TODO()
+          OrderDetailsEvent.OrderInfoEvent.PayerClicked -> TODO()
+          OrderDetailsEvent.OrderInfoEvent.AddInvoiceClicked -> TODO()
+          OrderDetailsEvent.OrderInfoEvent.StatusClicked -> TODO()
+          is OrderDetailsEvent.OrderInfoEvent.NoteChanged -> TODO()
+          OrderDetailsEvent.EditPricesClicked -> { navigator.goto(EditOrderPricesScreen(orderId)) }
           is OrderDetailsEvent.SuborderEvent.UserClicked -> navigator.goto(CreateSuborderScreen(orderId, event.user.id))
           is OrderDetailsEvent.SuborderEvent.EditSuborderClicked -> {
             navigator.goto(CreateSuborderScreen(orderId, event.suborder.userId))
