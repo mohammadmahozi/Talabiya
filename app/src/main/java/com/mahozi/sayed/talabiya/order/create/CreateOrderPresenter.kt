@@ -14,6 +14,7 @@ import com.mahozi.sayed.talabiya.resturant.store.RestaurantStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import restaurant.RestaurantEntity
+import java.time.Clock
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
@@ -22,6 +23,7 @@ class CreateOrderPresenter @Inject constructor(
   private val orderStore: OrderStore,
   private val restaurantStore: RestaurantStore,
   private val navigator: Navigator,
+  private val clock: Clock,
 ) : Presenter<CreateOrderEvent, CreateOrderState> {
 
   @Composable
@@ -29,8 +31,8 @@ class CreateOrderPresenter @Inject constructor(
     val restaurants by remember { restaurantStore.restaurants }.collectAsState(initial = emptyList())
 
     var selectedRestaurant by remember { mutableStateOf<RestaurantEntity?>(null) }
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    var selectedTime by remember { mutableStateOf(LocalTime.now()) }
+    var selectedDate by remember { mutableStateOf(LocalDate.now(clock)) }
+    var selectedTime by remember { mutableStateOf(LocalTime.now(clock)) }
 
     val canConfirm by remember(selectedRestaurant) { mutableStateOf(selectedRestaurant != null) }
 
