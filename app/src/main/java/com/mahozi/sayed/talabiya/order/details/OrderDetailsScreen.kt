@@ -61,9 +61,9 @@ fun OrderDetailsUi(
         )
 
         when (tab) {
-          OrderDetailsTab.INFO -> if (state.info != null) OrderInfoScreen(state.info, onEvent)
-          OrderDetailsTab.SUBORDERS -> if (state.subordersState != null) SubordersScreen(state.subordersState, onEvent)
-          OrderDetailsTab.FULL -> FullOrderScreen(state.fullOrderItems)
+          OrderDetailsTab.Info -> if (state.info != null) OrderInfoScreen(state.info, onEvent)
+          OrderDetailsTab.Suborders -> if (state.subordersState != null) SubordersScreen(state.subordersState, onEvent)
+          OrderDetailsTab.Full -> FullOrderScreen(state.fullOrderItems)
         }
       }
     }
