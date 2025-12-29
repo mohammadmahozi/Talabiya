@@ -19,6 +19,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -66,46 +67,52 @@ class OrdersPresenterTest {
 
   @Test
   fun loadingOrders() {
-    presenter.test(events.receiveAsFlow()) {
-      assertThat(awaitItem()).isEqualTo(OrdersState(emptyList()))
-      val restaurant = "Restaurant"
-      restaurantStore.createRestaurant(restaurant)
-      val instant = Instant.now().truncatedTo(ChronoUnit.SECONDS)
+    runTest {
+      presenter.test(events.receiveAsFlow()) {
+        assertThat(awaitItem()).isEqualTo(OrdersState(emptyList()))
+        val restaurant = "Restaurant"
+        restaurantStore.createRestaurant(restaurant)
+        val instant = Instant.now().truncatedTo(ChronoUnit.SECONDS)
 
-      orderStore.createOrder(
-        restaurantId = 1L,
-        date = instant.atZone(ZoneId.systemDefault()).toLocalDate(),
-        time = instant.atZone(ZoneId.systemDefault()).toLocalTime(),
-      )
-      val order = Order(
-        id = 1L,
-        restaurant = restaurant,
-        createdAt = instant
-      )
-      assertThat(awaitItem()).isEqualTo(OrdersState(listOf(order)))
+        orderStore.createOrder(
+          restaurantId = 1L,
+          date = instant.atZone(ZoneId.systemDefault()).toLocalDate(),
+          time = instant.atZone(ZoneId.systemDefault()).toLocalTime(),
+        )
+        val order = Order(
+          id = 1L,
+          restaurant = restaurant,
+          createdAt = instant
+        )
+        assertThat(awaitItem()).isEqualTo(OrdersState(listOf(order)))
+      }
     }
   }
 
   @Test
   fun navigateToOrder() {
-    presenter.test(events.receiveAsFlow()) {
-      skipItems(1) //Skip initial state
-      val order = Order(
-        id = 1L,
-        restaurant = "Restaurant",
-        createdAt = Instant.now()
-      )
-      events.send(OrdersEvent.OrderClicked(order))
-      assertThat(navigator.currentScreen()).isEqualTo(OrderDetailsScreen(1L))
+    runTest {
+      presenter.test(events.receiveAsFlow()) {
+        skipItems(1) //Skip initial state
+        val order = Order(
+          id = 1L,
+          restaurant = "Restaurant",
+          createdAt = Instant.now()
+        )
+        events.send(OrdersEvent.OrderClicked(order))
+        assertThat(navigator.currentScreen()).isEqualTo(OrderDetailsScreen(1L))
+      }
     }
   }
 
   @Test
   fun navigateToCreateOrder() {
-    presenter.test(events.receiveAsFlow()) {
-      skipItems(1) //Skip initial state
-      events.send(OrdersEvent.CreateOrderClicked)
-      assertThat(navigator.currentScreen()).isEqualTo(CreateOrderScreen)
+    runTest {
+      presenter.test(events.receiveAsFlow()) {
+        skipItems(1) //Skip initial state
+        events.send(OrdersEvent.CreateOrderClicked)
+        assertThat(navigator.currentScreen()).isEqualTo(CreateOrderScreen)
+      }
     }
   }
 }
