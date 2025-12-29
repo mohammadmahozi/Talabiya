@@ -1,4 +1,4 @@
-package com.mahozi.sayed.talabiya.order.details.tabs
+package com.mahozi.sayed.talabiya.order.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

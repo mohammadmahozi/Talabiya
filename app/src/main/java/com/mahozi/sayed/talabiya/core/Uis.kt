@@ -9,10 +9,10 @@ import com.mahozi.sayed.talabiya.order.create.CreateOrderState
 import com.mahozi.sayed.talabiya.order.create.CreateOrderUi
 import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesScreen
 import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesScreenUi
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsScreen
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsState
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsUi
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsEvent
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsScreen
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsState
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsUi
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersEvent
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersState

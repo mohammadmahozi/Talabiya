@@ -5,8 +5,8 @@ import com.mahozi.sayed.talabiya.order.create.CreateOrderPresenter
 import com.mahozi.sayed.talabiya.order.create.CreateOrderScreen
 import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesPresenter
 import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesScreen
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsPresenter
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsScreen
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsPresenter
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsScreen
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersPresenter
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
 import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderPresenter
@@ -27,7 +27,6 @@ import com.mahozi.sayed.talabiya.user.create.CreateUserPresenter
 import com.mahozi.sayed.talabiya.user.create.CreateUserScreen
 import com.mahozi.sayed.talabiya.user.details.UserDetailsScreen
 import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentPresenter
-import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentScreen
 import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsPresenter
 import com.mahozi.sayed.talabiya.user.list.UsersPresenter
 import com.mahozi.sayed.talabiya.user.list.UsersScreen

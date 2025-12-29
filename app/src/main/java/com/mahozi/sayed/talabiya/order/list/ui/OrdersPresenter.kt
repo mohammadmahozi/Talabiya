@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.order.create.CreateOrderScreen
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsScreen
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsScreen
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

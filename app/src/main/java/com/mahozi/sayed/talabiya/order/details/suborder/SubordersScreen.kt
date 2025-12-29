@@ -46,8 +46,8 @@ import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent.SuborderEvent
-import com.mahozi.sayed.talabiya.order.details.tabs.SubordersState
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsEvent.SuborderEvent
+import com.mahozi.sayed.talabiya.order.details.SubordersState
 import kotlinx.coroutines.launch
 import user.UserEntity
 

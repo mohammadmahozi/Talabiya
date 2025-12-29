@@ -3,7 +3,7 @@ package com.mahozi.talabiya.order
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.mahozi.sayed.talabiya.order.create.CreateOrderScreen
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsScreen
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsScreen
 import com.mahozi.sayed.talabiya.order.list.Order
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersEvent
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersPresenter

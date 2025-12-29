@@ -31,8 +31,8 @@ import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerDialog
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.order.OrderStatus
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderDetailsEvent.OrderInfoEvent
-import com.mahozi.sayed.talabiya.order.details.tabs.OrderInfoState
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsEvent.OrderInfoEvent
+import com.mahozi.sayed.talabiya.order.details.OrderInfoState
 import com.mahozi.sayed.talabiya.order.title
 import java.time.Instant
 import java.time.ZoneId
