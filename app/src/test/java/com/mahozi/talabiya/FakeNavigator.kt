@@ -3,9 +3,15 @@ package com.mahozi.talabiya
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 
-class FakeNavigator: Navigator {
+class FakeNavigator(initialScreen: Screen? = null): Navigator {
 
   private val screens = mutableListOf<Screen>()
+
+  init {
+    if (initialScreen != null) {
+      screens.add(initialScreen)
+    }
+  }
 
   fun currentScreen(): Screen? {
     return screens.lastOrNull()
