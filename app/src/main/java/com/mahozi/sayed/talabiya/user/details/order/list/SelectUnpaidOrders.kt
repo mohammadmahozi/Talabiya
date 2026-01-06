@@ -28,6 +28,7 @@ import com.mahozi.sayed.talabiya.core.extensions.locale
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.ui.components.HorizontalSpacer
 import com.mahozi.sayed.talabiya.core.ui.components.TlbCard
+import com.mahozi.sayed.talabiya.core.ui.components.TlbIcon
 import com.mahozi.sayed.talabiya.core.ui.components.TlbText
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.onSurfaceVariant
@@ -132,7 +133,7 @@ internal fun UnpaidOrder(
             text = order.userOrderTotal.format(),
             style = AppTheme.type.bodySmall,
             leadingIcon = {
-              TlbTextIcon(
+              TlbIcon(
                 painter = painterResource(R.drawable.arrow_forward_rounded),
                 contentDescription = stringResource(R.string.expense)
               )
@@ -143,7 +144,7 @@ internal fun UnpaidOrder(
             text = order.fullOrderTotal.format(),
             style = AppTheme.type.bodySmall,
             leadingIcon = {
-              TlbTextIcon(
+              TlbIcon(
                 painter = painterResource(R.drawable.arrow_back_rounded),
                 contentDescription = stringResource(R.string.income)
               )

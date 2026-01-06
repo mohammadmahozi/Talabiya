@@ -53,10 +53,14 @@ fun DateField(
 
   var showDialog by remember { mutableStateOf(false) }
 
-  IconText(
+  TlbText(
     text = formatter.formatShortDateWithDay(selectedDate),
-    painter = painterResource(R.drawable.ic_date),
-    contentDescription = stringResource(R.string.select_date),
+    leadingIcon = {
+      TlbIcon(
+        painter = painterResource(R.drawable.ic_date),
+        contentDescription = stringResource(R.string.select_date)
+      )
+    },
     modifier = modifier
       .clickable { showDialog = true }
       .padding(padding)

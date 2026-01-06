@@ -29,6 +29,7 @@ import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.HorizontalSpacer
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.components.TlbCard
+import com.mahozi.sayed.talabiya.core.ui.components.TlbIcon
 import com.mahozi.sayed.talabiya.core.ui.components.TlbTab
 import com.mahozi.sayed.talabiya.core.ui.components.TlbTabRow
 import com.mahozi.sayed.talabiya.core.ui.components.TlbText
@@ -221,7 +222,7 @@ private fun UserOrder(order: UserOrder) {
             text = "0",
             style = AppTheme.type.bodySmall,
             leadingIcon = {
-              TlbTextIcon(
+              TlbIcon(
                 painter = painterResource(R.drawable.arrow_forward_rounded),
                 contentDescription = stringResource(R.string.expense)
               )
@@ -232,7 +233,7 @@ private fun UserOrder(order: UserOrder) {
             text = "0",
             style = AppTheme.type.bodySmall,
             leadingIcon = {
-              TlbTextIcon(
+              TlbIcon(
                 painter = painterResource(R.drawable.arrow_back_rounded),
                 contentDescription = stringResource(R.string.income)
               )

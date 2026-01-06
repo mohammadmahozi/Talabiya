@@ -2,21 +2,12 @@ package com.mahozi.sayed.talabiya.core.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -25,26 +16,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import com.mahozi.sayed.talabiya.R
 
-class TlbTextScope internal constructor() {
-  @Composable
-  fun TlbTextIcon(
-    painter: Painter,
-    contentDescription: String?,
-    modifier: Modifier = Modifier,
-  ) {
-    Icon(
-      painter = painter,
-      contentDescription = contentDescription,
-      modifier = modifier
-        .size(12.dp)
-    )
-  }
-}
 
 @Composable
 fun TlbText(
@@ -65,28 +40,28 @@ fun TlbText(
   minLines: Int = 1,
   onTextLayout: ((TextLayoutResult) -> Unit)? = null,
   style: TextStyle = LocalTextStyle.current,
-  overLine: (@Composable TlbTextScope.() -> Unit)? = null,
-  leadingIcon: (@Composable TlbTextScope.() -> Unit)? = null,
-  trailingIcon: (@Composable TlbTextScope.() -> Unit)? = null,
-  prefix: (@Composable TlbTextScope.() -> Unit)? = null,
-  suffix: (@Composable TlbTextScope.() -> Unit)? = null,
+  overLine: (@Composable () -> Unit)? = null,
+  leadingIcon: (@Composable () -> Unit)? = null,
+  trailingIcon: (@Composable () -> Unit)? = null,
+  prefix: (@Composable () -> Unit)? = null,
+  suffix: (@Composable () -> Unit)? = null,
 ) {
   Column {
-    val scope = remember { TlbTextScope() }
     if (overLine != null) {
-      scope.overLine()
+      overLine()
       VerticalSpacer(4.dp)
     }
     Row(
       modifier = modifier,
       verticalAlignment = Alignment.CenterVertically
     ) {
+      val iconSize = DpSize(12.dp, 12.dp)
       if (leadingIcon != null) {
-        scope.leadingIcon()
+        ProvideIconSize(iconSize) { leadingIcon() }
         HorizontalSpacer(4.dp)
       }
       if (prefix != null) {
-        scope.prefix()
+        prefix()
         HorizontalSpacer(4.dp)
       }
       Text(
@@ -109,46 +84,12 @@ fun TlbText(
       )
       if (suffix != null) {
         HorizontalSpacer(4.dp)
-        scope.suffix()
+        suffix()
       }
       if (trailingIcon != null) {
         HorizontalSpacer(4.dp)
-        scope.trailingIcon()
+        ProvideIconSize(iconSize) { trailingIcon() }
       }
     }
-  }
-}
-
-@Preview
-@Composable
-private fun PreviewIconText() {
-  IconText(text = "Test", painter = painterResource(R.drawable.ic_date), contentDescription = null)
-}
-
-@Composable
-fun IconText(
-  text: String,
-  painter: Painter,
-  contentDescription: String?,
-  modifier: Modifier = Modifier,
-  iconTint: Color = LocalContentColor.current
-) {
-  Row(
-    modifier = modifier,
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    Icon(
-      painter = painter,
-      contentDescription = contentDescription,
-      tint = iconTint,
-      modifier = Modifier
-        .size(16.dp)
-    )
-
-    Spacer(modifier = Modifier.width(4.dp))
-
-    Text(
-      text = text,
-    )
   }
 }

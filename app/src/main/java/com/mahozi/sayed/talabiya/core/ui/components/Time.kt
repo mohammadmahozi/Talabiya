@@ -48,10 +48,14 @@ fun TimeField(
 
   var showDialog by remember { mutableStateOf(false) }
 
-  IconText(
+  TlbText(
     text = formatter.formatTime(selectedTime),
-    painter = painterResource(R.drawable.ic_time),
-    contentDescription = stringResource(R.string.select_date),
+    leadingIcon = {
+      TlbIcon(
+        painter = painterResource(R.drawable.ic_time),
+        contentDescription = stringResource(R.string.select_date)
+      )
+    },
     modifier = modifier
       .clickable { showDialog = true }
       .padding(padding)

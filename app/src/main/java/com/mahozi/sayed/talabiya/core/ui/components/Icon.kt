@@ -5,6 +5,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,14 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
 private val LocalIconSize = staticCompositionLocalOf {
   DpSize(Dp.Unspecified, Dp.Unspecified)
+}
+
+@Composable
+fun ProvideIconSize(
+  size: DpSize,
+  content: @Composable () -> Unit
+) {
+  CompositionLocalProvider(value = LocalIconSize provides size, content = content)
 }
 
 @Preview
