@@ -73,7 +73,7 @@ fun OrderInfoScreen(
     if (model.datePickerState != null) {
       TlbDatePickerDialog(
         state = model.datePickerState,
-        onEvent = { onEvent(OrderInfoEvent.DateEvent(it) )},
+        onEvent = { onEvent(OrderInfoEvent.DateEvent(it)) },
       )
     }
 

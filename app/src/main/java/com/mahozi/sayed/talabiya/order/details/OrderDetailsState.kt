@@ -11,24 +11,24 @@ import java.lang.IllegalArgumentException
 import java.time.Instant
 
 data class OrderDetailsState(
-    val info: OrderInfoState?,
-    val subordersState: SubordersState?,
-    val fullOrderItems: List<FullOrderItem>
+  val info: OrderInfoState?,
+  val subordersState: SubordersState?,
+  val fullOrderItems: List<FullOrderItem>
 )
 
 data class OrderInfoState(
-    val datetime: Instant,
-    val total: Money,
-    val payer: String?,
-    val status: OrderStatus,
-    val note: String,
-    val datePickerState: TlbDatePickerState?,
-    val timePickerState: TlbTimePickerState?,
+  val datetime: Instant,
+  val total: Money,
+  val payer: String?,
+  val status: OrderStatus,
+  val note: String,
+  val datePickerState: TlbDatePickerState?,
+  val timePickerState: TlbTimePickerState?,
 )
 
 data class SubordersState(
-    val suborders: List<Suborder>,
-    val users: List<UserEntity>,
+  val suborders: List<Suborder>,
+  val users: List<UserEntity>,
 )
 
 enum class OrderDetailsTab {
