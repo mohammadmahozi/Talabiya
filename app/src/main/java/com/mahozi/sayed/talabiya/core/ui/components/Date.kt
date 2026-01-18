@@ -38,7 +38,6 @@ import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -72,7 +71,7 @@ fun DateField(
     TlbDatePickerDialog(
       initial = selectedDate,
       onDateSelected = {
-        onDateSelected(it.toLocalDate())
+        onDateSelected(it)
         showDialog = false
       },
       onDismissRequest = { showDialog = false }
@@ -92,11 +91,37 @@ private fun PreviewDatePickerDialog() {
   }
 }
 
+data class TlbDatePickerState(
+  val initial: LocalDate = LocalDate.now(),
+  val minDate: LocalDate = LocalDate.now(),
+  val maxDate: LocalDate = LocalDate.MAX,
+)
+sealed interface TlbDatePickerEvent {
+  data class SelectDate(val date: LocalDate) : TlbDatePickerEvent
+  object Dismiss : TlbDatePickerEvent
+}
+
+@Composable
+fun TlbDatePickerDialog(
+  state: TlbDatePickerState,
+  onEvent: (TlbDatePickerEvent) -> Unit,
+  modifier: Modifier = Modifier
+) {
+  TlbDatePickerDialog(
+    initial = state.initial,
+    onDateSelected = { onEvent(TlbDatePickerEvent.SelectDate(it)) },
+    onDismissRequest = { onEvent(TlbDatePickerEvent.Dismiss) },
+    minDate = state.minDate,
+    maxDate = state.maxDate,
+    modifier = modifier
+  )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TlbDatePickerDialog(
   initial: LocalDate,
-  onDateSelected: (LocalDateTime) -> Unit,
+  onDateSelected: (LocalDate) -> Unit,
   onDismissRequest: () -> Unit,
   modifier: Modifier = Modifier,
   minDate: LocalDate = LocalDate.now(),
