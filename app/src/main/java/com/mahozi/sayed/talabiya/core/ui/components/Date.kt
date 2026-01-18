@@ -1,7 +1,5 @@
 package com.mahozi.sayed.talabiya.core.ui.components
 
-import android.view.ContextThemeWrapper
-import android.widget.CalendarView
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.mahozi.sayed.talabiya.R
@@ -203,31 +200,4 @@ private fun DialogTextButton(
       color = AppTheme.colors.material.onSurface
     )
   }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PreviewCalendar() {
-  Calendar(LocalDate.now()) {}
-}
-
-@Composable
-fun Calendar(
-  selectedDate: LocalDate,
-  onDateSelected: (LocalDate) -> Unit
-) {
-  AndroidView(
-    factory = { context ->
-      CalendarView(ContextThemeWrapper(context, R.style.CalenderView)).apply {
-        date = selectedDate.toEpochDay()
-      }
-    },
-    update = { view ->
-      view.date = selectedDate.toEpochDay()
-      view.setOnDateChangeListener { _, year, month, dayOfMonth ->
-        val date = LocalDate.of(year, month + 1, dayOfMonth)
-        onDateSelected(date)
-      }
-    }
-  )
 }
