@@ -1,7 +1,5 @@
 package com.mahozi.sayed.talabiya.order.store
 
-import androidx.lifecycle.LiveData
-import androidx.sqlite.db.SimpleSQLiteQuery
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
@@ -25,7 +23,9 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.Optional
 import javax.inject.Inject
+import kotlin.jvm.optionals.getOrNull
 
 class OrderStore @Inject constructor(
   private val orderQueries: OrderQueries,
@@ -200,6 +200,51 @@ class OrderStore @Inject constructor(
   suspend fun getRestaurantId(orderId: Long): Long {
     return withContext(dispatcher) {
       orderQueries.selectRestaurantId(orderId).executeAsOne()
+    }
+  }
+
+  suspend fun updateOrder(
+    orderId: Long,
+    date: LocalDate? = null,
+    time: LocalTime? = null,
+    payerId: Optional<Long>? = null,
+    attachment: Optional<String>? = null,
+    note: String? = null,
+  ) {
+    withContext(dispatcher) {
+      if (date != null) {
+        var instant = orderQueries.selectCreationTime(orderId).executeAsOne()
+        instant = instant
+          .atZone(ZoneId.systemDefault())
+          .with(date)
+          .toInstant()
+
+        orderQueries.updateCreationTime(id = orderId, createdAt = instant)
+      }
+      if (time != null) {
+        var instant = orderQueries.selectCreationTime(orderId).executeAsOne()
+        instant = instant
+          .atZone(ZoneId.systemDefault())
+          .with(time)
+          .toInstant()
+
+        orderQueries.updateCreationTime(id = orderId, createdAt = instant)
+      }
+
+      if (payerId != null) {
+        orderQueries.updatePayer(id = orderId, payerId = payerId.getOrNull())
+      }
+
+      if (payerId != null) {
+        orderQueries.updatePayer(id = orderId, payerId = payerId.getOrNull())
+      }
+
+      if (attachment != null) {
+        orderQueries.updateAttachment(id = orderId, attachment = attachment.getOrNull())
+      }
+      if (note != null) {
+        orderQueries.updateNote(id = orderId, note = note)
+      }
     }
   }
 }
