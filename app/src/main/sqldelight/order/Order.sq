@@ -148,5 +148,31 @@ SELECT *
 FROM UserOrderView
 WHERE userId = ?;
 
+updateCreationTime:
+UPDATE OrderEntity
+SET createdAt = ?
+WHERE id = ?;
+
+updatePayer:
+UPDATE OrderEntity
+SET payerId = ?
+WHERE id = ?;
+
+updateAttachment:
+UPDATE OrderEntity
+SET attachment = ?
+WHERE id = ?;
+
+updateNote:
+UPDATE OrderEntity
+SET note = ?
+WHERE id = ?;
+
+selectCreationTime:
+SELECT createdAt
+FROM OrderEntity
+WHERE id = ?;
+
+
 lastInsertRowId:
 SELECT last_insert_rowid();
