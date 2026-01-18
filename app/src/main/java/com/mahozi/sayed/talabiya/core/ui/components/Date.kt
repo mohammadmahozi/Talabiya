@@ -41,6 +41,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 
 @Composable
 fun DateField(
@@ -153,8 +154,8 @@ fun TlbDatePickerDialog(
           if (state.selectedDateMillis != null) {
             val date = Instant
               .ofEpochMilli(state.selectedDateMillis!!)
-              .atZone(ZoneId.systemDefault())
-              .toLocalDateTime()
+              .atZone(ZoneOffset.UTC)
+              .toLocalDate()
 
             onDateSelected(date)
           }
