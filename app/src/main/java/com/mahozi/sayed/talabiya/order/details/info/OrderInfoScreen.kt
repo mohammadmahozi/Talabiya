@@ -35,7 +35,6 @@ import com.mahozi.sayed.talabiya.order.details.OrderDetailsEvent.OrderInfoEvent
 import com.mahozi.sayed.talabiya.order.details.OrderInfoState
 import com.mahozi.sayed.talabiya.order.title
 import java.time.Instant
-import java.time.ZoneId
 
 @Preview(showBackground = true)
 @Composable
@@ -43,12 +42,12 @@ private fun PreviewOrderInfoScreen() {
   Preview {
     OrderInfoScreen(
       model = OrderInfoState(
-        Instant.now(),
-        60.0.money,
-        "mmm",
-        OrderStatus.COMPLETE,
-        "Note",
-        false
+        datetime = Instant.now(),
+        total = 60.0.money,
+        payer = "mmm",
+        status = OrderStatus.COMPLETE,
+        note = "Note",
+        datePickerState = null
       ),
       onEvent = { }
     )
@@ -69,6 +68,12 @@ fun OrderInfoScreen(
       .fillMaxSize()
       .padding(16.dp)
   ) {
+    if (model.datePickerState != null) {
+      TlbDatePickerDialog(
+        state = model.datePickerState,
+        onEvent = { onEvent(OrderInfoEvent.DateEvent(it) )},
+      )
+    }
     InfoTextRow(
       text = formatter.formatShortDateWithDay(model.datetime),
       icon = R.drawable.ic_date,
@@ -119,11 +124,6 @@ fun OrderInfoScreen(
       )
     }
   }
-  if (model.datePickerVisible) TlbDatePickerDialog(
-    initial = model.datetime.atZone(ZoneId.systemDefault()).toLocalDate(),
-    onDateSelected = { onEvent(OrderInfoEvent.DateSelected(it.toLocalDate())) },
-    onDismissRequest = { onEvent(OrderInfoEvent.DateDialogDismissed) }
-  )
 }
 
 @Preview

@@ -1,6 +1,7 @@
 package com.mahozi.sayed.talabiya.order.details
 
 import com.mahozi.sayed.talabiya.core.Money
+import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerState
 import com.mahozi.sayed.talabiya.order.OrderStatus
 import com.mahozi.sayed.talabiya.order.details.full.FullOrderItem
 import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
@@ -20,7 +21,7 @@ data class OrderInfoState(
     val payer: String?,
     val status: OrderStatus,
     val note: String,
-    val datePickerVisible: Boolean,
+    val datePickerState: TlbDatePickerState?,
 )
 
 data class SubordersState(

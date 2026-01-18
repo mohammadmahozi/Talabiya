@@ -1,16 +1,15 @@
 package com.mahozi.sayed.talabiya.order.details
 
+import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerEvent
 import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
 import user.UserEntity
-import java.time.LocalDate
 
 sealed interface OrderDetailsEvent {
     object EditPricesClicked: OrderDetailsEvent
 
     sealed interface OrderInfoEvent: OrderDetailsEvent {
         object DateClicked: OrderInfoEvent
-        data class DateSelected(val date: LocalDate): OrderInfoEvent
-        object DateDialogDismissed: OrderInfoEvent
+        data class DateEvent(val event: TlbDatePickerEvent): OrderInfoEvent
         object TimeClicked: OrderInfoEvent
         object InvoiceClicked: OrderInfoEvent
         object AddInvoiceClicked: OrderInfoEvent
