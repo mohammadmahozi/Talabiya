@@ -28,6 +28,7 @@ import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerDialog
+import com.mahozi.sayed.talabiya.core.ui.components.TlbTimePickerDialog
 import com.mahozi.sayed.talabiya.core.ui.string
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.order.OrderStatus
@@ -47,7 +48,8 @@ private fun PreviewOrderInfoScreen() {
         payer = "mmm",
         status = OrderStatus.COMPLETE,
         note = "Note",
-        datePickerState = null
+        datePickerState = null,
+        timePickerState = null,
       ),
       onEvent = { }
     )
@@ -74,6 +76,14 @@ fun OrderInfoScreen(
         onEvent = { onEvent(OrderInfoEvent.DateEvent(it) )},
       )
     }
+
+    if (model.timePickerState != null) {
+      TlbTimePickerDialog(
+        state = model.timePickerState,
+        onEvent = { onEvent(OrderInfoEvent.TimeEvent(it)) }
+      )
+    }
+
     InfoTextRow(
       text = formatter.formatShortDateWithDay(model.datetime),
       icon = R.drawable.ic_date,

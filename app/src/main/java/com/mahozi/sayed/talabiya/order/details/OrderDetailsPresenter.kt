@@ -6,7 +6,10 @@ import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerEvent
 import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerState
+import com.mahozi.sayed.talabiya.core.ui.components.TlbTimePickerEvent
+import com.mahozi.sayed.talabiya.core.ui.components.TlbTimePickerState
 import com.mahozi.sayed.talabiya.order.OrderStatus
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsEvent.OrderInfoEvent
 import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesScreen
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderScreen
@@ -17,6 +20,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 
 class OrderDetailsPresenter @AssistedInject constructor(
   @Assisted private val orderId: Long,
@@ -33,15 +37,16 @@ class OrderDetailsPresenter @AssistedInject constructor(
     val users by remember { userStore.users }.collectAsState(initial = emptyList())
 
     var datePickerState by remember { mutableStateOf(null as TlbDatePickerState?) }
+    var timePickerState by remember { mutableStateOf(null as TlbTimePickerState?) }
 
     CollectEvents(events) { event ->
       when (event) {
-        OrderDetailsEvent.OrderInfoEvent.DateClicked -> {
+        OrderInfoEvent.DateClicked -> {
           datePickerState = TlbDatePickerState(
             initial = LocalDate.now(),
           )
         }
-        is OrderDetailsEvent.OrderInfoEvent.DateEvent -> when (event.event) {
+        is OrderInfoEvent.DateEvent -> when (event.event) {
           is TlbDatePickerEvent.SelectDate -> {
             launch {
               orderStore.updateOrder(
@@ -53,12 +58,26 @@ class OrderDetailsPresenter @AssistedInject constructor(
           }
           TlbDatePickerEvent.Dismiss -> datePickerState = null
         }
-        OrderDetailsEvent.OrderInfoEvent.TimeClicked -> TODO()
-        OrderDetailsEvent.OrderInfoEvent.InvoiceClicked -> TODO()
-        OrderDetailsEvent.OrderInfoEvent.PayerClicked -> TODO()
-        OrderDetailsEvent.OrderInfoEvent.AddInvoiceClicked -> TODO()
-        OrderDetailsEvent.OrderInfoEvent.StatusClicked -> TODO()
-        is OrderDetailsEvent.OrderInfoEvent.NoteChanged -> TODO()
+        OrderInfoEvent.TimeClicked -> {
+          timePickerState = TlbTimePickerState(LocalTime.now())
+        }
+        is OrderInfoEvent.TimeEvent -> when (event.event) {
+          is TlbTimePickerEvent.SelectTime -> {
+            launch {
+              orderStore.updateOrder(
+                orderId = orderId,
+                time = event.event.time,
+              )
+              timePickerState = null
+            }
+          }
+          TlbTimePickerEvent.Dismiss -> timePickerState = null
+        }
+        OrderInfoEvent.InvoiceClicked -> TODO()
+        OrderInfoEvent.PayerClicked -> TODO()
+        OrderInfoEvent.AddInvoiceClicked -> TODO()
+        OrderInfoEvent.StatusClicked -> TODO()
+        is OrderInfoEvent.NoteChanged -> TODO()
         OrderDetailsEvent.EditPricesClicked -> {
           navigator.goto(EditOrderPricesScreen(orderId))
         }
@@ -84,7 +103,8 @@ class OrderDetailsPresenter @AssistedInject constructor(
           payer = order.payer,
           status = OrderStatus.COMPLETE,
           note = order.note,
-          datePickerState = datePickerState
+          datePickerState = datePickerState,
+          timePickerState = timePickerState,
         ),
         subordersState = SubordersState(suborders, users),
         fullOrderItems = fullOrderItems

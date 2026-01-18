@@ -1,6 +1,7 @@
 package com.mahozi.sayed.talabiya.order.details
 
 import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerEvent
+import com.mahozi.sayed.talabiya.core.ui.components.TlbTimePickerEvent
 import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
 import user.UserEntity
 
@@ -11,6 +12,7 @@ sealed interface OrderDetailsEvent {
         object DateClicked: OrderInfoEvent
         data class DateEvent(val event: TlbDatePickerEvent): OrderInfoEvent
         object TimeClicked: OrderInfoEvent
+        data class TimeEvent(val event: TlbTimePickerEvent): OrderInfoEvent
         object InvoiceClicked: OrderInfoEvent
         object AddInvoiceClicked: OrderInfoEvent
         object PayerClicked: OrderInfoEvent

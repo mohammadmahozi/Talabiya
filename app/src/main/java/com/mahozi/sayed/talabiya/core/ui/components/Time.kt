@@ -65,17 +65,39 @@ fun TimeField(
   if (showDialog) {
     TlbTimePickerDialog(
       onDismissRequest = { showDialog = false },
-      onConfirm = onTimeSelected
+      onTimeSelected = onTimeSelected
     )
   }
 }
 
+data class TlbTimePickerState(
+  val initialTime: LocalTime = LocalTime.now(),
+)
+
+sealed interface TlbTimePickerEvent {
+  data class SelectTime(val time: LocalTime) : TlbTimePickerEvent
+  object Dismiss : TlbTimePickerEvent
+}
+
 @Composable
 fun TlbTimePickerDialog(
+  state: TlbTimePickerState,
+  onEvent: (TlbTimePickerEvent) -> Unit,
+  modifier: Modifier = Modifier
+) {
+  TlbTimePickerDialog(
+    initialTime = state.initialTime,
+    onDismissRequest = { onEvent(TlbTimePickerEvent.Dismiss) },
+    onTimeSelected = { onEvent(TlbTimePickerEvent.SelectTime(it)) },
+    modifier = modifier
+  )
+}
+
+@Composable
+fun TlbTimePickerDialog(
+  onTimeSelected: (LocalTime) -> Unit,
   onDismissRequest: () -> Unit,
   modifier: Modifier = Modifier,
-  onConfirm: (LocalTime) -> Unit = { onDismissRequest() },
-  onTimeChanged: (LocalTime) -> Unit = {},
   initialTime: LocalTime = LocalTime.now(),
 ) {
   var time by remember { mutableStateOf(initialTime) }
@@ -92,7 +114,6 @@ fun TlbTimePickerDialog(
       TlbTimePicker(
         onTimeChanged = {
           time = it
-          onTimeChanged(it)
         },
         initialTime = initialTime
       )
@@ -101,7 +122,7 @@ fun TlbTimePickerDialog(
       DialogTextButton(
         text = R.string.confirm,
         onClick = {
-          onConfirm(time)
+          onTimeSelected(time)
           onDismissRequest()
         }
       )
