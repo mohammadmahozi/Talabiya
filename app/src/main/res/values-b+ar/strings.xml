@@ -147,6 +147,8 @@
     <string name="completed">Completed</string>
     <string name="canceled">Canceled</string>
     <string name="income">Income</string>
+    <string name="add_invoice">Add invoice</string>
+    <string name="invoice">Invoice</string>
 
 
 </resources>

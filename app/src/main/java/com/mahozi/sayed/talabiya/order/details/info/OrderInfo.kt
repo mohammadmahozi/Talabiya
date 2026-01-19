@@ -9,5 +9,6 @@ data class OrderInfo(
   val restaurant: String,
   val payer: String?,
   val total: Money,
+  val invoice: String?,
   val note: String
 )

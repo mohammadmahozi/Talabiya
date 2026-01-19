@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
@@ -48,6 +50,7 @@ private fun PreviewOrderInfoScreen() {
         payer = "mmm",
         status = OrderStatus.COMPLETE,
         note = "Note",
+        invoice = null,
         datePickerState = null,
         timePickerState = null,
       ),
@@ -104,7 +107,13 @@ fun OrderInfoScreen(
       text = model.total.format(),
       icon = R.drawable.ic_money,
       iconDescription = R.string.total,
-      onclick = {}
+    )
+
+    InfoTextRow(
+      text = model.invoice ?: stringResource(R.string.add_invoice),
+      icon = R.drawable.ic_docs,
+      iconDescription = R.string.invoice,
+      onclick = { onEvent(OrderInfoEvent.InvoiceClicked) }
     )
 
     InfoTextRow(
@@ -152,7 +161,7 @@ private fun InfoTextRow(
   text: String,
   @DrawableRes icon: Int,
   @StringRes iconDescription: Int,
-  onclick: () -> Unit,
+  onclick: (() -> Unit)? = null,
 ) {
   InfoRow(
     icon,
@@ -161,7 +170,6 @@ private fun InfoTextRow(
   ) {
     Text(
       text = text,
-      color = AppTheme.colors.onSurface
     )
   }
 }
@@ -170,14 +178,17 @@ private fun InfoTextRow(
 private fun InfoRow(
   @DrawableRes icon: Int,
   @StringRes iconDescription: Int,
-  onclick: () -> Unit,
-  content: @Composable () -> Unit
+  onclick: (() -> Unit)? = null,
+  content: @Composable RowScope.() -> Unit
 ) {
   Row(
     verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier
       .fillMaxWidth()
-      .clickable { onclick() }
+      .clickable(
+        enabled = onclick != null,
+        onClick = { onclick!!.invoke() }
+      )
       .padding(vertical = 8.dp)
   ) {
     Image(

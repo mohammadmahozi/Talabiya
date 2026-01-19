@@ -14,7 +14,6 @@ sealed interface OrderDetailsEvent {
     object TimeClicked : OrderInfoEvent
     data class TimeEvent(val event: TlbTimePickerEvent) : OrderInfoEvent
     object InvoiceClicked : OrderInfoEvent
-    object AddInvoiceClicked : OrderInfoEvent
     object PayerClicked : OrderInfoEvent
     object StatusClicked : OrderInfoEvent
     data class NoteChanged(val note: String) : OrderInfoEvent

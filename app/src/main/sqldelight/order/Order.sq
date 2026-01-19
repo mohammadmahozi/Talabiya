@@ -78,7 +78,7 @@ ORDER BY createdAt DESC;
 
 selectById:
 SELECT OrderEntity.id, OrderEntity.createdAt, RestaurantEntity.name AS restaurant, UserEntity.name AS payer,
-sum(OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total, OrderEntity.note
+sum(OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total, OrderEntity.attachment, OrderEntity.note
 FROM OrderEntity
 JOIN RestaurantEntity ON OrderEntity.restaurantId = RestaurantEntity.id
 LEFT JOIN UserEntity ON OrderEntity.payerId = UserEntity.id

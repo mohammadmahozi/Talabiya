@@ -31,7 +31,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
 
   @Composable
   override fun start(events: Flow<OrderDetailsEvent>): OrderDetailsState {
-    val orderState by remember { orderStore.getOrderDetails(orderId) }.collectAsState(initial = null)
+    val info by remember { orderStore.getOrderDetails(orderId) }.collectAsState(initial = null)
     val suborders by remember { orderStore.getSuborders(orderId) }.collectAsState(initial = emptyList())
     val fullOrderItems by remember { orderStore.getFullOrderItems(orderId) }.collectAsState(initial = emptyList())
     val users by remember { userStore.users }.collectAsState(initial = emptyList())
@@ -73,9 +73,13 @@ class OrderDetailsPresenter @AssistedInject constructor(
           }
           TlbTimePickerEvent.Dismiss -> timePickerState = null
         }
-        OrderInfoEvent.InvoiceClicked -> TODO()
+        OrderInfoEvent.InvoiceClicked -> {
+          when(info!!.invoice) {
+            null -> TODO()
+            else -> TODO()
+          }
+        }
         OrderInfoEvent.PayerClicked -> TODO()
-        OrderInfoEvent.AddInvoiceClicked -> TODO()
         OrderInfoEvent.StatusClicked -> TODO()
         is OrderInfoEvent.NoteChanged -> TODO()
         OrderDetailsEvent.EditPricesClicked -> {
@@ -93,13 +97,14 @@ class OrderDetailsPresenter @AssistedInject constructor(
       }
     }
 
-    val order = orderState
+    val order = info
     return when (order) {
       null -> OrderDetailsState(null, null, listOf())
       else -> OrderDetailsState(
         info = OrderInfoState(
           datetime = order.createdAt,
           total = order.total,
+          invoice = order.invoice,
           payer = order.payer,
           status = OrderStatus.COMPLETE,
           note = order.note,

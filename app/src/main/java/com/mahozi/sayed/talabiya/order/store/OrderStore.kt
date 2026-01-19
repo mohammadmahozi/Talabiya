@@ -43,14 +43,15 @@ class OrderStore @Inject constructor(
   fun getOrderDetails(id: Long): Flow<OrderInfo> {
     return orderQueries.selectById(
       id = id,
-      mapper = { _, createdAt, restaurant, payer, total, note ->
+      mapper = { id, createdAt, restaurant, payer, total, attachment, note ->
         OrderInfo(
-          id,
-          createdAt,
-          restaurant,
-          payer,
-          (total ?: 0.0).money,
-          note
+          id = id,
+          createdAt = createdAt,
+          restaurant = restaurant,
+          payer = payer,
+          total = (total ?: 0.0).money,
+          invoice = attachment,
+          note = note
         )
       }).asFlow()
       .mapToOne(dispatcher)
