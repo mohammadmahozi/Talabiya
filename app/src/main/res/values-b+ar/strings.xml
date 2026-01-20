@@ -149,6 +149,11 @@
     <string name="income">Income</string>
     <string name="add_invoice">Add invoice</string>
     <string name="invoice">Invoice</string>
+    <string name="allow">Allow</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="video">Video</string>
+    <string name="file">File</string>
 
 
 </resources>
