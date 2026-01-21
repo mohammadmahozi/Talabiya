@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import restaurant.MenuItemQueries
 import restaurant.RestaurantQueries
 import java.time.Instant
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 class RestaurantStore @Inject constructor(
   private val restaurantQueries: RestaurantQueries,

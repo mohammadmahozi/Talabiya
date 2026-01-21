@@ -27,7 +27,7 @@ import com.mahozi.sayed.talabiya.user.data.UserStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 data class CreateUserState(
   val name: String,

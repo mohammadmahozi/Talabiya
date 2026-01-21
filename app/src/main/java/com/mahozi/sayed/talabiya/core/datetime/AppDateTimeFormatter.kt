@@ -3,13 +3,13 @@ package com.mahozi.sayed.talabiya.core.datetime
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.mahozi.sayed.talabiya.core.di.SingleIn
 import com.mahozi.sayed.talabiya.core.main.MainScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
 import java.util.Locale
-import javax.inject.Inject
 
 val LocalDateTimeFormatter = staticCompositionLocalOf<AppDateTimeFormatter> {
   error("AppLocalDateTimeFormatter is not provided")

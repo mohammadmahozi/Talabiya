@@ -3,27 +3,23 @@ package com.mahozi.sayed.talabiya.core.main
 import androidx.appcompat.app.AppCompatActivity
 import com.mahozi.sayed.talabiya.core.Presenters
 import com.mahozi.sayed.talabiya.core.datetime.AppDateTimeFormatter
-import com.mahozi.sayed.talabiya.core.di.SingleIn
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
-import com.squareup.anvil.annotations.MergeSubcomponent
-import dagger.BindsInstance
-import dagger.Subcomponent
-import javax.inject.Scope
+import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.Scope
 
-@MainScope
-@SingleIn(MainScope::class)
-@MergeSubcomponent(MainScope::class)
+@GraphExtension(MainScope::class)
 interface MainGraph {
 
   fun presenterFactories(): Presenters
 
   fun formatter(): AppDateTimeFormatter
 
-  @Subcomponent.Factory
+  @GraphExtension.Factory
   interface Factory {
     fun create(
-      @BindsInstance navigator: Navigator,
-      @BindsInstance context: AppCompatActivity
+      @Provides navigator: Navigator,
+      @Provides context: AppCompatActivity
     ): MainGraph
   }
 }

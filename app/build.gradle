@@ -1,11 +1,11 @@
+plugins {
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin)
+}
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'app.cash.molecule'
 apply plugin: 'kotlin-parcelize'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'com.squareup.anvil'
 apply plugin: "app.cash.sqldelight"
-
+apply plugin: "dev.zacsweers.metro"
 
 android {
     compileSdk 36
@@ -41,10 +41,6 @@ android {
         jvmTarget = "17"
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.8"
-    }
-
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
@@ -71,6 +67,8 @@ dependencies {
     implementation(libs.compose.preview)
     debugImplementation(libs.compose.tooling)
 
+    implementation(libs.molecule)
+
     testImplementation(libs.assertk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
@@ -79,18 +77,15 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation "androidx.test.ext:junit:1.1.5"
 
-    implementation 'com.google.dagger:dagger:2.44'
-    kapt 'com.google.dagger:dagger-compiler:2.44'
-
     implementation "cafe.adriel.voyager:voyager-navigator:1.0.0-rc03"
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
     lintChecks("com.slack.lint.compose:compose-lint-checks:1.4.2")
 
-    implementation("app.cash.sqldelight:android-driver:2.0.0")
-    implementation("app.cash.sqldelight:coroutines-extensions:2.0.0")
-    testImplementation("app.cash.sqldelight:sqlite-driver:2.0.0")
+    implementation(libs.sqldelight.driver)
+    implementation(libs.sqldelight.coroutines)
+    testImplementation(libs.sqldelight.driver)
     testImplementation('org.xerial:sqlite-jdbc:3.40.0.0') {
         // Override the version of sqlite used by sqlite-driver to match Android API 23
         version {

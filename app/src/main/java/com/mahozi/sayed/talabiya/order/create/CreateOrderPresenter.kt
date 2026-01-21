@@ -11,13 +11,14 @@ import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantStore
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import restaurant.RestaurantEntity
 import java.time.Clock
 import java.time.LocalDate
 import java.time.LocalTime
-import javax.inject.Inject
+
 
 class CreateOrderPresenter @Inject constructor(
   private val orderStore: OrderStore,

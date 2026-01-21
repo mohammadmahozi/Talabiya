@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import payment.PaymentQueries
 import java.time.Instant
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 class PaymentStore @Inject constructor(
   private val paymentQueries: PaymentQueries,

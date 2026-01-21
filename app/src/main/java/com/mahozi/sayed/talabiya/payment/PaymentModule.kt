@@ -2,13 +2,14 @@ package com.mahozi.sayed.talabiya.payment
 
 import com.mahozi.sayed.talabiya.core.di.AppScope
 import com.mahozi.talabiya.Database
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import payment.PaymentQueries
 
-@Module
+
 @ContributesTo(AppScope::class)
-object PaymentModule {
+interface PaymentModule {
 
-    @Provides fun providePaymentQuery(database: Database) = database.paymentQueries
+    @Provides
+    fun providePaymentQuery(database: Database): PaymentQueries = database.paymentQueries
 }

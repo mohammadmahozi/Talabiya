@@ -13,9 +13,9 @@ import com.mahozi.sayed.talabiya.core.sumOf
 import com.mahozi.sayed.talabiya.payment.PaymentStore
 import com.mahozi.sayed.talabiya.user.details.order.list.SelectUnpaidOrdersEvent
 import com.mahozi.sayed.talabiya.user.details.order.list.SelectUnpaidOrderState
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.Instant

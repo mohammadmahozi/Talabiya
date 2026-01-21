@@ -11,7 +11,7 @@ import com.mahozi.sayed.talabiya.resturant.create.CreateRestaurantScreen
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItemsScreen
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantStore
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 class RestaurantsPresenter @Inject constructor(
   private val restaurantStore: RestaurantStore,

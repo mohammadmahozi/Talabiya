@@ -24,7 +24,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.util.Optional
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.jvm.optionals.getOrNull
 
 class OrderStore @Inject constructor(

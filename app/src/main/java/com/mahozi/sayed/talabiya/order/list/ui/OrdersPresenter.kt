@@ -8,7 +8,7 @@ import com.mahozi.sayed.talabiya.order.details.OrderDetailsScreen
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 
 class OrdersPresenter @Inject constructor(

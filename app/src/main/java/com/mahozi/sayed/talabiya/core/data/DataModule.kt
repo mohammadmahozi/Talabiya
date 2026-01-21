@@ -5,22 +5,21 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.mahozi.sayed.talabiya.core.di.AppScope
 import com.mahozi.talabiya.Database
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import order.OrderEntity
 import order.OrderItemPriceEntity
 import payment.PaymentEntity
 import restaurant.MenuItemPriceEntity
-import javax.inject.Singleton
 
 
-@Module
 @ContributesTo(AppScope::class)
-object DataModule {
+interface DataModule {
 
-    @Singleton
+    @SingleIn(AppScope::class)
     @Provides
     fun provideTalabiyaDatabase(context: Context): Database {
         val driver = AndroidSqliteDriver(
@@ -41,5 +40,5 @@ object DataModule {
         )
     }
 
-    @Provides fun provideDispatcher() = Dispatchers.IO
+    @Provides fun provideDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

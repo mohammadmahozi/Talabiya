@@ -2,16 +2,13 @@ package com.mahozi.sayed.talabiya.user
 
 import com.mahozi.sayed.talabiya.core.di.AppScope
 import com.mahozi.talabiya.Database
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
-import restaurant.MenuItemQueries
-import restaurant.RestaurantQueries
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import user.UserQueries
 
-@Module
 @ContributesTo(AppScope::class)
-object UsersModule {
+interface UsersModule {
 
-  @Provides fun provideUserQueries(database: Database): UserQueries = database.userQueries
+  @Provides
+  fun provideUserQueries(database: Database): UserQueries = database.userQueries
 }

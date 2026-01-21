@@ -30,8 +30,8 @@ import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentPr
 import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsPresenter
 import com.mahozi.sayed.talabiya.user.list.UsersPresenter
 import com.mahozi.sayed.talabiya.user.list.UsersScreen
-import javax.inject.Inject
-import javax.inject.Provider
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provider
 
 
 class Presenters @Inject constructor(
@@ -54,15 +54,15 @@ class Presenters @Inject constructor(
 
   fun create(screen: Screen): Presenter<*, *> {
     return when (screen) {
-      is OrdersScreen -> ordersPresenter.get()
+      is OrdersScreen -> ordersPresenter.invoke()
       is OrderDetailsScreen -> ordersDetailsPresenter.create(screen.orderId)
-      is CreateOrderScreen -> createOrderPresenter.get()
-      is RestaurantsScreen -> restaurantsPresenter.get()
-      is CreateRestaurantScreen -> createRestaurantPresenter.get()
+      is CreateOrderScreen -> createOrderPresenter.invoke()
+      is RestaurantsScreen -> restaurantsPresenter.invoke()
+      is CreateRestaurantScreen -> createRestaurantPresenter.invoke()
       is MenuItemsScreen -> menuItemPresenter.create(screen.restaurantId)
       is CreateMenuItemScreen -> createMenuItemPresenter.create(screen.restaurantId)
-      is UsersScreen -> usersPresenter.get()
-      is CreateUserScreen -> createUserPresenter.get()
+      is UsersScreen -> usersPresenter.invoke()
+      is CreateUserScreen -> createUserPresenter.invoke()
       is CreateSuborderScreen -> createSuborderPresenter.create(screen)
       is OptionsScreen -> optionsPresenter.create(screen.restaurantId)
       is CreateOptionScreen -> createOptionPresenter.create(screen.restaurantId)

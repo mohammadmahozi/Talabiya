@@ -12,7 +12,7 @@ import com.mahozi.sayed.talabiya.user.data.UserStore
 import com.mahozi.sayed.talabiya.user.details.UserDetailsScreen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 class UsersPresenter @Inject constructor(
   private val userStore: UserStore,

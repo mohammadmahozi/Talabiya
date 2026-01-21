@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import user.UserEntity
 import user.UserQueries
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 class UserStore @Inject constructor(
   private val userQueries: UserQueries,

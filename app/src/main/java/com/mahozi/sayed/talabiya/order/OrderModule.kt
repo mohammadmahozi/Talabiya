@@ -2,13 +2,14 @@ package com.mahozi.sayed.talabiya.order
 
 import com.mahozi.sayed.talabiya.core.di.AppScope
 import com.mahozi.talabiya.Database
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import order.OrderQueries
 
-@Module
+
 @ContributesTo(AppScope::class)
-object OrderModule {
+interface OrderModule {
 
-    @Provides fun provideOrderQuery(database: Database) = database.orderQueries
+    @Provides
+    fun provideOrderQuery(database: Database): OrderQueries = database.orderQueries
 }

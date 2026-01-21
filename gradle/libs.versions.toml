@@ -4,6 +4,12 @@ minSdk = "23"
 
 kotlin = "2.2.21"
 coroutine = "1.7.3"
+sqldelight = "2.2.1"
+
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 [libraries]
 compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2025.12.00"}
@@ -16,4 +22,8 @@ compose-activity = "androidx.activity:activity-compose:1.12.1"
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutine" }
 
 assertk = "com.willowtreeapps.assertk:assertk:0.28.1"
-turbine = { module = "app.cash.turbine:turbine", version = "1.0.0" }
+turbine = { module = "app.cash.turbine:turbine", version = "1.2.1" }
+
+sqldelight-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+molecule = "app.cash.molecule:molecule-runtime:2.2.0"
