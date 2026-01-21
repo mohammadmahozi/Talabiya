@@ -37,6 +37,11 @@ class OrderDetailsPresenter @AssistedInject constructor(
     val fullOrderItems by remember { orderStore.getFullOrderItems(orderId) }.collectAsState(initial = emptyList())
     val users by remember { userStore.users }.collectAsState(initial = emptyList())
 
+    var note by remember { mutableStateOf("") }
+    LaunchedEffect(info) {
+      note = info?.note ?: ""
+    }
+
     var datePickerState by remember { mutableStateOf(null as TlbDatePickerState?) }
     var timePickerState by remember { mutableStateOf(null as TlbTimePickerState?) }
 
@@ -82,9 +87,17 @@ class OrderDetailsPresenter @AssistedInject constructor(
             )
           }
         }
-        OrderInfoEvent.PayerClicked -> TODO()
-        OrderInfoEvent.StatusClicked -> TODO()
-        is OrderInfoEvent.NoteChanged -> TODO()
+        OrderInfoEvent.PayerClicked -> { /*TODO */ }
+        OrderInfoEvent.StatusClicked -> { /*TODO */ }
+        is OrderInfoEvent.NoteChanged -> {
+          note = event.note
+          launch {
+            orderStore.updateOrder(
+              orderId = orderId,
+              note = event.note,
+            )
+          }
+        }
         OrderDetailsEvent.EditPricesClicked -> {
           navigator.goto(EditOrderPricesScreen(orderId))
         }
@@ -110,7 +123,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
           invoice = order.invoice,
           payer = order.payer,
           status = OrderStatus.COMPLETE,
-          note = order.note,
+          note = note,
           datePickerState = datePickerState,
           timePickerState = timePickerState,
         ),

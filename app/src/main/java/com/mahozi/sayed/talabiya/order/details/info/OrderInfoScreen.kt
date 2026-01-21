@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,8 +27,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
@@ -119,12 +123,12 @@ fun OrderInfoScreen(
     var showFilePicker by rememberSaveable { mutableStateOf(false) }
     if (showFilePicker) {
       TlbFilePicker(
-        onDismissRequest = { showFilePicker = false},
+        onDismissRequest = { showFilePicker = false },
         onResult = { uri ->
           //Todo handle errors
           if (uri != null) onEvent(OrderInfoEvent.ChangeInvoice(uri))
           showFilePicker = false
-         },
+        },
         cameraImage = CameraImageOption(),
         gallery = GalleryOption()
       )
@@ -163,11 +167,20 @@ fun OrderInfoScreen(
     InfoRow(
       icon = R.drawable.ic_baseline_notes_24,
       iconDescription = R.string.note,
-      onclick = {}
     ) {
+      val focusManager = LocalFocusManager.current
       BasicTextField(
         value = model.note,
-        onValueChange = { note -> onEvent(OrderInfoEvent.NoteChanged(note)) }
+        singleLine = true,
+        onValueChange = { note -> onEvent(OrderInfoEvent.NoteChanged(note)) },
+        keyboardOptions = KeyboardOptions(
+          imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+          onDone = {
+            focusManager.clearFocus()
+          }
+        ),
       )
     }
   }
