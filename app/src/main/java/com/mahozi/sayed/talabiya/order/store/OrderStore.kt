@@ -209,7 +209,7 @@ class OrderStore @Inject constructor(
     date: LocalDate? = null,
     time: LocalTime? = null,
     payerId: Optional<Long>? = null,
-    attachment: Optional<String>? = null,
+    invoice: Optional<String>? = null,
     note: String? = null,
   ) {
     withContext(dispatcher) {
@@ -240,8 +240,8 @@ class OrderStore @Inject constructor(
         orderQueries.updatePayer(id = orderId, payerId = payerId.getOrNull())
       }
 
-      if (attachment != null) {
-        orderQueries.updateAttachment(id = orderId, attachment = attachment.getOrNull())
+      if (invoice != null) {
+        orderQueries.updateAttachment(id = orderId, attachment = invoice.getOrNull())
       }
       if (note != null) {
         orderQueries.updateNote(id = orderId, note = note)

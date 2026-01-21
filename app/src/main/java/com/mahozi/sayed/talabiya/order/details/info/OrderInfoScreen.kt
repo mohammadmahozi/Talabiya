@@ -18,6 +18,10 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -29,6 +33,9 @@ import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.core.picker.CameraImageOption
+import com.mahozi.sayed.talabiya.core.picker.GalleryOption
+import com.mahozi.sayed.talabiya.core.picker.TlbFilePicker
 import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerDialog
 import com.mahozi.sayed.talabiya.core.ui.components.TlbTimePickerDialog
 import com.mahozi.sayed.talabiya.core.ui.string
@@ -109,12 +116,33 @@ fun OrderInfoScreen(
       iconDescription = R.string.total,
     )
 
-    InfoTextRow(
-      text = model.invoice ?: stringResource(R.string.add_invoice),
+    var showFilePicker by rememberSaveable { mutableStateOf(false) }
+    if (showFilePicker) {
+      TlbFilePicker(
+        onDismissRequest = { showFilePicker = false},
+        onResult = { uri ->
+          //Todo handle errors
+          if (uri != null) onEvent(OrderInfoEvent.ChangeInvoice(uri))
+          showFilePicker = false
+         },
+        cameraImage = CameraImageOption(),
+        gallery = GalleryOption()
+      )
+    }
+    InfoRow(
       icon = R.drawable.ic_docs,
       iconDescription = R.string.invoice,
-      onclick = { onEvent(OrderInfoEvent.InvoiceClicked) }
-    )
+      onclick = {
+        when (model.invoice) {
+          null -> showFilePicker = true
+          else -> {}
+        }
+      },
+    ) {
+      Text(
+        text = model.invoice ?: stringResource(R.string.add_invoice),
+      )
+    }
 
     InfoTextRow(
       text = model.payer ?: string(R.string.select_payer),

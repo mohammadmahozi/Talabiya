@@ -167,18 +167,17 @@ private fun Option(
   }
 }
 
-
-internal val Context.authority: String
-  get() =
-    "$packageName.com.Tlb.core.fileprovider"
-
+internal val authority: String
+  get() = "com.mahozi.talabiya.fileprovider"
 
 internal fun Context.createImageUri(
   fileName: String = "img_${System.currentTimeMillis()}.png"
 ): Uri {
   val type = Environment.DIRECTORY_PICTURES
-  val base = Environment.getExternalStoragePublicDirectory(type)
-  val file = File(base, fileName)
+  val base = "${Environment.getExternalStoragePublicDirectory(type)}/Talabiya"
+  val dir = File(base)
+  if(!dir.exists()) dir.mkdirs()
+  val file = File(dir, fileName)
   return FileProvider.getUriForFile(this, authority, file)
 }
 
@@ -186,7 +185,9 @@ internal fun Context.createVideoUri(
   fileName: String = "vid_${System.currentTimeMillis()}.mp4"
 ): Uri {
   val type = Environment.DIRECTORY_MOVIES
-  val base = Environment.getExternalStoragePublicDirectory(type)
-  val file = File(base, fileName)
+  val base = "${Environment.getExternalStoragePublicDirectory(type)}/Talabiya"
+  val dir = File(base)
+  if(!dir.exists()) dir.mkdirs()
+  val file = File(dir, fileName)
   return FileProvider.getUriForFile(this, authority, file)
 }

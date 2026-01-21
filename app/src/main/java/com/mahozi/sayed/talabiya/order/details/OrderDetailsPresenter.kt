@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Optional
 
 class OrderDetailsPresenter @AssistedInject constructor(
   @Assisted private val orderId: Long,
@@ -73,10 +74,12 @@ class OrderDetailsPresenter @AssistedInject constructor(
           }
           TlbTimePickerEvent.Dismiss -> timePickerState = null
         }
-        OrderInfoEvent.InvoiceClicked -> {
-          when(info!!.invoice) {
-            null -> TODO()
-            else -> TODO()
+        is OrderInfoEvent.ChangeInvoice -> {
+          launch {
+            orderStore.updateOrder(
+              orderId = orderId,
+              invoice = Optional.of(event.invoice.toString())
+            )
           }
         }
         OrderInfoEvent.PayerClicked -> TODO()
