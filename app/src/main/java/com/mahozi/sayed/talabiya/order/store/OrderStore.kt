@@ -4,6 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
 import com.mahozi.sayed.talabiya.core.Money
+import com.mahozi.sayed.talabiya.core.cents
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.order.details.edit.PricedOrderItem
 import com.mahozi.sayed.talabiya.order.details.full.FullOrderItem
@@ -49,7 +50,7 @@ class OrderStore @Inject constructor(
           createdAt = createdAt,
           restaurant = restaurant,
           payer = payer,
-          total = (total ?: 0.0).money,
+          total = (total ?: 0.0).cents,
           invoice = attachment,
           note = note
         )
@@ -80,13 +81,13 @@ class OrderStore @Inject constructor(
         selectAllOrderItemsQuery.executeAsList()
           .groupBy { item -> item.customerId }
           .map { (id, orderItems) ->
-            val suborderTotal = orderItems.sumOf { it.total }.money
+            val suborderTotal = orderItems.sumOf { it.total }.cents
 
             Suborder(
               id,
               orderItems.first().customerId,
               orderItems.first().name,
-              orderItems.map { OrderItem(it.id, it.quantity.toInt(), it.name, it.total.money) },
+              orderItems.map { OrderItem(it.id, it.quantity.toInt(), it.name, it.total.cents) },
               suborderTotal,
             )
         }
@@ -105,7 +106,7 @@ class OrderStore @Inject constructor(
             item.id,
             item.quantity.toInt(),
             item.name,
-            item.total.money
+            item.total.cents
           )
         }
       }
@@ -120,7 +121,7 @@ class OrderStore @Inject constructor(
             orderItemId = item.id,
             menuItemId = item.menuItemId,
             name = item.name,
-            price = item.price.money
+            price = item.price.cents
           )
         }
       }

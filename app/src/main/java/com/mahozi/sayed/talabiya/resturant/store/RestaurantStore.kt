@@ -3,7 +3,7 @@ package com.mahozi.sayed.talabiya.resturant.store
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.mahozi.sayed.talabiya.core.Money
-import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.core.cents
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 import com.mahozi.sayed.talabiya.resturant.option.FoodOption
 import dev.zacsweers.metro.Inject
@@ -36,7 +36,7 @@ class RestaurantStore @Inject constructor(
           name = name,
           category = category,
           priceId = priceId,
-          price = price.money
+          price = price.cents
         )
       }
     ).asFlow()

@@ -23,9 +23,19 @@ data class Money constructor(private val amount: BigDecimal){
   fun toLong(): Long = (amount * BigDecimal.valueOf(100)).longValueExact()
 }
 
-val Number.money: Money get() = Money(this.toDouble().toBigDecimal())
-
+val BigDecimal.money: Money get() = Money(this)
+val Int.money: Money get() = Money(this.toBigDecimal())
+val Double.money: Money get() = Money(this.toBigDecimal())
 val String.money: Money get() = Money(this.toBigDecimal())
+
+val Long.cents: Money get() = Money(BigDecimal.valueOf(this, 2))
+val Double.cents: Money get() {
+  val bigDecimal = this.toBigDecimal().stripTrailingZeros()
+  if (bigDecimal.scale() > 0) {
+   throw IllegalArgumentException("Invalid cents value ($this). Fractional cents are not allowed")
+  }
+  return Money(bigDecimal.movePointLeft(2))
+}
 
 inline fun <T> Iterable<T>.sumOf(selector: (T) -> Money): Money {
   var sum = 0.money

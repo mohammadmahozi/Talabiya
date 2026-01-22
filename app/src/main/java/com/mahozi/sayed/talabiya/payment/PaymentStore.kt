@@ -3,6 +3,7 @@ package com.mahozi.sayed.talabiya.payment
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.mahozi.sayed.talabiya.core.Money
+import com.mahozi.sayed.talabiya.core.cents
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.user.details.payment.create.UnpaidOrder
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,7 +25,7 @@ class PaymentStore @Inject constructor(
         mapper = { id, amount, createdAt, status ->
           Payment(
             id = id,
-            amount = amount.money,
+            amount = amount.cents,
             createdAt = createdAt,
             status = PaymentStatus.valueOf(status),
             userId = userId
@@ -119,8 +120,8 @@ class PaymentStore @Inject constructor(
             orderId = orderId,
             createdAt = createdAt,
             restaurant = restaurant,
-            fullOrderTotal = (fullOrderTotal ?: 0L).money,
-            userOrderTotal = (userOrderTotal ?: 0L).money,
+            fullOrderTotal = (fullOrderTotal ?: 0L).cents,
+            userOrderTotal = (userOrderTotal ?: 0L).cents,
             selected = true
           )
         }
