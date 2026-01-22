@@ -4,9 +4,9 @@ import java.math.BigDecimal
 import java.text.DecimalFormat
 
 
-data class Money constructor(private val amount: BigDecimal){
+private val format = DecimalFormat("#,##0.##")
 
-  private val format = DecimalFormat("#,###.00")
+data class Money constructor(private val amount: BigDecimal){
 
   operator fun plus(money: Money): Money = (this.amount + money.amount).money
 
