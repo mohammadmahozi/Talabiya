@@ -12,10 +12,6 @@ data class Money constructor(private val amount: BigDecimal){
 
   operator fun minus(money: Money): Money = (this.amount - money.amount).money
 
-  operator fun times(money: Money): Money = (this.amount * money.amount).money
-
-  operator fun div(money: Money): Money = (this.amount / money.amount).money
-
   operator fun compareTo(money: Money) = this.amount.compareTo(money.amount)
 
   fun format(): String = format.format(amount)
