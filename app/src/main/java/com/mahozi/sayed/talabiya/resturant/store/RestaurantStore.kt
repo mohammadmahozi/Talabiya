@@ -2,11 +2,11 @@ package com.mahozi.sayed.talabiya.resturant.store
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.mahozi.sayed.talabiya.core.Cent
 import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 import com.mahozi.sayed.talabiya.resturant.option.FoodOption
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,7 +14,6 @@ import kotlinx.coroutines.withContext
 import restaurant.MenuItemQueries
 import restaurant.RestaurantQueries
 import java.time.Instant
-import dev.zacsweers.metro.Inject
 
 class RestaurantStore @Inject constructor(
   private val restaurantQueries: RestaurantQueries,
@@ -37,7 +36,7 @@ class RestaurantStore @Inject constructor(
           name = name,
           category = category,
           priceId = priceId,
-          price = Cent(price).money
+          price = price.money
         )
       }
     ).asFlow()

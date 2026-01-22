@@ -27,12 +27,6 @@ val Number.money: Money get() = Money(this.toDouble().toBigDecimal())
 
 val String.money: Money get() = Money(this.toBigDecimal())
 
-val Cent.money: Money get() {
-  val centsInBigDecimal = cents.toBigDecimal()
-  val money = centsInBigDecimal / BigDecimal.valueOf(100)
-  return Money(money)
-}
-
 inline fun <T> Iterable<T>.sumOf(selector: (T) -> Money): Money {
   var sum = 0.money
   for (element in this) {
