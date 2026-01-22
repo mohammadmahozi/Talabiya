@@ -83,7 +83,7 @@ dependencies {
 
     lintChecks("com.slack.lint.compose:compose-lint-checks:1.4.2")
 
-    implementation(libs.sqldelight.driver)
+    implementation(libs.sqldelight.driver.android)
     implementation(libs.sqldelight.coroutines)
     testImplementation(libs.sqldelight.driver)
     testImplementation('org.xerial:sqlite-jdbc:3.40.0.0') {

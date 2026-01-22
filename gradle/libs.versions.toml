@@ -24,6 +24,7 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 assertk = "com.willowtreeapps.assertk:assertk:0.28.1"
 turbine = { module = "app.cash.turbine:turbine", version = "1.2.1" }
 
-sqldelight-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 molecule = "app.cash.molecule:molecule-runtime:2.2.0"
