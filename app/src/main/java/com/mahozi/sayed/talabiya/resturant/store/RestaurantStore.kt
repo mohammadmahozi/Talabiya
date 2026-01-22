@@ -58,7 +58,7 @@ class RestaurantStore @Inject constructor(
       menuItemQueries.transaction {
         menuItemQueries.insert(restaurantId, name, category)
         val menuItemId = menuItemQueries.lastInsertRowId().executeAsOne()
-        menuItemQueries.insertPrice(menuItemId, Instant.now(), price.toLong())
+        menuItemQueries.insertPrice(menuItemId, Instant.now(), price.toCents())
       }
     }
   }

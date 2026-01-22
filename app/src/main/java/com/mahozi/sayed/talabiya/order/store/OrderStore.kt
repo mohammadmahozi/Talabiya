@@ -164,7 +164,7 @@ class OrderStore @Inject constructor(
   ) {
     withContext(dispatcher) {
       orderQueries.transaction {
-        orderQueries.insertOrderItemPrice(orderId, menuItemId, price.toLong(), Instant.now())
+        orderQueries.insertOrderItemPrice(orderId, menuItemId, price.toCents(), Instant.now())
 
         val priceId = orderQueries.selectOrderItemPriceId(orderId, menuItemId).executeAsOne()
         orderQueries.insertOrderItem(
@@ -184,7 +184,7 @@ class OrderStore @Inject constructor(
   ) {
     withContext(dispatcher) {
       orderQueries.updateOrderItemsPrice(
-        price = price.toLong(),
+        price = price.toCents(),
         orderId = orderId,
         menuItemId = itemId
       )
@@ -193,7 +193,7 @@ class OrderStore @Inject constructor(
         menuQueries.insertPrice(
           menuItemId = itemId,
           datetime = Instant.now(),
-          price = price.toLong()
+          price = price.toCents()
         )
       }
     }

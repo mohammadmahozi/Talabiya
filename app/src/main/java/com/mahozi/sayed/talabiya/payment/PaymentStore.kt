@@ -44,7 +44,7 @@ class PaymentStore @Inject constructor(
       paymentQueries.transaction {
         paymentQueries.insertPayment(
           userId,
-          amount = amount.toLong(),
+          amount = amount.toCents(),
           createdAt = Instant.now(),
           status = PaymentStatus.Completed.name
         )
@@ -76,7 +76,7 @@ class PaymentStore @Inject constructor(
       paymentQueries.transaction {
         paymentQueries.insertPayment(
           userId,
-          amount = amount.toLong(),
+          amount = amount.toCents(),
           createdAt = Instant.now(),
           status = PaymentStatus.Completed.name
         )
@@ -98,7 +98,7 @@ class PaymentStore @Inject constructor(
       paymentQueries.transaction {
         paymentQueries.insertPayment(
           userId = userId,
-          amount = amount.toLong(),
+          amount = amount.toCents(),
           createdAt = Instant.now(),
           status = PaymentStatus.Completed.name
         )
