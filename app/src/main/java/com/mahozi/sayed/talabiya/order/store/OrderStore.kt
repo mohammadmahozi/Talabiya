@@ -74,6 +74,7 @@ class OrderStore @Inject constructor(
     ).asFlow()
     .mapToList(dispatcher)
   }
+
   fun getSuborders(id: Long): Flow<List<Suborder>> {
     return orderQueries.selectAllOrderItems(id)
       .asFlow()
@@ -84,13 +85,20 @@ class OrderStore @Inject constructor(
             val suborderTotal = orderItems.sumOf { it.total }.cents
 
             Suborder(
-              id,
-              orderItems.first().customerId,
-              orderItems.first().name,
-              orderItems.map { OrderItem(it.id, it.quantity.toInt(), it.name, it.total.cents) },
-              suborderTotal,
+              id = id,
+              userId = orderItems.first().customerId,
+              user = orderItems.first().userName,
+              items = orderItems.map {
+                OrderItem(
+                  id = it.id,
+                  quantity = it.quantity.toInt(),
+                  name = it.itemName,
+                  total = it.total.cents
+                )
+              },
+              total = suborderTotal,
             )
-        }
+          }
       }
   }
 
