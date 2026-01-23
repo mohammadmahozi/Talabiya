@@ -115,8 +115,14 @@ class OrderDetailsPresenter @AssistedInject constructor(
 
     val order = info
     return when (order) {
-      null -> OrderDetailsState(null, null, listOf())
+      null -> OrderDetailsState(
+        orderId = orderId,
+        info = null,
+        subordersState = null,
+        fullOrderItems = listOf()
+      )
       else -> OrderDetailsState(
+        orderId = orderId,
         info = OrderInfoState(
           datetime = order.createdAt,
           total = order.total,

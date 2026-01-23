@@ -33,7 +33,9 @@ fun OrderDetailsUi(
   Scaffold(
     topBar = {
       TalabiyaBar(
-        title = R.string.order_number,
+        title = {
+          Text(stringResource(R.string.order_number, state.orderId))
+        },
         navigationIcon = {
           TalabiyaTopBarDefaults.BackIcon(onBack)
         },

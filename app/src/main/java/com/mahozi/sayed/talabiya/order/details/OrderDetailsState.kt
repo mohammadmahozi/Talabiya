@@ -11,6 +11,7 @@ import java.lang.IllegalArgumentException
 import java.time.Instant
 
 data class OrderDetailsState(
+  val orderId: Long,
   val info: OrderInfoState?,
   val subordersState: SubordersState?,
   val fullOrderItems: List<FullOrderItem>
