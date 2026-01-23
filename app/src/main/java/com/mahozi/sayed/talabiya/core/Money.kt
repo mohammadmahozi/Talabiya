@@ -6,7 +6,7 @@ import java.text.DecimalFormat
 
 private val format = DecimalFormat("#,##0.##")
 
-data class Money constructor(private val amount: BigDecimal){
+data class Money (private val amount: BigDecimal){
 
   operator fun plus(money: Money): Money = (this.amount + money.amount).money
 
