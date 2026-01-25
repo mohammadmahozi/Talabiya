@@ -154,6 +154,7 @@
     <string name="camera">Camera</string>
     <string name="video">Video</string>
     <string name="file">File</string>
+    <string name="are_you_sure_you_want_to_delete_order">Are you sure you want to delete %s order?</string>
 
 
 </resources>

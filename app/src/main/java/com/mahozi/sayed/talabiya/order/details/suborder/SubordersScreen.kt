@@ -46,10 +46,15 @@ import androidx.compose.ui.unit.sp
 import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.Preview
 import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.core.ui.ConfirmDialog
+import com.mahozi.sayed.talabiya.core.ui.ConfirmState
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.components.HorizontalSpacer
 import com.mahozi.sayed.talabiya.core.ui.components.TlbCard
 import com.mahozi.sayed.talabiya.core.ui.components.TlbIcon
+import com.mahozi.sayed.talabiya.core.ui.localString
+import com.mahozi.sayed.talabiya.core.ui.localize
+import com.mahozi.sayed.talabiya.core.ui.rememberConfirmState
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.onSurfaceVariant
 import com.mahozi.sayed.talabiya.order.details.OrderDetailsEvent.SuborderEvent
@@ -130,6 +135,10 @@ fun SubordersScreen(
     },
   ) { paddingValues ->
     val scrollState = rememberScrollState()
+
+    var confirmState by rememberConfirmState()
+    if (confirmState != null) ConfirmDialog(confirmState!!)
+
     Column(
       verticalArrangement = Arrangement.spacedBy(8.dp),
       modifier = modifier
@@ -142,7 +151,13 @@ fun SubordersScreen(
           suborder = it,
           onPayClicked = { onEvent(SuborderEvent.Pay(it)) },
           onEditClicked = { onEvent(SuborderEvent.EditSuborderClicked(it)) },
-          onDeleteOrderClicked = { onEvent(SuborderEvent.Delete(it)) }
+          onDeleteOrderClicked = {
+            confirmState = ConfirmState(
+              text = localString(R.string.are_you_sure_you_want_to_delete_order, it.user),
+              onDismiss = { confirmState = null },
+              onConfirm = { onEvent(SuborderEvent.Delete(it)); confirmState = null }
+            )
+          }
         )
       }
     }
