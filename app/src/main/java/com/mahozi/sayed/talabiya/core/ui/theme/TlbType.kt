@@ -65,7 +65,7 @@ data class TlbType(
    */
   val titleMedium: TextStyle = defaultType.titleMedium.copy(
     fontSize = 16.sp,
-    fontWeight = FontWeight.Medium
+    fontWeight = FontWeight.SemiBold
   ),
   /**
    * Used by tabs.

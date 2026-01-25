@@ -10,6 +10,7 @@ import com.mahozi.sayed.talabiya.core.ui.components.TlbTimePickerEvent
 import com.mahozi.sayed.talabiya.core.ui.components.TlbTimePickerState
 import com.mahozi.sayed.talabiya.order.OrderStatus
 import com.mahozi.sayed.talabiya.order.details.OrderDetailsEvent.OrderInfoEvent
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsEvent.SuborderEvent
 import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesScreen
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderScreen
@@ -101,13 +102,14 @@ class OrderDetailsPresenter @AssistedInject constructor(
         OrderDetailsEvent.EditPricesClicked -> {
           navigator.goto(EditOrderPricesScreen(orderId))
         }
-        is OrderDetailsEvent.SuborderEvent.UserClicked -> navigator.goto(
+        is SuborderEvent.UserClicked -> navigator.goto(
           CreateSuborderScreen(
             orderId,
             event.user.id
           )
         )
-        is OrderDetailsEvent.SuborderEvent.EditSuborderClicked -> {
+        is SuborderEvent.Pay -> {}
+        is SuborderEvent.EditSuborderClicked -> {
           navigator.goto(CreateSuborderScreen(orderId, event.suborder.userId))
         }
       }
