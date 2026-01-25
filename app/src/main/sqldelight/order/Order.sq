@@ -174,6 +174,24 @@ SELECT createdAt
 FROM OrderEntity
 WHERE id = ?;
 
+deleteUserOrder:
+DELETE FROM OrderItemEntity
+WHERE customerId = :userId AND orderItemPriceId IN (
+    SELECT id
+    FROM OrderItemPriceEntity
+    WHERE orderId = :orderId
+);
+
+CREATE TRIGGER DeleteUnusedOrderPriceItem
+AFTER DELETE ON OrderItemEntity
+BEGIN
+    DELETE FROM OrderItemPriceEntity
+    WHERE id = old.orderItemPriceId AND NOT EXISTS (
+        SELECT 1
+        FROM OrderItemEntity
+        WHERE orderItemPriceId = old.orderItemPriceId
+    );
+END;
 
 lastInsertRowId:
 SELECT last_insert_rowid();

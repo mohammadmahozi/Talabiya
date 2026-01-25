@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
@@ -138,7 +141,9 @@ fun SubordersScreen(
         Suborder(
           suborder = it,
           onPayClicked = { onEvent(SuborderEvent.Pay(it)) },
-          onEditClicked = { onEvent(SuborderEvent.EditSuborderClicked(it)) })
+          onEditClicked = { onEvent(SuborderEvent.EditSuborderClicked(it)) },
+          onDeleteOrderClicked = { onEvent(SuborderEvent.Delete(it)) }
+        )
       }
     }
   }
@@ -153,7 +158,8 @@ private fun PreviewSuborder(
     Suborder(
       suborder = suborder,
       onPayClicked = {},
-      onEditClicked = {}
+      onEditClicked = {},
+      onDeleteOrderClicked = {}
     )
   }
 }
@@ -163,16 +169,32 @@ private fun Suborder(
   suborder: Suborder,
   onPayClicked: () -> Unit,
   onEditClicked: () -> Unit,
+  onDeleteOrderClicked: () -> Unit,
 ) {
   var expanded by remember { mutableStateOf(false) }
+  var showMenu by remember { mutableStateOf(false) }
 
   TlbCard(
     title = {
+      if (showMenu) {
+        DropdownMenu(
+          expanded = showMenu,
+          onDismissRequest = { showMenu = false }
+        ) {
+          DropdownMenuItem(
+            text = { Text(stringResource(R.string.delete))},
+            onClick = { onDeleteOrderClicked(); showMenu = false }
+          )
+        }
+      }
       Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
           .clickable(onClick = { expanded = !expanded })
-          .padding(start = 8.dp)
+          .combinedClickable(
+            onClick = { expanded = !expanded },
+            onLongClick = { showMenu = true }
+          ).padding(start = 8.dp)
       ) {
         Column(
           verticalArrangement = Arrangement.spacedBy(4.dp)

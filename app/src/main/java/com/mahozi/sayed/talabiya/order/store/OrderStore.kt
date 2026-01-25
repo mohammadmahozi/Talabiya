@@ -257,4 +257,16 @@ class OrderStore @Inject constructor(
       }
     }
   }
+
+  suspend fun deleteUserOrder(
+    orderId: Long,
+    userId: Long,
+  ) {
+    withContext(dispatcher) {
+      orderQueries.deleteUserOrder(
+        orderId = orderId,
+        userId = userId
+      )
+    }
+  }
 }

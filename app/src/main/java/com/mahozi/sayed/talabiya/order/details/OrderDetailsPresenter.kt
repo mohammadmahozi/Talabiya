@@ -112,6 +112,14 @@ class OrderDetailsPresenter @AssistedInject constructor(
         is SuborderEvent.EditSuborderClicked -> {
           navigator.goto(CreateSuborderScreen(orderId, event.suborder.userId))
         }
+        is SuborderEvent.Delete -> {
+          launch {
+            orderStore.deleteUserOrder(
+              orderId = orderId,
+              userId = event.suborder.userId
+            )
+          }
+        }
       }
     }
 

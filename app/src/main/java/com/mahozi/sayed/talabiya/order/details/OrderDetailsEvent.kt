@@ -24,5 +24,6 @@ sealed interface OrderDetailsEvent {
     data class UserClicked(val user: UserEntity) : SuborderEvent
     data class Pay(val suborder: Suborder) : SuborderEvent
     data class EditSuborderClicked(val suborder: Suborder) : SuborderEvent
+    data class Delete(val suborder: Suborder) : SuborderEvent
   }
 }
