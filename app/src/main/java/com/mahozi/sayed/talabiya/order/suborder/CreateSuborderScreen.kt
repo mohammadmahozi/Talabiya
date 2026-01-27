@@ -133,8 +133,6 @@ fun CreateSuborderScreen(
           windowInsets = WindowInsets.zero
         )
       },
-      modifier = Modifier
-        .fillMaxHeight(.5F)
     ) {
       UserOrderItems(items = state.addedItems)
     }
@@ -225,8 +223,10 @@ private fun PreviewUserOrderItems() {
 private fun UserOrderItems(
   items: List<OrderItem>
 ) {
-
-  Column {
+  Column(
+    modifier = Modifier
+      .fillMaxHeight(.5F)
+  ) {
     items.forEach { item ->
       Row(
         verticalAlignment = Alignment.CenterVertically,
