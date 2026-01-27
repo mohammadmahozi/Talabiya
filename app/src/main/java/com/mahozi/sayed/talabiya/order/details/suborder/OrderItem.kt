@@ -4,7 +4,8 @@ import com.mahozi.sayed.talabiya.core.Money
 
 data class OrderItem(
   val id: Long,
-  val quantity: Int,
+  val menuItemId: Long,
   val name: String,
+  val quantity: Int,
   val total: Money
 )

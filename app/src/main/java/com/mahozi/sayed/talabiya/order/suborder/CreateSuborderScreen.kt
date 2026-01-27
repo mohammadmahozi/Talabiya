@@ -134,7 +134,10 @@ fun CreateSuborderScreen(
         )
       },
     ) {
-      UserOrderItems(items = state.addedItems)
+      UserOrderItems(
+        items = state.addedItems,
+        onClick = { }
+      )
     }
   }
 
@@ -211,27 +214,30 @@ private fun PreviewUserOrderItems() {
   AppTheme {
     UserOrderItems(
       listOf(
-        OrderItem(0L, 1, "Name", 20.money),
-        OrderItem(0L, 1, "Name", 20.money),
-        OrderItem(0L, 1, "Name", 20.money),
+        OrderItem(0L, 0L, "Name", 1, 20.money),
+        OrderItem(0L, 0L, "Name", 1, 20.money),
+        OrderItem(0L, 0L, "Name", 1, 20.money),
       ),
+      onClick = {}
     )
   }
 }
 
 @Composable
 private fun UserOrderItems(
-  items: List<OrderItem>
+  items: List<OrderItem>,
+  onClick: () -> Unit,
 ) {
   Column(
     modifier = Modifier
       .fillMaxHeight(.5F)
   ) {
+
     items.forEach { item ->
       Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-          .clickable { }
+          .clickable { onClick() }
           .padding(vertical = 12.dp, horizontal = 16.dp)
       ) {
 

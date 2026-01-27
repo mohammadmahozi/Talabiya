@@ -88,7 +88,7 @@ WHERE OrderEntity.id = ?;
 
 selectAllOrderItems:
 SELECT OrderItemEntity.id, OrderItemEntity.customerId, UserEntity.name AS userName, MenuItemEntity.name AS itemName,
-OrderItemPriceEntity.price, OrderItemEntity.quantity,
+MenuItemEntity.id AS menuItemId, OrderItemPriceEntity.price, OrderItemEntity.quantity,
 (OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total
 FROM OrderItemEntity
 JOIN UserEntity ON OrderItemEntity.customerId = UserEntity.id
@@ -97,8 +97,8 @@ JOIN MenuItemEntity ON OrderItemPriceEntity.menuItemId = MenuItemEntity.id
 WHERE OrderItemPriceEntity.orderId = ?;
 
 selectUserOrderItems:
-SELECT OrderItemEntity.id, OrderItemEntity.customerId, OrderItemPriceEntity.price,
-OrderItemEntity.quantity, MenuItemEntity.name, (OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total
+SELECT OrderItemEntity.id, MenuItemEntity.id,OrderItemEntity.quantity,
+MenuItemEntity.name, (OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total
 FROM OrderItemEntity
 JOIN UserEntity ON OrderItemEntity.customerId = UserEntity.id
 JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id

@@ -46,11 +46,12 @@ class CreateSuborderPresenter @AssistedInject constructor(
           }
         }
         is CreateSuborderEvent.MenuItemClicked -> {
-          //TODO fix id comparision
-          val quantity = addedItems.find { it.id == event.item.id }?.quantity ?: 1
+          val quantity = addedItems.find { it.menuItemId == event.item.id }?.quantity ?: 1
           openedMenuItem = OpenedOrderItemState(event.item.id, quantity, event.item.price)
         }
-        is CreateSuborderEvent.QuantityChanged -> openedMenuItem = openedMenuItem!!.copy(quantity = event.newQuantity)
+        is CreateSuborderEvent.QuantityChanged -> {
+          openedMenuItem = openedMenuItem!!.copy(quantity = event.newQuantity.coerceAtLeast(1))
+        }
         is CreateSuborderEvent.OnSaveMenuItemClicked -> {
           launch {
             orderStore.insertOrderItem(

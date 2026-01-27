@@ -91,6 +91,7 @@ class OrderStore @Inject constructor(
               items = orderItems.map {
                 OrderItem(
                   id = it.id,
+                  menuItemId = it.menuItemId,
                   quantity = it.quantity.toInt(),
                   name = it.itemName,
                   total = it.total.cents
@@ -106,18 +107,20 @@ class OrderStore @Inject constructor(
     orderId: Long,
     userId: Long,
   ): Flow<List<OrderItem>> {
-    return orderQueries.selectUserOrderItems(orderId, userId)
-      .asFlow()
-      .map { query ->
-        query.executeAsList().map { item ->
-          OrderItem(
-            item.id,
-            item.quantity.toInt(),
-            item.name,
-            item.total.cents
-          )
-        }
+    return orderQueries.selectUserOrderItems(
+      orderId = orderId,
+      userId = userId,
+      mapper = { id, menuItemId, quantity, name, total ->
+        OrderItem(
+          id = id,
+          menuItemId = menuItemId,
+          name = name,
+          quantity = quantity.toInt(),
+          total = total.cents
+        )
       }
+    ).asFlow()
+    .mapToList(dispatcher)
   }
 
   fun getPricedOrderItems(orderId: Long): Flow<List<PricedOrderItem>> {
