@@ -10,6 +10,7 @@ import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.order.store.OrderStore
+import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderEvent.*
 import com.mahozi.sayed.talabiya.resturant.menu.CreateMenuItemScreen
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantStore
@@ -39,20 +40,35 @@ class CreateSuborderPresenter @AssistedInject constructor(
 
     CollectEvents(events) { event ->
       when(event) {
-        CreateSuborderEvent.AddMenuItemClicked -> {
+        AddMenuItemClicked -> {
           launch {
             val restaurantId = orderStore.getRestaurantId(screen.orderId)
             navigator.goto(CreateMenuItemScreen(restaurantId))
           }
         }
-        is CreateSuborderEvent.MenuItemClicked -> {
-          val quantity = addedItems.find { it.menuItemId == event.item.id }?.quantity ?: 1
-          openedMenuItem = OpenedOrderItemState(event.item.id, quantity, event.item.price)
+        is MenuItemClicked -> {
+          val orderItem = addedItems.find { it.menuItemId == event.item.id }
+          openedMenuItem = OpenedOrderItemState(
+            menuItemId = event.item.id,
+            quantity = orderItem?.quantity ?: 1,
+            price = event.item.price,
+            orderItemId = orderItem?.id
+          )
         }
-        is CreateSuborderEvent.QuantityChanged -> {
+        is QuantityChanged -> {
           openedMenuItem = openedMenuItem!!.copy(quantity = event.newQuantity.coerceAtLeast(1))
         }
-        is CreateSuborderEvent.OnSaveMenuItemClicked -> {
+        is DeleteItem -> {
+          launch {
+            orderStore.deleteOrderItem(
+              itemId = openedMenuItem!!.orderItemId!!,
+              orderId = screen.orderId,
+              userId = screen.userid
+            )
+            openedMenuItem = null
+          }
+        }
+        is OnSaveMenuItemClicked -> {
           launch {
             orderStore.insertOrderItem(
               screen.orderId,
@@ -64,8 +80,8 @@ class CreateSuborderPresenter @AssistedInject constructor(
             openedMenuItem = null
           }
         }
-        is CreateSuborderEvent.OnCancelAddingMenuItem -> openedMenuItem = null
-        is CreateSuborderEvent.QueryChanged -> query = event.query
+        is OnCancelAddingMenuItem -> openedMenuItem = null
+        is QueryChanged -> query = event.query
       }
     }
 

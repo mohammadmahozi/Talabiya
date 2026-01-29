@@ -187,6 +187,18 @@ class OrderStore @Inject constructor(
     }
   }
 
+  suspend fun deleteOrderItem(
+    itemId: Long,
+    orderId: Long,
+    userId: Long,
+  ) {
+    orderQueries.deleteOrderItem(
+      orderItemId = itemId,
+      userId = userId,
+      orderId = orderId
+    )
+  }
+
   suspend fun updateOrderItemPrice(
     orderId: Long,
     itemId: Long,

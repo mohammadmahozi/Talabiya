@@ -13,10 +13,12 @@ data class CreateSuborderState(
 
 sealed interface CreateSuborderEvent {
   data class MenuItemClicked(val item: MenuItem): CreateSuborderEvent
-  object AddMenuItemClicked: CreateSuborderEvent
+  data object AddMenuItemClicked: CreateSuborderEvent
   data class QuantityChanged(val newQuantity: Int): CreateSuborderEvent
   object OnSaveMenuItemClicked: CreateSuborderEvent
-  object OnCancelAddingMenuItem: CreateSuborderEvent
+  data object OnCancelAddingMenuItem: CreateSuborderEvent
+  data object DeleteItem: CreateSuborderEvent
+
   data class QueryChanged(val query: String): CreateSuborderEvent
 }
 
@@ -24,4 +26,7 @@ data class OpenedOrderItemState(
   val menuItemId: Long,
   val quantity: Int,
   val price: Money,
-)
+  val orderItemId: Long? = null,
+) {
+  val showDelete get() = quantity == 1 && orderItemId != null
+}

@@ -109,12 +109,9 @@ fun CreateSuborderScreen(
     ) {
       AddOrderItem(
         state = state.openedOrderItemState,
-        onQuantityChanged = {
-          onEvent(CreateSuborderEvent.QuantityChanged(it))
-        },
-        onConfirm = {
-          onEvent(CreateSuborderEvent.OnSaveMenuItemClicked)
-        }
+        onQuantityChanged = { onEvent(CreateSuborderEvent.QuantityChanged(it)) },
+        onDelete = { onEvent(CreateSuborderEvent.DeleteItem) },
+        onConfirm = { onEvent(CreateSuborderEvent.OnSaveMenuItemClicked) }
       )
     }
   }
@@ -361,6 +358,7 @@ private fun PreviewAddOrderItem() {
     AddOrderItem(
       state = OpenedOrderItemState(1, 13, 15.money),
       onQuantityChanged = {},
+      onDelete = {},
       onConfirm = {}
     )
   }
@@ -370,6 +368,7 @@ private fun PreviewAddOrderItem() {
 private fun AddOrderItem(
   state: OpenedOrderItemState,
   onQuantityChanged: (newQuantity: Int) -> Unit,
+  onDelete: () -> Unit,
   onConfirm: () -> Unit,
 ) {
   Column(
@@ -390,14 +389,29 @@ private fun AddOrderItem(
       Row(
         verticalAlignment = Alignment.CenterVertically
       ) {
-        Icon(
-          painter = painterResource(R.drawable.ic_remove),
-          contentDescription = null,
-          modifier = Modifier
-            .clickable { onQuantityChanged(state.quantity - 1) }
-            .padding(2.dp)
-            .background(AppTheme.colors.surfaceContainerHigh, CircleShape)
-        )
+
+        val iconModifier = Modifier
+          .padding(2.dp)
+          .background(AppTheme.colors.surfaceContainerHigh, CircleShape)
+
+        if (state.showDelete) {
+          Icon(
+            painter = painterResource(R.drawable.ic_delete),
+            contentDescription = stringResource(R.string.delete),
+            tint = AppTheme.colors.error,
+            modifier = Modifier
+              .clickable { onDelete() }
+              .then(iconModifier)
+          )
+        } else {
+          Icon(
+            painter = painterResource(R.drawable.ic_remove),
+            contentDescription = stringResource(R.string.decrease_quantity),
+            modifier = Modifier
+              .clickable { onQuantityChanged(state.quantity - 1) }
+              .then(iconModifier)
+          )
+        }
 
         Text(
           text = state.quantity.toString(),
@@ -408,11 +422,10 @@ private fun AddOrderItem(
 
         Icon(
           painter = painterResource(R.drawable.ic_add_white_24dp),
-          contentDescription = null,
+          contentDescription = stringResource(R.string.increase_quantity),
           modifier = Modifier
             .clickable { onQuantityChanged(state.quantity + 1) }
-            .padding(2.dp)
-            .background(color = AppTheme.colors.surfaceContainerHigh, shape = CircleShape)
+            .then(iconModifier)
         )
       }
     }

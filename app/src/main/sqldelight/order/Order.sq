@@ -119,6 +119,14 @@ insertOrderItem:
 INSERT OR REPLACE INTO OrderItemEntity(customerId, quantity, orderItemPriceId)
 VALUES (?, ?, ?);
 
+deleteOrderItem:
+DELETE FROM OrderItemEntity
+WHERE id = :orderItemId AND customerId = :userId AND orderItemPriceId IN (
+    SELECT id
+    FROM OrderItemPriceEntity
+    WHERE orderId = :orderId
+);
+
 selectRestaurantId:
 SELECT restaurantId
 FROM OrderEntity
