@@ -69,7 +69,7 @@ fun Uis(
     }
 
     is RestaurantsScreen -> ui<RestaurantsState, RestaurantsEvent> { state, onEvent ->
-      RestaurantsScreen(state, onEvent)
+      RestaurantsScreen(state, onEvent, onToggleDrawer)
     }
 
     is CreateRestaurantScreen -> ui<CreateRestaurantState, CreateRestaurantEvent> { state, onEvent ->
@@ -89,7 +89,7 @@ fun Uis(
     }
 
     is UsersScreen -> ui<UsersState, UsersEvent> { state, onEvent ->
-      UsersScreen(state, onEvent)
+      UsersScreen(state, onEvent, onToggleDrawer)
     }
 
     is CreateUserScreen -> ui<CreateUserState, CreateUserEvent> { state, onEvent ->

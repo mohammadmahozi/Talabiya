@@ -27,6 +27,7 @@ import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.components.DeleteContextMenu
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import kotlinx.parcelize.Parcelize
 import restaurant.RestaurantEntity
@@ -40,7 +41,8 @@ private fun PreviewRestaurantScreen() {
   AppTheme {
     RestaurantsScreen(
       state = RestaurantsState(listOf(RestaurantEntity(0L, "Name"))),
-      onEvent = {}
+      onEvent = {},
+      onOpenNavDrawer = {}
     )
   }
 }
@@ -48,11 +50,15 @@ private fun PreviewRestaurantScreen() {
 @Composable fun RestaurantsScreen(
   state: RestaurantsState,
   onEvent: (RestaurantsEvent) -> Unit,
+  onOpenNavDrawer: () -> Unit,
   modifier: Modifier = Modifier
 ) {
   Scaffold(
     topBar = {
-      TalabiyaBar(title = R.string.restaurants)
+      TalabiyaBar(
+        title = R.string.restaurants,
+        navigationIcon = { TalabiyaTopBarDefaults.MenuIcon(onOpenNavDrawer) }
+      )
     },
     floatingActionButton = { AddFab { onEvent(RestaurantsEvent.CreateRestaurantClicked) } }
   ) { paddingValues ->

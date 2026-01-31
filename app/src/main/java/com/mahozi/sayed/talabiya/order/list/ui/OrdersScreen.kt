@@ -49,7 +49,7 @@ fun OrdersUi(
       TalabiyaBar(
         title = R.string.app_name,
         navigationIcon = {
-          TalabiyaTopBarDefaults.MenuIcon(onClick = onOpenNavDrawer)
+          TalabiyaTopBarDefaults.MenuIcon(onOpenNavDrawer)
         }
       )
     },

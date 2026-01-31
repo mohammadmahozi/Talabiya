@@ -27,6 +27,7 @@ import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
 import com.mahozi.sayed.talabiya.core.ui.components.DeleteContextMenu
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import kotlinx.parcelize.Parcelize
 import user.UserEntity
@@ -40,7 +41,8 @@ private fun PreviewUsersScreen() {
   AppTheme {
     UsersScreen(
       state = UsersState(listOf(UserEntity(0L, "Name"))),
-      onEvent = {}
+      onEvent = {},
+      onOpenNavDrawer = {}
     )
 
   }
@@ -49,11 +51,15 @@ private fun PreviewUsersScreen() {
 @Composable fun UsersScreen(
   state: UsersState,
   onEvent: (UsersEvent) -> Unit,
+  onOpenNavDrawer: () -> Unit,
   modifier: Modifier = Modifier
 ) {
   Scaffold(
     topBar = {
-      TalabiyaBar(title = R.string.users)
+      TalabiyaBar(
+        title = R.string.users,
+        navigationIcon = { TalabiyaTopBarDefaults.MenuIcon(onOpenNavDrawer) }
+      )
     },
     floatingActionButton = { AddFab { onEvent(UsersEvent.CreateUserClicked) } }
   ) { paddingValues ->
