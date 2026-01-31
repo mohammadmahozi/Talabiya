@@ -31,7 +31,7 @@ class UsersPresenter @Inject constructor(
           }
         }
         is UsersEvent.UserClicked -> {
-          navigator.goto(UserDetailsScreen(event.user.id))
+          navigator.goto(UserDetailsScreen(event.user.id, event.user.name))
         }
       }
     }

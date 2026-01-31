@@ -49,7 +49,7 @@ class UserDetailsPresenter @AssistedInject constructor(
     }
 
     return UserDetailsState(
-      userName = "",
+      userName = screen.name,
       tab = tab,
       createUserPaymentState = createPaymentState,
       payments = payments,

@@ -106,7 +106,9 @@ fun Uis(
 
     is EditOrderPricesScreen -> EditOrderPricesScreenUi()
 
-    is UserDetailsScreen -> ui<UserDetailsState, UserDetailsEvent> { state, onEvent ->  UserDetailsScreen(state = state, onEvent = onEvent) }
+    is UserDetailsScreen -> ui<UserDetailsState, UserDetailsEvent> { state, onEvent ->
+      UserDetailsScreen(state = state, onEvent = onEvent, onBack = onBack)
+    }
     else -> throw IllegalStateException("Unknown screen $screen")
   }
 }

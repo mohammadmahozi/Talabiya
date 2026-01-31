@@ -28,6 +28,7 @@ import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.HorizontalSpacer
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
 import com.mahozi.sayed.talabiya.core.ui.components.TlbCard
 import com.mahozi.sayed.talabiya.core.ui.components.TlbIcon
 import com.mahozi.sayed.talabiya.core.ui.components.TlbTab
@@ -50,17 +51,22 @@ import java.time.Instant
 @Parcelize
 data class UserDetailsScreen(
   val userId: Long,
+  val name: String,
 ) : Screen
 
 @Composable
 fun UserDetailsScreen(
   state: UserDetailsState,
   onEvent: (UserDetailsEvent) -> Unit,
+  onBack: () -> Unit,
   modifier: Modifier = Modifier
 ) {
   Scaffold(
     topBar = {
-      TalabiyaBar(title = { Text(text = stringResource(id = R.string.create_option)) })
+      TalabiyaBar(
+        title = { Text(text = state.userName) },
+        navigationIcon = { TalabiyaTopBarDefaults.BackIcon(onBack)}
+      )
     },
   ) { paddingValues ->
     Column(
