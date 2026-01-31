@@ -67,12 +67,13 @@ data class CreateSuborderScreen(
 @Composable
 private fun PreviewCreateSuborderScreen() {
   val menu = listOf(
-    MenuItem(
-      0,
-      "Item 1",
-      "Pastry",
-      0L,
-      14.money,
+    MenuItemState(
+      id = 0,
+      name = "Item 1",
+      category = "Pastry",
+      priceId = 0L,
+      price = 14.money,
+      quantity = 1
     )
   )
   AppTheme {
@@ -178,9 +179,10 @@ fun CreateSuborderScreen(
           .weight(1F)
       ) {
         items(state.menuItems) { menuItem ->
-          MenuItem(item = menuItem, onItemClicked = {
-            onEvent(CreateSuborderEvent.MenuItemClicked(it))
-          })
+          MenuItem(
+            item = menuItem,
+            onItemClicked = { onEvent(CreateSuborderEvent.MenuItemClicked(it)) }
+          )
           HorizontalDivider()
         }
       }
@@ -263,15 +265,23 @@ private fun UserOrderItems(
 
 @Composable
 private fun MenuItem(
-  item: MenuItem,
-  onItemClicked: (MenuItem) -> Unit,
+  item: MenuItemState,
+  onItemClicked: (MenuItemState) -> Unit,
 ) {
   Row(
     verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
     modifier = Modifier
       .clickable { onItemClicked(item) }
       .padding(vertical = 12.dp, horizontal = 16.dp)
   ) {
+    if (item.quantity > 0) {
+      Text(
+        text = "${item.quantity}x",
+        style = AppTheme.type.title,
+        color = AppTheme.colors.primary,
+      )
+    }
 
     Text(
       text = item.name,
