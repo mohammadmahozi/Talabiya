@@ -133,13 +133,10 @@ private fun Payments(
 private fun Payment(
   payment: Payment
 ) {
-  Column(
-    verticalArrangement = Arrangement.spacedBy(8.dp),
-    modifier = Modifier
-      .padding(8.dp)
-  ) {
+
+  TlbCard {
     Row(
-      verticalAlignment = Alignment.CenterVertically,
+      verticalAlignment = Alignment.Top,
       horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
       Text(
