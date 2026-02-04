@@ -2,6 +2,9 @@ package com.mahozi.sayed.talabiya.user.details.payment.create
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -11,8 +14,8 @@ import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.sumOf
 import com.mahozi.sayed.talabiya.payment.PaymentStore
-import com.mahozi.sayed.talabiya.user.details.order.list.SelectUnpaidOrdersEvent
 import com.mahozi.sayed.talabiya.user.details.order.list.SelectUnpaidOrderState
+import com.mahozi.sayed.talabiya.user.details.order.list.SelectUnpaidOrdersEvent
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -27,38 +30,11 @@ class CreateUserPaymentPresenter @AssistedInject constructor(
 
   @Composable
   override fun start(events: Flow<CreateUserPaymentEvent>): CreateUserPaymentState {
-
-    var orders by remember { mutableStateOf(listOf<UnpaidOrder>()) }
-    LaunchedEffect(Unit) {
-      orders = paymentStore.getUnpaidOrders(userId)
-    }
-
-    var summary by remember(orders) {
-      val selectedOrders = orders.selected
-      val placedOrders = selectedOrders.filter { it.userOrderTotal > 0.money }
-      val coveredOrders = selectedOrders.filter { it.fullOrderTotal > 0.money }
-      mutableStateOf(
-        PaymentSummary(
-          from = selectedOrders.firstOrNull()?.createdAt ?: Instant.now(),
-          to = selectedOrders.lastOrNull()?.createdAt ?: Instant.now(),
-          ordersPlaced = placedOrders.size,
-          ordersCovered = coveredOrders.size,
-        )
-      )
-    }
-    var totals by remember(orders) {
-      val selectedOrders = orders.selected
-      val placedOrdersTotal = selectedOrders.sumOf { it.userOrderTotal }
-      val coveredOrdersTotal = selectedOrders.sumOf { it.fullOrderTotal }
-      mutableStateOf(
-        PaymentTotals(
-          coveredOrdersTotal = coveredOrdersTotal,
-          placedOrdersTotal = placedOrdersTotal,
-          finalTotal = coveredOrdersTotal - placedOrdersTotal,
-        )
-      )
-    }
     var showSelectOrders by remember { mutableStateOf(false) }
+    val ordersState by orders()
+
+    val summary = remember(ordersState) { calculateSummary(ordersState.selectedOrders) }
+    val totals = remember(ordersState) { calculateTotals(ordersState.selectedOrders) }
 
     CollectEvents(events) { event ->
       when (event) {
@@ -67,47 +43,91 @@ class CreateUserPaymentPresenter @AssistedInject constructor(
           when (event.event) {
             SelectUnpaidOrdersEvent.Dismiss -> showSelectOrders = false
             is SelectUnpaidOrdersEvent.SelectOrder -> {
-              orders = orders.map {
-                if (it.orderId == event.event.order.orderId) {
-                  it.copy(selected = !it.selected)
-                } else {
-                  it
-                }
-              }
+              ordersState.onToggleOrder(event.event.order.orderId)
             }
           }
         }
         CreateUserPaymentEvent.Pay -> {
-          val selectedOrders = orders.selected
+          val selectedOrders = ordersState.selectedOrders
           launch {
             paymentStore.createPayment(
               userId = userId,
               orders = selectedOrders,
               amount = totals.finalTotal,
             )
-            orders = paymentStore.getUnpaidOrders(userId)
           }
         }
       }
     }
+
     return CreateUserPaymentState(
       user = "",
-      numberOfSelectedOrders = orders.selected.size,
-      allOrdersSelected = orders.all { it.selected },
+      numberOfSelectedOrders = ordersState.selectedOrders.size,
+      allOrdersSelected = ordersState.orders.all { it.selected },
       summary = summary,
       totals = totals,
-      showPay = orders.any { it.selected },
+      showPay = ordersState.selectedOrders.isNotEmpty(),
       selectUnpaidOrderState = when (showSelectOrders) {
-        true -> SelectUnpaidOrderState(orders)
+        true -> SelectUnpaidOrderState(ordersState.orders)
         false -> null
       },
     )
   }
 
-  private val List<UnpaidOrder>.selected get() = filter { it.selected }
+  @Composable
+  private fun orders(): State<OrdersState> {
+    val orders by paymentStore.getUnpaidOrders(userId).collectAsState(listOf())
+    var selectedOrdersIds by remember { mutableStateOf(setOf<Long>()) }
+
+    LaunchedEffect(orders) {
+      if (selectedOrdersIds.isEmpty()) {
+        selectedOrdersIds = orders.map { it.orderId }.toSet()
+      }
+    }
+
+    return remember {
+      derivedStateOf {
+        val uiOrders = orders.map { order ->
+          order.copy(selected = selectedOrdersIds.contains(order.orderId))
+        }
+        OrdersState(
+          orders = uiOrders,
+          selectedOrderIds = selectedOrdersIds,
+          selectedOrders = uiOrders.filter { it.selected },
+          onToggleOrder = { id ->
+            selectedOrdersIds = if (id in selectedOrdersIds) {
+              selectedOrdersIds - id
+            } else {
+              selectedOrdersIds + id
+            }
+          },
+        )
+      }
+    }
+  }
+
+  private fun calculateSummary(selectedOrders: List<UnpaidOrder>) = PaymentSummary(
+    from = selectedOrders.firstOrNull()?.createdAt ?: Instant.now(),
+    to = selectedOrders.lastOrNull()?.createdAt ?: Instant.now(),
+    ordersPlaced = selectedOrders.count { it.userOrderTotal > 0.money },
+    ordersCovered = selectedOrders.count { it.fullOrderTotal > 0.money },
+  )
+
+  private fun calculateTotals(selectedOrders: List<UnpaidOrder>) = PaymentTotals(
+    coveredOrdersTotal = selectedOrders.sumOf { it.fullOrderTotal },
+    placedOrdersTotal = selectedOrders.sumOf { it.userOrderTotal },
+    finalTotal = selectedOrders.sumOf { it.fullOrderTotal - it.userOrderTotal },
+  )
 
   @AssistedFactory
   interface Factory {
-    fun create(userId: Long,): CreateUserPaymentPresenter
+    fun create(userId: Long): CreateUserPaymentPresenter
   }
 }
+
+private data class OrdersState(
+  val orders: List<UnpaidOrder>,
+  val selectedOrders: List<UnpaidOrder>,
+  val selectedOrderIds: Set<Long>,
+  val onToggleOrder: (Long) -> Unit,
+)

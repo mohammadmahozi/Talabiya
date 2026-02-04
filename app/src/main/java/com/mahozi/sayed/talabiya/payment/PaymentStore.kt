@@ -111,22 +111,20 @@ class PaymentStore @Inject constructor(
     }
   }
 
-  suspend fun getUnpaidOrders(userId: Long): List<UnpaidOrder> {
-    return withContext(dispatcher) {
-      val orders = paymentQueries.unpaidOrdersEntity(
-        userId = userId,
-        mapper = { orderId, createdAt, restaurant, fullOrderTotal, userOrderTotal ->
-          UnpaidOrder(
-            orderId = orderId,
-            createdAt = createdAt,
-            restaurant = restaurant,
-            fullOrderTotal = (fullOrderTotal ?: 0L).cents,
-            userOrderTotal = (userOrderTotal ?: 0L).cents,
-            selected = true
-          )
-        }
-      ).executeAsList()
-      orders
-    }
+  fun getUnpaidOrders(userId: Long): Flow<List<UnpaidOrder>> {
+    return paymentQueries.unpaidOrdersEntity(
+      userId = userId,
+      mapper = { orderId, createdAt, restaurant, fullOrderTotal, userOrderTotal ->
+        UnpaidOrder(
+          orderId = orderId,
+          createdAt = createdAt,
+          restaurant = restaurant,
+          fullOrderTotal = (fullOrderTotal ?: 0L).cents,
+          userOrderTotal = (userOrderTotal ?: 0L).cents,
+          selected = true
+        )
+      }
+    ).asFlow()
+    .mapToList(dispatcher)
   }
 }
