@@ -10,7 +10,7 @@ import com.mahozi.sayed.talabiya.order.list.ui.OrdersPresenter
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersState
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import com.mahozi.sayed.talabiya.resturant.store.RestaurantStore
-import com.mahozi.talabiya.Database
+import com.mahozi.talabiya.TalabiyaDatabase
 import com.mahozi.talabiya.FakeNavigator
 import com.mahozi.talabiya.MainDispatcherRule
 import com.mahozi.talabiya.database.createDatabase
@@ -29,7 +29,7 @@ import java.time.temporal.ChronoUnit
 
 class OrdersPresenterTest {
 
-  private lateinit var database: Database
+  private lateinit var database: TalabiyaDatabase
   private lateinit var orderStore: OrderStore
   private lateinit var restaurantStore: RestaurantStore
 

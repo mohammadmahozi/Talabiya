@@ -104,8 +104,9 @@ allprojects {
 
 sqldelight {
     databases {
-        Database {
+        TalabiyaDatabase {
             packageName = "com.mahozi.talabiya"
+            version = 2
         }
     }
 }

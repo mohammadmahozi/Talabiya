@@ -1,7 +1,7 @@
 package com.mahozi.sayed.talabiya.order
 
 import com.mahozi.sayed.talabiya.core.di.AppScope
-import com.mahozi.talabiya.Database
+import com.mahozi.talabiya.TalabiyaDatabase
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import order.OrderQueries
@@ -11,5 +11,5 @@ import order.OrderQueries
 interface OrderModule {
 
     @Provides
-    fun provideOrderQuery(database: Database): OrderQueries = database.orderQueries
+    fun provideOrderQuery(database: TalabiyaDatabase): OrderQueries = database.orderQueries
 }

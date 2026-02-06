@@ -2,7 +2,7 @@ package com.mahozi.talabiya.order
 
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import com.mahozi.sayed.talabiya.core.data.TypeAdapters
-import com.mahozi.talabiya.Database
+import com.mahozi.talabiya.TalabiyaDatabase
 import order.OrderEntity
 import order.OrderItemPriceEntity
 import org.junit.Before
@@ -14,7 +14,7 @@ import java.util.Properties
 
 class OrderQueriesTest {
 
-  private lateinit var database: Database
+  private lateinit var database: TalabiyaDatabase
   private val orderQueries get() = database.orderQueries
 
   @Before fun setUp() {
@@ -22,8 +22,8 @@ class OrderQueriesTest {
       url = JdbcSqliteDriver.IN_MEMORY,
       properties = Properties().apply { put("foreign_keys", "true") }
     )
-    Database.Schema.create(driver)
-    database = Database(
+    TalabiyaDatabase.Schema.create(driver)
+    database = TalabiyaDatabase(
       driver,
       MenuItemPriceEntity.Adapter(TypeAdapters.instantAdapter),
       OrderEntity.Adapter(TypeAdapters.instantAdapter),

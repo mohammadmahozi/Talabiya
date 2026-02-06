@@ -1,6 +1,6 @@
 package com.mahozi.talabiya.database.payment
 
-import com.mahozi.talabiya.Database
+import com.mahozi.talabiya.TalabiyaDatabase
 import com.mahozi.talabiya.database.createDatabase
 import org.junit.Before
 import org.junit.Test
@@ -9,7 +9,7 @@ import java.time.Instant
 
 class PaymentQueriesTest {
 
-  private lateinit var database: Database
+  private lateinit var database: TalabiyaDatabase
   private val paymentQueries get() = database.paymentQueries
   private val orderQueries get() = database.orderQueries
   private val restaurantQueries get() = database.restaurantQueries

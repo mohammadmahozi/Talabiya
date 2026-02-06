@@ -1,7 +1,7 @@
 package com.mahozi.sayed.talabiya.user
 
 import com.mahozi.sayed.talabiya.core.di.AppScope
-import com.mahozi.talabiya.Database
+import com.mahozi.talabiya.TalabiyaDatabase
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import user.UserQueries
@@ -10,5 +10,5 @@ import user.UserQueries
 interface UsersModule {
 
   @Provides
-  fun provideUserQueries(database: Database): UserQueries = database.userQueries
+  fun provideUserQueries(database: TalabiyaDatabase): UserQueries = database.userQueries
 }
