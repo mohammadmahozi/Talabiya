@@ -7,15 +7,20 @@ import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 
 enum class PaymentStatus {
   Completed,
-  Cancel;
+  Canceled;
+}
+
+val PaymentStatus.key: String get() = when(this) {
+  PaymentStatus.Completed -> "Completed"
+  PaymentStatus.Canceled -> "Canceled"
 }
 
 val PaymentStatus.title: Int get() = when(this) {
   PaymentStatus.Completed -> R.string.completed
-  PaymentStatus.Cancel -> R.string.canceled
+  PaymentStatus.Canceled -> R.string.canceled
 }
 
 val PaymentStatus.background: Color @Composable get() = when(this) {
   PaymentStatus.Completed -> AppTheme.colors.green.copy(alpha = 0.1f)
-  PaymentStatus.Cancel -> AppTheme.colors.red.copy(alpha = 0.1f)
+  PaymentStatus.Canceled -> AppTheme.colors.red.copy(alpha = 0.1f)
 }
