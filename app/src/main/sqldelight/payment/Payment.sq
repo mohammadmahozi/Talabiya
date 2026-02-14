@@ -50,7 +50,8 @@ VALUES (?, ?, ?, ?);
 userPayments:
 SELECT id, amount, createdAt, status, direction
 FROM PaymentEntity
-WHERE userId = :userId;
+WHERE userId = :userId
+ORDER BY createdAt DESC;
 
 unpaidOrderEntity:
 SELECT
