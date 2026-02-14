@@ -8,5 +8,5 @@ data class Payment(
   val amount: Money,
   val createdAt: Instant,
   val status: PaymentStatus,
-  val userId: Long,
+  val direction: PaymentDirection,
 )

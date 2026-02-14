@@ -4,14 +4,14 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.cents
-import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.core.sumOf
 import com.mahozi.sayed.talabiya.user.details.payment.create.UnpaidOrder
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import payment.PaymentQueries
 import java.time.Instant
-import dev.zacsweers.metro.Inject
 
 class PaymentStore @Inject constructor(
   private val paymentQueries: PaymentQueries,
@@ -20,15 +20,15 @@ class PaymentStore @Inject constructor(
 
   fun getUserPayments(userId: Long): Flow<List<Payment>> {
     return paymentQueries
-      .selectUserPayments(
+      .userPayments(
         userId = userId,
-        mapper = { id, amount, createdAt, status ->
+        mapper = { id, amount, createdAt, status, direction ->
           Payment(
             id = id,
             amount = amount.cents,
             createdAt = createdAt,
-            status = PaymentStatus.valueOf(status),
-            userId = userId
+            status = PaymentStatus.from(status),
+            direction = PaymentDirection.from(direction)
           )
         }
       ).asFlow()
@@ -42,85 +42,53 @@ class PaymentStore @Inject constructor(
   ) {
     withContext(dispatcher) {
       paymentQueries.transaction {
+        val totalPaid = orders.sumOf { it.fullOrderTotal }
+        val totalOwed = orders.sumOf { it.userOrderTotal }
+
+        val direction = if (totalPaid > totalOwed) {
+          PaymentDirection.Credit
+        } else {
+          PaymentDirection.Debit
+        }
+
         paymentQueries.insertPayment(
           userId,
           amount = amount.toCents(),
           createdAt = Instant.now(),
-          status = PaymentStatus.Completed.name
+          status = PaymentStatus.Completed.name,
+          direction = direction.key
         )
         val paymentId = paymentQueries.lastInsertRowId().executeAsOne()
+
+        paymentQueries.insertInvoice(
+          paymentId = paymentId,
+          totalOwed = totalOwed.toCents(),
+          totalPaid = totalPaid.toCents()
+        )
+        val invoiceId = paymentQueries.lastInsertRowId().executeAsOne()
+
         orders.forEach { order ->
-          if (order.userOrderTotal > 0.money) {
-            paymentQueries.insertUserOrderPayment(
-              paymentId = paymentId,
-              orderId = order.orderId
-            )
-          }
-          if (order.fullOrderTotal > 0.money) {
-            paymentQueries.insertOrderReimbursement(
-              paymentId = paymentId,
-              orderId = order.orderId
-            )
-          }
+          paymentQueries.insertInvoiceItem(
+            invoiceId = invoiceId,
+            orderId = order.orderId,
+            amountPaid = order.fullOrderTotal.toCents(),
+            amountOwed = order.userOrderTotal.toCents()
+          )
         }
       }
     }
   }
 
-  suspend fun createUserOrderPayment(
-    orderId: Long,
-    userId: Long,
-    amount: Money,
-  ) {
-    withContext(dispatcher) {
-      paymentQueries.transaction {
-        paymentQueries.insertPayment(
-          userId,
-          amount = amount.toCents(),
-          createdAt = Instant.now(),
-          status = PaymentStatus.Completed.name
-        )
-        val paymentId = paymentQueries.lastInsertRowId().executeAsOne()
-        paymentQueries.insertUserOrderPayment(
-          paymentId = paymentId,
-          orderId = orderId
-        )
-      }
-    }
-  }
-
-  suspend fun createReimbursementPayment(
-    orderId: Long,
-    userId: Long,
-    amount: Money,
-  ) {
-    withContext(dispatcher) {
-      paymentQueries.transaction {
-        paymentQueries.insertPayment(
-          userId = userId,
-          amount = amount.toCents(),
-          createdAt = Instant.now(),
-          status = PaymentStatus.Completed.name
-        )
-        val paymentId = paymentQueries.lastInsertRowId().executeAsOne()
-        paymentQueries.insertOrderReimbursement(
-          paymentId = paymentId,
-          orderId = orderId
-        )
-      }
-    }
-  }
-
   fun getUnpaidOrders(userId: Long): Flow<List<UnpaidOrder>> {
-    return paymentQueries.unpaidOrdersEntity(
+    return paymentQueries.unpaidOrderEntity(
       userId = userId,
-      mapper = { orderId, createdAt, restaurant, fullOrderTotal, userOrderTotal ->
+      mapper = { orderId, createdAt, restaurant, totalPaid, totalOwed ->
         UnpaidOrder(
           orderId = orderId,
           createdAt = createdAt,
           restaurant = restaurant,
-          fullOrderTotal = (fullOrderTotal ?: 0L).cents,
-          userOrderTotal = (userOrderTotal ?: 0L).cents,
+          fullOrderTotal = totalPaid.cents,
+          userOrderTotal = totalOwed.cents,
           selected = true
         )
       }

@@ -37,6 +37,7 @@ import com.mahozi.sayed.talabiya.core.ui.components.TlbText
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.onSurfaceVariant
 import com.mahozi.sayed.talabiya.payment.Payment
+import com.mahozi.sayed.talabiya.payment.PaymentDirection
 import com.mahozi.sayed.talabiya.payment.PaymentStatus
 import com.mahozi.sayed.talabiya.payment.background
 import com.mahozi.sayed.talabiya.payment.title
@@ -182,7 +183,7 @@ private fun PreviewPayment() {
       amount = 100.money,
       createdAt = Instant.now(),
       status = PaymentStatus.Completed,
-      userId = 0L,
+      direction = PaymentDirection.Credit,
     )
     ProvideDateTimeFormatter(AppDateTimeFormatter(LocalContext.current.locale)) {
       Payment(payment)

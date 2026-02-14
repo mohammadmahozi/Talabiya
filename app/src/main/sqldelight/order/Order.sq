@@ -44,6 +44,7 @@ CREATE TABLE OrderItemOptionsEntity(
 
 CREATE VIEW OrderItemView AS
 SELECT
+    OrderItemPriceEntity.orderId,
     OrderItemEntity.id AS orderItemId,
     OrderItemEntity.customerId AS userId,
     OrderItemEntity.quantity AS quantity,
@@ -59,7 +60,8 @@ SELECT
     OrderEntity.id AS orderId,
     OrderItemEntity.customerId AS userId,
     RestaurantEntity.name AS restaurant,
-    OrderEntity.createdAt AS createdAt
+    OrderEntity.createdAt AS createdAt,
+    sum(quantity * price) AS total
 FROM OrderItemEntity
 JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
 JOIN OrderEntity ON OrderItemPriceEntity.orderId = OrderEntity.id
@@ -112,7 +114,7 @@ JOIN MenuItemEntity ON OrderItemPriceEntity.menuItemId = MenuItemEntity.id
 WHERE OrderItemPriceEntity.orderId = :orderId;
 
 insertOrderItemPrice:
-INSERT OR IGNORE INTO OrderItemPriceEntity(orderId, menuItemId, price, datetime)
+INSERT INTO OrderItemPriceEntity(orderId, menuItemId, price, datetime)
 VALUES(?, ?, ?, ?);
 
 insertOrderItem:

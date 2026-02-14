@@ -6,63 +6,73 @@ CREATE TABLE PaymentEntity (
     amount INTEGER NOT NULL,
     createdAt INTEGER AS Instant NOT NULL,
     status TEXT NOT NULL, -- Completed, Canceled
+    direction TEXT NOT NULL, --Credit, Debit
     FOREIGN KEY (userId) REFERENCES UserEntity(id)
 );
 
+CREATE TABLE InvoiceEntity (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    paymentId INTEGER NOT NULL,
+    totalPaid INTEGER NOT NULL,
+    totalOwed INTEGER NOT NULL,
+    FOREIGN KEY (paymentId) REFERENCES PaymentEntity(id)
+);
+
+CREATE TABLE InvoiceItemEntity (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    invoiceId INTEGER NOT NULL,
+    orderId INTEGER NOT NULL,
+    amountPaid INTEGER NOT NULL,
+    amountOwed INTEGER NOT NULL,
+    FOREIGN KEY (invoiceId) REFERENCES InvoiceEntity(id),
+    FOREIGN KEY (orderId) REFERENCES OrderEntity(id)
+);
+
+CREATE VIEW InvoicePaymentView AS
+SELECT InvoiceItemEntity.id AS invoiceItemId, invoiceId, orderId, amountPaid, amountOwed, userId,
+paymentId, totalPaid, totalOwed, status, direction
+FROM InvoiceItemEntity
+JOIN InvoiceEntity ON InvoiceItemEntity.invoiceId = InvoiceEntity.id
+JOIN PaymentEntity ON InvoiceEntity.paymentId = PaymentEntity.id;
+
 insertPayment:
-INSERT INTO PaymentEntity(userId, amount, createdAt, status)
+INSERT INTO PaymentEntity(userId, amount, createdAt, status, direction)
+VALUES (?, ?, ?, ?, ?);
+
+insertInvoice:
+INSERT INTO InvoiceEntity(paymentId, totalOwed, totalPaid)
+VALUES (?, ?, ?);
+
+insertInvoiceItem:
+INSERT INTO InvoiceItemEntity(invoiceId, orderId, amountPaid, amountOwed)
 VALUES (?, ?, ?, ?);
 
-CREATE TABLE UserOrderPaymentEntity(
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    paymentId INTEGER NOT NULL,
-    orderId INTEGER NOT NULL,
-    FOREIGN KEY (paymentId) REFERENCES PaymentEntity(id),
-    FOREIGN KEY (orderId) REFERENCES OrderEntity(id)
-);
-
-insertUserOrderPayment:
-INSERT INTO UserOrderPaymentEntity(paymentId, orderId)
-VALUES (?, ?);
-
-CREATE TABLE OrderReimbursementEntity(
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    paymentId INTEGER NOT NULL,
-    orderId INTEGER NOT NULL,
-    FOREIGN KEY (paymentId) REFERENCES PaymentEntity(id),
-    FOREIGN KEY (orderId) REFERENCES OrderEntity(id)
-);
-
-insertOrderReimbursement:
-INSERT INTO OrderReimbursementEntity(paymentId, orderId)
-VALUES (?, ?);
-
-selectUserPayments:
-SELECT
-    PaymentEntity.id,
-    PaymentEntity.amount,
-    PaymentEntity.createdAt,
-    PaymentEntity.status
+userPayments:
+SELECT id, amount, createdAt, status, direction
 FROM PaymentEntity
-WHERE PaymentEntity.userId = ?;
+WHERE userId = :userId;
 
-unpaidOrdersEntity:
-SELECT OrderEntity.id AS orderId, OrderEntity.createdAt, RestaurantEntity.name AS restaurant,
-  -- Total for the full order (all users)
-  SUM(OrderItemPriceEntity.price * OrderItemEntity.quantity) AS fullOrderTotal,
-
-  -- Total just for the current user
-  SUM(CASE WHEN OrderItemEntity.customerId = :userId
-           THEN OrderItemPriceEntity.price * OrderItemEntity.quantity
-           ELSE 0 END) AS userOrderTotal
+unpaidOrderEntity:
+SELECT
+    OrderEntity.id AS orderId, OrderEntity.createdAt, RestaurantEntity.name,
+    CASE
+        WHEN OrderEntity.payerId = :userId THEN total(OrderItemView.total) ELSE 0
+    END AS totalPaid,
+    total(
+        CASE
+            WHEN OrderItemView.userId = :userId THEN OrderItemView.total ELSE 0
+        END
+    ) AS totalOwed
 FROM OrderEntity
-LEFT JOIN UserOrderPaymentEntity ON OrderEntity.id = UserOrderPaymentEntity.orderId
-LEFT JOIN OrderReimbursementEntity ON OrderEntity.id = OrderReimbursementEntity.orderId
-LEFT JOIN PaymentEntity ON UserOrderPaymentEntity.paymentId = PaymentEntity.id AND PaymentEntity.status = 'Completed' AND PaymentEntity.userId = :userId
-JOIN RestaurantEntity ON OrderEntity.restaurantId = RestaurantEntity.id
-JOIN OrderItemPriceEntity ON OrderEntity.id = OrderItemPriceEntity.orderId
-JOIN OrderItemEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
-WHERE PaymentEntity.id IS NULL
+JOIN RestaurantEntity ON RestaurantEntity.id = OrderEntity.restaurantId
+JOIN OrderItemView ON OrderItemView.orderId = OrderEntity.id
+WHERE (OrderEntity.payerId = :userId OR OrderItemView.userId = :userId)
+  AND NOT EXISTS (
+      SELECT 1
+      FROM InvoicePaymentView
+      WHERE InvoicePaymentView.orderId = OrderEntity.id
+        AND InvoicePaymentView.status = 'Completed'
+  )
 GROUP BY OrderEntity.id;
 
 lastInsertRowId:
