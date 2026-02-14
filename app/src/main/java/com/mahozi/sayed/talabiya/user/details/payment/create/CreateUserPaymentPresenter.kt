@@ -34,7 +34,7 @@ class CreateUserPaymentPresenter @AssistedInject constructor(
     val ordersState by orders()
 
     val summary = remember(ordersState) { calculateSummary(ordersState.selectedOrders) }
-    val totals = remember(ordersState) { calculateTotals(ordersState.selectedOrders) }
+    val totals by remember { derivedStateOf { calculateTotals(ordersState.selectedOrders) } }
 
     CollectEvents(events) { event ->
       when (event) {
