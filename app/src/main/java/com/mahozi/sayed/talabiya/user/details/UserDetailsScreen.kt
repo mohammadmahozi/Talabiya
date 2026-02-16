@@ -220,26 +220,26 @@ private fun UserOrder(order: UserOrder) {
         ) {
           Text(
             text = order.restaurant,
+            modifier = Modifier.weight(1F),
           )
-          HorizontalSpacer(1F)
           TlbText(
-            text = "0",
+            text = order.totalPaid.format(),
             style = AppTheme.type.bodySmall,
             leadingIcon = {
               TlbIcon(
-                painter = painterResource(R.drawable.arrow_forward_rounded),
-                contentDescription = stringResource(R.string.expense)
+                painter = painterResource(R.drawable.arrow_back_rounded),
+                contentDescription = stringResource(R.string.total_paid)
               )
             }
           )
           HorizontalSpacer(16.dp)
           TlbText(
-            text = "0",
+            text = order.totalOwed.format(),
             style = AppTheme.type.bodySmall,
             leadingIcon = {
               TlbIcon(
-                painter = painterResource(R.drawable.arrow_back_rounded),
-                contentDescription = stringResource(R.string.income)
+                painter = painterResource(R.drawable.arrow_forward_rounded),
+                contentDescription = stringResource(R.string.total_owed)
               )
             }
           )

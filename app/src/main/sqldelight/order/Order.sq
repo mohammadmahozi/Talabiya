@@ -155,9 +155,21 @@ GROUP BY OrderItemPriceEntity.id
 ORDER BY CategoryEntity.number, MenuItemEntity.name;
 
 selectUserOrders:
-SELECT *
-FROM UserOrderView
-WHERE userId = ?;
+SELECT
+    OrderEntity.id AS orderId, OrderEntity.createdAt, RestaurantEntity.name AS restaurant,
+    CASE
+        WHEN OrderEntity.payerId = :userId THEN total(OrderItemView.total) ELSE 0
+    END AS totalPaid,
+    total(
+        CASE
+            WHEN OrderItemView.userId = :userId THEN OrderItemView.total ELSE 0
+        END
+    ) AS totalOwed
+FROM OrderEntity
+JOIN RestaurantEntity ON RestaurantEntity.id = OrderEntity.restaurantId
+JOIN OrderItemView ON OrderItemView.orderId = OrderEntity.id
+WHERE OrderEntity.payerId = :userId OR OrderItemView.userId = :userId
+GROUP BY OrderEntity.id;
 
 updateCreationTime:
 UPDATE OrderEntity

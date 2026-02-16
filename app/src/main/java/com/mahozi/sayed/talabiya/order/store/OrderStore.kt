@@ -61,14 +61,13 @@ class OrderStore @Inject constructor(
   fun getUserOrders(userId: Long): Flow<List<UserOrder>> {
     return orderQueries.selectUserOrders(
       userId = userId,
-      mapper = { orderId, userId, restaurant, createdAt, total ->
+      mapper = { orderId, createdAt, restaurant, totalPaid, totalOwed ->
         UserOrder(
           orderId = orderId,
-          userId = userId,
-          user = "",
           restaurant = restaurant,
           createdAt = createdAt,
-          total = (total ?: 0).cents,
+          totalPaid = totalPaid.cents,
+          totalOwed = totalOwed.cents,
         )
       }
     ).asFlow()

@@ -5,9 +5,8 @@ import java.time.Instant
 
 data class UserOrder(
   val orderId: Long,
-  val userId: Long,
-  val user: String,
   val restaurant: String,
   val createdAt: Instant,
-  val total: Money,
+  val totalPaid: Money,
+  val totalOwed: Money,
 )
