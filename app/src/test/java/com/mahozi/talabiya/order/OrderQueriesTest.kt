@@ -1,14 +1,10 @@
 package com.mahozi.talabiya.order
 
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
-import com.mahozi.sayed.talabiya.core.data.TypeAdapters
 import com.mahozi.talabiya.TalabiyaDatabase
-import order.OrderEntity
-import order.OrderItemPriceEntity
+import com.mahozi.talabiya.database.createDatabase
 import org.junit.Before
 import org.junit.Test
-import payment.PaymentEntity
-import restaurant.MenuItemPriceEntity
 import java.time.Instant
 import java.util.Properties
 
@@ -23,13 +19,7 @@ class OrderQueriesTest {
       properties = Properties().apply { put("foreign_keys", "true") }
     )
     TalabiyaDatabase.Schema.create(driver)
-    database = TalabiyaDatabase(
-      driver,
-      MenuItemPriceEntity.Adapter(TypeAdapters.instantAdapter),
-      OrderEntity.Adapter(TypeAdapters.instantAdapter),
-      OrderItemPriceEntity.Adapter(TypeAdapters.instantAdapter),
-      PaymentEntity.Adapter(TypeAdapters.instantAdapter),
-    )
+    database = createDatabase()
   }
 
   @Test fun selectOrderById() {

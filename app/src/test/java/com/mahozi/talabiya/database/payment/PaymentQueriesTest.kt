@@ -1,5 +1,7 @@
 package com.mahozi.talabiya.database.payment
 
+import com.mahozi.sayed.talabiya.payment.PaymentDirection
+import com.mahozi.sayed.talabiya.payment.key
 import com.mahozi.talabiya.TalabiyaDatabase
 import com.mahozi.talabiya.database.createDatabase
 import org.junit.Before
@@ -90,15 +92,8 @@ class PaymentQueriesTest {
       user1Id,
       amount = 1000,
       createdAt = Instant.now(),
-      status = "Completed"
+      status = "Completed",
+      direction = PaymentDirection.Credit.key
     )
-
-    val paymentId = paymentQueries.lastInsertRowId().executeAsOne()
-    paymentQueries.insertOrderReimbursement(
-      paymentId = paymentId,
-      orderId = thirdOrderId
-    )
-    val unpaidOrders = paymentQueries.unpaidOrdersEntity(user1Id).executeAsList()
-    unpaidOrders.forEach { println(it) }
   }
 }

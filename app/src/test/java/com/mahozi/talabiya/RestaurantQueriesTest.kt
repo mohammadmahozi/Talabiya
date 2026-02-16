@@ -7,7 +7,7 @@ import java.time.Instant
 
 class RestaurantQueriesTest {
 
-  private lateinit var database: Database
+  private lateinit var database: TalabiyaDatabase
   private val restaurantQueries get() = database.restaurantQueries
   private val menuItemQueries get() = database.menuItemQueries
 
