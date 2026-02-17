@@ -17,6 +17,12 @@ data class Money (private val amount: BigDecimal){
   fun format(): String = format.format(amount)
 
   fun toCents(): Long = (amount.movePointRight(2)).longValueExact()
+
+  // BigDecimal.equals() considers scale, so 50.0 != 50. use compareTo() for numeric equality
+  override fun equals(other: Any?): Boolean =
+    other is Money && this.compareTo(other) == 0
+
+  override fun hashCode(): Int = amount.stripTrailingZeros().hashCode()
 }
 
 val BigDecimal.money: Money get() = Money(this)
