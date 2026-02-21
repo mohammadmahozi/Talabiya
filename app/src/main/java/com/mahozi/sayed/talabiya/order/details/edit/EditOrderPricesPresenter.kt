@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
+import com.mahozi.sayed.talabiya.core.SettingsStore
 import com.mahozi.sayed.talabiya.core.isDecimal
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 class EditOrderPricesPresenter @AssistedInject constructor(
   @Assisted private val orderId: Long,
   private val orderStore: OrderStore,
+  private val settingsStore: SettingsStore,
   private val navigator: Navigator,
 ): Presenter<EditOrderPricesScreenEvent, EditOrderPricesScreenState> {
 
@@ -31,8 +33,7 @@ class EditOrderPricesPresenter @AssistedInject constructor(
     var editingItem by remember { mutableStateOf(null as PricedOrderItem?) }
     var price by remember { mutableStateOf("") }
 
-    //TODO use datastore to read setAsDefault price
-    var setAsDefaultPrice by remember { mutableStateOf(false) }
+    val setNewPriceAsDefault by settingsStore.setNewPriceAsDefault.collectAsState(false)
 
     CollectEvents(events) { event ->
       when(event) {
@@ -47,7 +48,7 @@ class EditOrderPricesPresenter @AssistedInject constructor(
               orderId = orderId,
               itemId = editingItem!!.menuItemId,
               price = price.money,
-              setAsDefaultPrice = setAsDefaultPrice
+              setNewPriceAsDefault = setNewPriceAsDefault
             )
             price = ""
             editingItem = null
@@ -56,7 +57,11 @@ class EditOrderPricesPresenter @AssistedInject constructor(
         is EditOrderPricesScreenEvent.PriceChange -> {
           if (event.price.isDecimal()) price = event.price
         }
-        is EditOrderPricesScreenEvent.SetAsDefaultPriceChange -> { setAsDefaultPrice = event.setAsDefaultPrice }
+        is EditOrderPricesScreenEvent.SetAsDefaultPriceChange -> {
+          launch {
+            settingsStore.setNewPriceAsDefault(event.setAsDefaultPrice)
+          }
+        }
         is EditOrderPricesScreenEvent.Back -> navigator.back()
       }
     }
@@ -65,7 +70,7 @@ class EditOrderPricesPresenter @AssistedInject constructor(
       items = items,
       editingItem = editingItem,
       price = price,
-      setAsDefaultPrice = setAsDefaultPrice
+      setNewPriceAsDefault = setNewPriceAsDefault
     )
   }
 

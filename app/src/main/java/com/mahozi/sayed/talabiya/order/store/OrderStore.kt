@@ -203,7 +203,7 @@ class OrderStore @Inject constructor(
     orderId: Long,
     itemId: Long,
     price: Money,
-    setAsDefaultPrice: Boolean,
+    setNewPriceAsDefault: Boolean,
   ) {
     withContext(dispatcher) {
       orderQueries.updateOrderItemsPrice(
@@ -212,7 +212,7 @@ class OrderStore @Inject constructor(
         menuItemId = itemId
       )
 
-      if (setAsDefaultPrice) {
+      if (setNewPriceAsDefault) {
         menuQueries.insertPrice(
           menuItemId = itemId,
           datetime = Instant.now(),

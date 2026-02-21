@@ -92,6 +92,8 @@ dependencies {
             strictly("3.8.10.2")
         }
     }
+
+    implementation(libs.datastore)
 }
 
 allprojects {

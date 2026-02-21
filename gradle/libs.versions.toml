@@ -28,3 +28,5 @@ sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", ver
 sqldelight-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 molecule = "app.cash.molecule:molecule-runtime:2.2.0"
+
+datastore = "androidx.datastore:datastore-preferences:1.2.0"

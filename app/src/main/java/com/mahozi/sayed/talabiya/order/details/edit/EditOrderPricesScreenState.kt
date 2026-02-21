@@ -4,7 +4,7 @@ data class EditOrderPricesScreenState(
   val items: List<PricedOrderItem>,
   val editingItem: PricedOrderItem?,
   val price: String,
-  val setAsDefaultPrice: Boolean
+  val setNewPriceAsDefault: Boolean
 )
 
 sealed interface EditOrderPricesScreenEvent {

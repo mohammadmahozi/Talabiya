@@ -80,7 +80,7 @@ fun EditOrderScreen(
         state.editingItem,
         state.price,
         onPriceChange = { onEvent(EditOrderPricesScreenEvent.PriceChange(it)) },
-        setAsDefaultPrice = state.setAsDefaultPrice,
+        setAsDefaultPrice = state.setNewPriceAsDefault,
         onSetAsDefaultPriceChange = { onEvent(EditOrderPricesScreenEvent.SetAsDefaultPriceChange(it)) },
         onDismissRequest = { onEvent(EditOrderPricesScreenEvent.CancelPriceChange) },
         onConfirmPriceChange = { onEvent(EditOrderPricesScreenEvent.ConfirmPriceChange) }
