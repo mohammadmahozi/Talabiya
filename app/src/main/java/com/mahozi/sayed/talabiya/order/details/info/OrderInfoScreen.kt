@@ -126,7 +126,7 @@ fun OrderInfoScreen(
         onDismissRequest = { showFilePicker = false },
         onResult = { uri ->
           //Todo handle errors
-          if (uri != null) onEvent(OrderInfoEvent.ChangeInvoice(uri))
+          if (uri != null) onEvent(OrderInfoEvent.ChangeInvoice(uri.toString()))
           showFilePicker = false
         },
         cameraImage = CameraImageOption(),

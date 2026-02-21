@@ -20,6 +20,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.time.Clock
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Optional
@@ -29,6 +30,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
   private val orderStore: OrderStore,
   private val userStore: UserStore,
   private val navigator: Navigator,
+  private val clock: Clock,
 ) : Presenter<OrderDetailsEvent, OrderDetailsState> {
 
   @Composable
@@ -50,7 +52,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
       when (event) {
         OrderInfoEvent.DateClicked -> {
           datePickerState = TlbDatePickerState(
-            initial = LocalDate.now(),
+            initial = LocalDate.now(clock),
           )
         }
         is OrderInfoEvent.DateEvent -> when (event.event) {
@@ -66,7 +68,7 @@ class OrderDetailsPresenter @AssistedInject constructor(
           TlbDatePickerEvent.Dismiss -> datePickerState = null
         }
         OrderInfoEvent.TimeClicked -> {
-          timePickerState = TlbTimePickerState(LocalTime.now())
+          timePickerState = TlbTimePickerState(LocalTime.now(clock))
         }
         is OrderInfoEvent.TimeEvent -> when (event.event) {
           is TlbTimePickerEvent.SelectTime -> {

@@ -5,7 +5,8 @@ import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOne
 import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.cents
-import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.core.datetime.withDate
+import com.mahozi.sayed.talabiya.core.datetime.withTime
 import com.mahozi.sayed.talabiya.order.details.edit.PricedOrderItem
 import com.mahozi.sayed.talabiya.order.details.full.FullOrderItem
 import com.mahozi.sayed.talabiya.order.details.info.OrderInfo
@@ -13,6 +14,7 @@ import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
 import com.mahozi.sayed.talabiya.order.list.Order
 import com.mahozi.sayed.talabiya.userorder.UserOrder
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -25,7 +27,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.util.Optional
-import dev.zacsweers.metro.Inject
 import kotlin.jvm.optionals.getOrNull
 
 class OrderStore @Inject constructor(
@@ -238,20 +239,13 @@ class OrderStore @Inject constructor(
     withContext(dispatcher) {
       if (date != null) {
         var instant = orderQueries.selectCreationTime(orderId).executeAsOne()
-        instant = instant
-          .atZone(ZoneId.systemDefault())
-          .with(date)
-          .toInstant()
-
+        instant = instant.withDate(date)
         orderQueries.updateCreationTime(id = orderId, createdAt = instant)
       }
+
       if (time != null) {
         var instant = orderQueries.selectCreationTime(orderId).executeAsOne()
-        instant = instant
-          .atZone(ZoneId.systemDefault())
-          .with(time)
-          .toInstant()
-
+        instant = instant.withTime(time)
         orderQueries.updateCreationTime(id = orderId, createdAt = instant)
       }
 
