@@ -29,6 +29,7 @@ import com.mahozi.talabiya.MainDispatcherRule
 import com.mahozi.talabiya.TalabiyaDatabase
 import com.mahozi.talabiya.database.createDatabase
 import com.mahozi.talabiya.database.orderStore
+import com.mahozi.talabiya.database.seedOrder
 import com.mahozi.talabiya.database.userStore
 import com.mahozi.talabiya.test
 import kotlinx.coroutines.channels.Channel
@@ -82,7 +83,7 @@ class OrderDetailsPresenterTest {
   @Test
   fun `initial state`() {
     runTest {
-      seedOrder()
+      database.seedOrder()
       presenter.test(eventsFlow) {
         assertThat(awaitItem()).isEqualTo(
           OrderDetailsState(
@@ -103,7 +104,7 @@ class OrderDetailsPresenterTest {
   fun `update date`() {
     runTest {
       val date = LocalDate.of(2026, 2, 19)
-      seedOrder(date = date)
+      database.seedOrder(date = date)
       presenter.test(eventsFlow) {
         skipItems(3) //skip initial states
         var order = createOrder(date = date)
@@ -136,7 +137,7 @@ class OrderDetailsPresenterTest {
   fun `update time`() {
     runTest {
       val time = LocalTime.of(10, 0)
-      seedOrder(time = time)
+      database.seedOrder(time = time)
       presenter.test(eventsFlow) {
         skipItems(3) //skip initial states
         var order = createOrder(time = time)
@@ -166,7 +167,7 @@ class OrderDetailsPresenterTest {
   @Test
   fun `update invoice`() {
     runTest {
-      seedOrder(invoice = "123")
+      database.seedOrder(invoice = "123")
       presenter.test(eventsFlow) {
         skipItems(3) //skip initial states
         var order = createOrder(invoice = "123")
@@ -184,7 +185,7 @@ class OrderDetailsPresenterTest {
   @Test
   fun `update note`() {
     runTest {
-      seedOrder(note = "")
+      database.seedOrder(note = "")
       presenter.test(eventsFlow) {
         skipItems(3) //skip initial states
         var order = createOrder(note = "")
@@ -238,38 +239,5 @@ class OrderDetailsPresenterTest {
     fullOrderItems = fullOrderItems,
   )
 
-  private fun seedOrder(
-    date: LocalDate = LocalDate.now(clock),
-    time: LocalTime = LocalTime.now(clock),
-    invoice: String? = null,
-    note: String = "",
-  ) {
-    val orderQueries = database.orderQueries
-    val userQueries = database.userQueries
-    val restaurantQueries = database.restaurantQueries
-    val menuItemQueries = database.menuItemQueries
 
-    userQueries.insert("User")
-    restaurantQueries.insert("Restaurant")
-    menuItemQueries.insert(restaurantId = 1, name = "Item", category = "Pastry")
-    menuItemQueries.insertPrice(1, Instant.now(clock), 10.money.toCents())
-    orderQueries.insert(
-      restaurantId = 1,
-      createdAt = ZonedDateTime.of(
-        /* date = */ date,
-        /* time = */ time,
-        /* zone = */ ZoneId.systemDefault()
-      ).toInstant()
-      .truncatedTo(ChronoUnit.SECONDS)
-    )
-    orderQueries.updateAttachment(id = 1, attachment = invoice)
-    orderQueries.updateNote(id = 1, note = note)
-    orderQueries.insertOrderItemPrice(
-      orderId = 1,
-      menuItemId = 1,
-      price = 10.money.toCents(),
-      datetime = Instant.now(clock)
-    )
-    orderQueries.insertOrderItem(customerId = 1, quantity = 5, orderItemPriceId = 1)
-  }
 }
