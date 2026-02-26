@@ -1,5 +1,7 @@
+import 'dotenv/config'
 import express from 'express'
 import invoiceRouter from './invoice/invoice-router'
+
 
 const app = express()
 const port = 3000

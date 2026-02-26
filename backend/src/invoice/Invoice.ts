@@ -9,6 +9,7 @@ export interface Invoice {
 export interface User {
   readonly id: number
   readonly name: string
+  readonly email: string
 }
 
 export interface Summary {
