@@ -18,12 +18,12 @@ export async function sendInvoiceEmail(
     from: process.env.EMAIL,
     to: invoice.user.email,
     subject: `Invoice for ${invoice.user.name}`,
-    text: `Hi ${invoice.user.name}, please find your invoice attached.`,  
+    text: `Hi ${invoice.user.name}, please find your invoice attached.`,
     attachments: [
-        {
-          filename: `invoice-${invoice.user.name}.pdf`,
-          content: pdf
-        } 
-      ]
-    })
+      {
+        filename: `invoice-${invoice.user.name}.pdf`,
+        content: pdf
+      }
+    ]
+  })
 }

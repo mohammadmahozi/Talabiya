@@ -7,8 +7,8 @@ const router = Router()
 
 router.post('/send', async (req, res) => {
   const invoices: Invoice[] = req.body
-  
-  for(const invoice of invoices) {
+
+  for (const invoice of invoices) {
     const pdf = await generateInvoicePdf(invoice)
     await sendInvoiceEmail(invoice, pdf)
   }

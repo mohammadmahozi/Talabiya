@@ -11,7 +11,7 @@ app.use(express.json())
 app.use('/invoices', invoiceRouter)
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok'})
+  res.json({ status: 'ok' })
 })
 
 app.listen(port, () => {

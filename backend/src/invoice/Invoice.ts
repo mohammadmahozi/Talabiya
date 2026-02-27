@@ -1,4 +1,3 @@
-
 export interface Invoice {
   readonly user: User
   readonly summary: Summary
