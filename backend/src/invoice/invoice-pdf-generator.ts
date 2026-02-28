@@ -1,11 +1,10 @@
 import PDFDocument from 'pdfkit'
-import type { Invoice } from './invoice'
+import type { Invoice, OrderItem } from './invoice'
 
 const Colors = {
   text: '#1a1a1a',
   subtext: '#666666',
   primary: '#A30505',
-  light: '#f5f5f5',
   border: '#e0e0e0',
 }
 
@@ -115,60 +114,74 @@ function drawOrders(doc: PDFKit.PDFDocument, invoice: Invoice) {
       .fontSize(12)
       .fillColor(Colors.text)
       .text(order.restaurant)
-
-    doc.moveDown(0.3)
-
-    // Items header
-    const y = doc.y
-    const columns = itemColumns(doc.page.width)
-
-    doc
       .fontSize(9)
       .fillColor(Colors.subtext)
-      .text('ITEM', columns.item.x, y)
-      .text('QTY', columns.quantity.x, y, { width: columns.quantity.width, align: 'right' })
-      .text('UNIT PRICE', columns.unitPrice.x, y, { width: columns.unitPrice.width, align: 'right' })
-      .text('TOTAL', columns.total.x, y, { width: columns.total.width, align: 'right' })
-
-    doc.moveDown(0.5)
-    drawHorizontalLine(doc, doc.y)
-    doc.moveDown(0.5)
-
-    // Items
-    order.items.forEach((item) => {
-      const y = doc.y
-      const name = truncateText(doc, item.name, columns.item.width)
-      doc
-        .fontSize(11)
-        .fillColor(Colors.subtext)
-        .text(name, columns.item.x, y)
-        .text(`x${item.quantity}`, columns.quantity.x, y, { width: columns.quantity.width, align: 'right' })
-        .text(`${item.price} SAR`, columns.unitPrice.x, y, { width: columns.unitPrice.width, align: 'right' })
-        .text(`${item.total} SAR`, columns.total.x, y, { width: columns.total.width, align: 'right' })
-      doc.moveDown(0.3)
-    })
+      .text(`${order.date}`)
 
     doc.moveDown(0.3)
+
+    if (order.items.length > 0) {
+      drawOrderItems(doc, order.items)
+    }
 
     // Order totals
-    doc
-      .fontSize(10)
-      .fillColor(Colors.subtext)
-      .text('Paid', Margins.left, doc.y, { continued: true })
-      .fillColor(Colors.primary)
-      .text(`${order.totalPaid} SAR`, { align: 'right' })
-    doc.moveDown(0.3)
+    if (order.totalPaid > 0) {
+      doc
+        .fontSize(10)
+        .fillColor(Colors.subtext)
+        .text('Total paid', Margins.left, doc.y, { continued: true })
+        .fillColor(Colors.primary)
+        .text(`${order.totalPaid} SAR`, { align: 'right' })
+      doc.moveDown(0.3)
+    }
 
-    doc
-      .fontSize(10)
-      .fillColor(Colors.subtext)
-      .text('Owed', Margins.left, doc.y, { continued: true })
-      .fillColor(Colors.primary)
-      .text(`${order.totalOwed} SAR`, { align: 'right' })
+    if (order.totalOwed > 0) {
+      doc
+        .fontSize(10)
+        .fillColor(Colors.subtext)
+        .text('Total owed', Margins.left, doc.y, { continued: true })
+        .fillColor(Colors.primary)
+        .text(`${order.totalOwed} SAR`, { align: 'right' })
+    }
+
     doc.moveDown()
 
     doc.moveDown()
   })
+}
+
+function drawOrderItems(doc: PDFKit.PDFDocument, items: Array<OrderItem>) {
+  // Items header
+  const y = doc.y
+  const columns = itemColumns(doc.page.width)
+
+  doc
+    .fontSize(9)
+    .fillColor(Colors.subtext)
+    .text('ITEM', columns.item.x, y)
+    .text('QTY', columns.quantity.x, y, { width: columns.quantity.width, align: 'right' })
+    .text('UNIT PRICE', columns.unitPrice.x, y, { width: columns.unitPrice.width, align: 'right' })
+    .text('TOTAL', columns.total.x, y, { width: columns.total.width, align: 'right' })
+
+  doc.moveDown(0.5)
+  drawHorizontalLine(doc, doc.y)
+  doc.moveDown(0.5)
+
+  // Items
+  items.forEach((item) => {
+    const y = doc.y
+    const name = truncateText(doc, item.name, columns.item.width)
+    doc
+      .fontSize(11)
+      .fillColor(Colors.subtext)
+      .text(name, columns.item.x, y)
+      .text(`x${item.quantity}`, columns.quantity.x, y, { width: columns.quantity.width, align: 'right' })
+      .text(`${item.price} SAR`, columns.unitPrice.x, y, { width: columns.unitPrice.width, align: 'right' })
+      .text(`${item.total} SAR`, columns.total.x, y, { width: columns.total.width, align: 'right' })
+    doc.moveDown(0.3)
+  })
+
+  doc.moveDown(0.3)
 }
 
 function itemColumns(pageWidth: number) {

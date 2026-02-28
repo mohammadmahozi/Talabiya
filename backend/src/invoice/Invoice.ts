@@ -30,6 +30,7 @@ export type Direction = 'Credit' | 'Debit'
 export interface Order {
   readonly id: number
   readonly restaurant: string
+  readonly date: string
   readonly totalPaid: number
   readonly totalOwed: number
   readonly items: OrderItem[]
