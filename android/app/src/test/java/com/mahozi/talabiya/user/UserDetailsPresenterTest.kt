@@ -1,6 +1,5 @@
 package com.mahozi.talabiya.user
 
-import android.R.attr.direction
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.mahozi.sayed.talabiya.core.money
