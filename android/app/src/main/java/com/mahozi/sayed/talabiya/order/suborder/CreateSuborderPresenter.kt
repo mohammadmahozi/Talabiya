@@ -116,6 +116,7 @@ class CreateSuborderPresenter @AssistedInject constructor(
           priceId = menuItem.priceId,
           price = menuItem.price,
           quantity = orderItem?.quantity ?: 0,
+          note = orderItem?.note ?: "",
         )
       }
     }

@@ -69,9 +69,30 @@ private class SuborderPreviewParameter : PreviewParameterProvider<Suborder> {
     userId = 0,
     user = "Customer",
     items = listOf(
-      OrderItem(id = 0, menuItemId = 0, name = "Item 1", quantity = 1, total = 10.money),
-      OrderItem(id = 1, menuItemId = 1, name = "Item 2", quantity = 575, total = 100.money),
-      OrderItem(id = 2, menuItemId = 2, name = "Item 3", quantity = 12, total = 4000.money),
+      OrderItem(
+        id = 0,
+        menuItemId = 0,
+        name = "Item 1",
+        quantity = 1,
+        total = 10.money,
+        note = "Note"
+      ),
+      OrderItem(
+        id = 1,
+        menuItemId = 1,
+        name = "Item 2",
+        quantity = 575,
+        total = 100.money,
+        note = ""
+      ),
+      OrderItem(
+        id = 2,
+        menuItemId = 2,
+        name = "Item 3",
+        quantity = 12,
+        total = 4000.money,
+        note = ""
+      ),
     ),
     total = 6000.money,
   )
@@ -266,7 +287,8 @@ private fun PreviewOrderItem() {
       menuItemId = 0,
       name = "Test",
       quantity = 5,
-      total = 50.money
+      total = 50.money,
+      note = "",
     )
   )
 }

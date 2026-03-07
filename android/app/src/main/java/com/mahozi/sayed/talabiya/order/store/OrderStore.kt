@@ -94,7 +94,8 @@ class OrderStore @Inject constructor(
                   menuItemId = it.menuItemId,
                   quantity = it.quantity.toInt(),
                   name = it.itemName,
-                  total = it.total.cents
+                  total = it.total.cents,
+                  note = "",
                 )
               },
               total = suborderTotal,
@@ -110,13 +111,14 @@ class OrderStore @Inject constructor(
     return orderQueries.selectUserOrderItems(
       orderId = orderId,
       userId = userId,
-      mapper = { id, menuItemId, quantity, name, total ->
+      mapper = { id, menuItemId, quantity, name, total, note ->
         OrderItem(
           id = id,
           menuItemId = menuItemId,
           name = name,
           quantity = quantity.toInt(),
-          total = total.cents
+          total = total.cents,
+          note = note
         )
       }
     ).asFlow()

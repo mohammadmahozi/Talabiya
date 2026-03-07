@@ -37,4 +37,5 @@ data class MenuItemState(
   val priceId: Long,
   val price: Money,
   val quantity: Int,
+  val note: String,
 )

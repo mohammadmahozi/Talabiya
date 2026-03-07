@@ -52,6 +52,7 @@ import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaSearchBar
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
 import com.mahozi.sayed.talabiya.core.ui.components.zero
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
+import com.mahozi.sayed.talabiya.core.ui.theme.onSurfaceVariant
 import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.resturant.menu.MenuItem
 import kotlinx.coroutines.launch
@@ -73,7 +74,8 @@ private fun PreviewCreateSuborderScreen() {
       category = "Pastry",
       priceId = 0L,
       price = 14.money,
-      quantity = 1
+      quantity = 1,
+      note = "Note",
     )
   )
   AppTheme {
@@ -213,9 +215,30 @@ private fun PreviewUserOrderItems() {
   AppTheme {
     UserOrderItems(
       listOf(
-        OrderItem(0L, 0L, "Name", 1, 20.money),
-        OrderItem(0L, 0L, "Name", 1, 20.money),
-        OrderItem(0L, 0L, "Name", 1, 20.money),
+        OrderItem(
+          id = 0L,
+          menuItemId = 0L,
+          name = "Name",
+          quantity = 1,
+          total = 20.money,
+          note = "Note"
+        ),
+        OrderItem(
+          id = 0L,
+          menuItemId = 0L,
+          name = "Name",
+          quantity = 1,
+          total = 20.money,
+          note = ""
+        ),
+        OrderItem(
+          id = 0L,
+          menuItemId = 0L,
+          name = "Name",
+          quantity = 1,
+          total = 20.money,
+          note = ""
+        ),
       ),
       onClick = {}
     )
@@ -231,26 +254,35 @@ private fun UserOrderItems(
     modifier = Modifier
       .fillMaxHeight(.5F)
   ) {
-
     items.forEach { item ->
       Row(
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
         modifier = Modifier
           .clickable { onClick() }
           .padding(vertical = 12.dp, horizontal = 16.dp)
       ) {
-
         Text(
           text = item.quantity.toString(),
-          style = AppTheme.type.title
+          style = AppTheme.type.titleMedium
         )
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Text(
-          text = item.name,
-          style = AppTheme.type.title
-        )
+        Column(
+          verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+          Text(
+            text = item.name,
+            style = AppTheme.type.titleMedium
+          )
+
+          if (item.note.isNotEmpty()) {
+            Text(
+              text = item.note,
+              style = AppTheme.type.bodyMedium.onSurfaceVariant
+            )
+          }
+        }
 
         Spacer(Modifier.weight(1F))
 
@@ -269,7 +301,7 @@ private fun MenuItem(
   onItemClicked: (MenuItemState) -> Unit,
 ) {
   Row(
-    verticalAlignment = Alignment.CenterVertically,
+    verticalAlignment = Alignment.Top,
     horizontalArrangement = Arrangement.spacedBy(8.dp),
     modifier = Modifier
       .clickable { onItemClicked(item) }
@@ -280,13 +312,27 @@ private fun MenuItem(
         text = "${item.quantity}x",
         style = AppTheme.type.title,
         color = AppTheme.colors.primary,
+        modifier = Modifier.alignByBaseline()
       )
     }
 
-    Text(
-      text = item.name,
-      style = AppTheme.type.title
-    )
+    Column(
+      verticalArrangement = Arrangement.spacedBy(4.dp),
+      modifier = Modifier.alignByBaseline()
+    ) {
+      Text(
+        text = item.name,
+        style = AppTheme.type.titleMedium,
+
+      )
+
+      if (item.note.isNotEmpty()) {
+        Text(
+          text = item.note,
+          style = AppTheme.type.bodyMedium.onSurfaceVariant
+        )
+      }
+    }
 
     Spacer(Modifier.weight(1F))
 

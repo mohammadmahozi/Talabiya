@@ -7,5 +7,6 @@ data class OrderItem(
   val menuItemId: Long,
   val name: String,
   val quantity: Int,
-  val total: Money
+  val total: Money,
+  val note: String,
 )

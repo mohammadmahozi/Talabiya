@@ -27,6 +27,7 @@ CREATE TABLE OrderItemEntity(
     customerId INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
     orderItemPriceId INTEGER NOT NULL,
+    note TEXT NOT NULL DEFAULT '',
     FOREIGN KEY (customerId) REFERENCES UserEntity(id),
     FOREIGN KEY (orderItemPriceId) REFERENCES OrderItemPriceEntity(id),
     UNIQUE(customerId, orderItemPriceId)
@@ -100,7 +101,8 @@ WHERE OrderItemPriceEntity.orderId = ?;
 
 selectUserOrderItems:
 SELECT OrderItemEntity.id, MenuItemEntity.id,OrderItemEntity.quantity,
-MenuItemEntity.name, (OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total
+MenuItemEntity.name, (OrderItemPriceEntity.price * OrderItemEntity.quantity) AS total,
+OrderItemEntity.note
 FROM OrderItemEntity
 JOIN UserEntity ON OrderItemEntity.customerId = UserEntity.id
 JOIN OrderItemPriceEntity ON OrderItemEntity.orderItemPriceId = OrderItemPriceEntity.id
@@ -114,7 +116,7 @@ JOIN MenuItemEntity ON OrderItemPriceEntity.menuItemId = MenuItemEntity.id
 WHERE OrderItemPriceEntity.orderId = :orderId;
 
 insertOrderItemPrice:
-INSERT INTO OrderItemPriceEntity(orderId, menuItemId, price, datetime)
+INSERT OR IGNORE INTO OrderItemPriceEntity(orderId, menuItemId, price, datetime)
 VALUES(?, ?, ?, ?);
 
 insertOrderItem:
