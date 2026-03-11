@@ -4,4 +4,5 @@ data class FullOrderItem(
   val id: Long,
   val name: String,
   val quantity: Int,
+  val note: String,
 )

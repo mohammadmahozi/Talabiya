@@ -148,7 +148,8 @@ class OrderStore @Inject constructor(
           FullOrderItem(
             id = item.id,
             name = item.name,
-            quantity = item.quantity!!.toInt()
+            quantity = item.quantity.toInt(),
+            note = item.note
           )
         }
       }

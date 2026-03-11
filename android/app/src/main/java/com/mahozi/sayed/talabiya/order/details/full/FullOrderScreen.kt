@@ -21,7 +21,11 @@ fun FullOrderScreen(
       .padding(horizontal = 16.dp, vertical = 8.dp)
   ) {
     items(items) { item ->
-      Text("${item.quantity}  ${item.name}")
+      val text = buildString {
+        append("${item.quantity}  ${item.name}")
+        if (item.note.isNotEmpty()) append(" (${item.note})")
+      }
+      Text(text)
     }
   }
 }
