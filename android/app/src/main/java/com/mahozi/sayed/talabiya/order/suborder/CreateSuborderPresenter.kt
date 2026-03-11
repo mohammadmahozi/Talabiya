@@ -13,6 +13,7 @@ import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.order.details.suborder.OrderItem
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderEvent.AddMenuItemClicked
+import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderEvent.ChangeNote
 import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderEvent.DeleteItem
 import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderEvent.MenuItemClicked
 import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderEvent.OnCancelAddingMenuItem
@@ -58,7 +59,8 @@ class CreateSuborderPresenter @AssistedInject constructor(
             menuItemId = event.item.id,
             quantity = orderItem?.quantity ?: 1,
             price = event.item.price,
-            orderItemId = orderItem?.id
+            orderItemId = orderItem?.id,
+            note = orderItem?.note ?: ""
           )
         }
         is QuantityChanged -> {
@@ -74,14 +76,18 @@ class CreateSuborderPresenter @AssistedInject constructor(
             openedMenuItem = null
           }
         }
+        is ChangeNote -> {
+          openedMenuItem = openedMenuItem!!.copy(note = event.note)
+        }
         is OnSaveMenuItemClicked -> {
           launch {
             orderStore.insertOrderItem(
-              screen.orderId,
-              screen.userid,
-              openedMenuItem!!.menuItemId,
-              openedMenuItem!!.quantity.toLong(),
-              openedMenuItem!!.price
+              orderId = screen.orderId,
+              customerId = screen.userid,
+              menuItemId = openedMenuItem!!.menuItemId,
+              quantity = openedMenuItem!!.quantity.toLong(),
+              price = openedMenuItem!!.price,
+              note = openedMenuItem!!.note
             )
             openedMenuItem = null
           }

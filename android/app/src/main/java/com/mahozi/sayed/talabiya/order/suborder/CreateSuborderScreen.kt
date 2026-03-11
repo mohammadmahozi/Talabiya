@@ -10,12 +10,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -35,11 +39,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,8 +56,10 @@ import com.mahozi.sayed.talabiya.R
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaCenterAlignedTopBar
+import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaOutlinedTextField
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaSearchBar
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaTopBarDefaults
+import com.mahozi.sayed.talabiya.core.ui.components.TlbButton
 import com.mahozi.sayed.talabiya.core.ui.components.zero
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.core.ui.theme.onSurfaceVariant
@@ -114,6 +124,7 @@ fun CreateSuborderScreen(
         state = state.openedOrderItemState,
         onQuantityChanged = { onEvent(CreateSuborderEvent.QuantityChanged(it)) },
         onDelete = { onEvent(CreateSuborderEvent.DeleteItem) },
+        onNoteChanged = { onEvent(CreateSuborderEvent.ChangeNote(it))},
         onConfirm = { onEvent(CreateSuborderEvent.OnSaveMenuItemClicked) }
       )
     }
@@ -412,9 +423,14 @@ private fun AlphabetIndex(
 private fun PreviewAddOrderItem() {
   AppTheme {
     AddOrderItem(
-      state = OpenedOrderItemState(1, 13, 15.money),
+      state = OpenedOrderItemState(
+        menuItemId = 1,
+        quantity = 13,
+        price = 15.money,
+      ),
       onQuantityChanged = {},
       onDelete = {},
+      onNoteChanged = {},
       onConfirm = {}
     )
   }
@@ -425,10 +441,11 @@ private fun AddOrderItem(
   state: OpenedOrderItemState,
   onQuantityChanged: (newQuantity: Int) -> Unit,
   onDelete: () -> Unit,
+  onNoteChanged: (String) -> Unit,
   onConfirm: () -> Unit,
 ) {
   Column(
-    verticalArrangement = Arrangement.spacedBy(8.dp),
+    verticalArrangement = Arrangement.spacedBy(20.dp),
     modifier = Modifier
       .padding(16.dp),
   ) {
@@ -445,7 +462,6 @@ private fun AddOrderItem(
       Row(
         verticalAlignment = Alignment.CenterVertically
       ) {
-
         val iconModifier = Modifier
           .padding(2.dp)
           .background(AppTheme.colors.surfaceContainerHigh, CircleShape)
@@ -486,13 +502,29 @@ private fun AddOrderItem(
       }
     }
 
-    Button(
-      modifier = Modifier
-        .align(Alignment.End),
-      onClick = { onConfirm() }
-    ) {
-      Text(text = stringResource(R.string.confirm))
-    }
+    val focusManager = LocalFocusManager.current
+
+    TalabiyaOutlinedTextField(
+      value = state.note,
+      onValueChange = onNoteChanged,
+      placeholder = { Text(stringResource(R.string.note)) },
+      shape = AppTheme.shapes.medium,
+      singleLine = true,
+      maxLines = 1,
+      keyboardOptions = KeyboardOptions(
+        imeAction = ImeAction.Done
+      ),
+      keyboardActions = KeyboardActions(
+        onDone = { focusManager.clearFocus() }
+      ),
+      modifier = Modifier.fillMaxWidth()
+    )
+
+    TlbButton(
+      text = stringResource(R.string.confirm),
+      onClick = { onConfirm() },
+      modifier = Modifier.fillMaxWidth()
+    )
   }
 }
 

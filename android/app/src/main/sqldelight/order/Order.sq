@@ -120,8 +120,8 @@ INSERT OR IGNORE INTO OrderItemPriceEntity(orderId, menuItemId, price, datetime)
 VALUES(?, ?, ?, ?);
 
 insertOrderItem:
-INSERT OR REPLACE INTO OrderItemEntity(customerId, quantity, orderItemPriceId)
-VALUES (?, ?, ?);
+INSERT OR REPLACE INTO OrderItemEntity(customerId, quantity, orderItemPriceId, note)
+VALUES (?, ?, ?, ?);
 
 deleteOrderItem:
 DELETE FROM OrderItemEntity

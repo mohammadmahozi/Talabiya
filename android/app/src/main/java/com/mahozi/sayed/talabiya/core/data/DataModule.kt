@@ -104,9 +104,9 @@ private object Schema : SqlSchema<QueryResult.Value<Unit>> by TalabiyaDatabase.S
         datetime = Instant.now(),
       ).id()
 
-      orderQueries.insertOrderItem(customerId = user1, quantity = 2, orderItemPriceId = item1)
-      orderQueries.insertOrderItem(customerId = user1, quantity = 2, orderItemPriceId = item2)
-      orderQueries.insertOrderItem(customerId = user2, quantity = 2, orderItemPriceId = item1)
+      orderQueries.insertOrderItem(customerId = user1, quantity = 2, orderItemPriceId = item1, "")
+      orderQueries.insertOrderItem(customerId = user1, quantity = 2, orderItemPriceId = item2, "")
+      orderQueries.insertOrderItem(customerId = user2, quantity = 2, orderItemPriceId = item1, "")
 
       //Only user1 ordered
       val order2 = orderQueries.insert(restaurantId = 1, createdAt = Instant.now()).id()
@@ -116,7 +116,7 @@ private object Schema : SqlSchema<QueryResult.Value<Unit>> by TalabiyaDatabase.S
         price = 10.money.toCents(),
         datetime = Instant.now(),
       ).id()
-      orderQueries.insertOrderItem(customerId = user1, quantity = 5, orderItemPriceId = item3)
+      orderQueries.insertOrderItem(customerId = user1, quantity = 5, orderItemPriceId = item3, "")
 
       //Only user1 ordered, paid for his share, 1 pay canceled and 1 completed
       val order3 = orderQueries.insert(restaurantId = 1, createdAt = Instant.now()).id()
@@ -126,7 +126,7 @@ private object Schema : SqlSchema<QueryResult.Value<Unit>> by TalabiyaDatabase.S
         price = 10.money.toCents(),
         datetime = Instant.now(),
       ).id()
-      orderQueries.insertOrderItem(customerId = user1, quantity = 2, orderItemPriceId = item4)
+      orderQueries.insertOrderItem(customerId = user1, quantity = 2, orderItemPriceId = item4, "")
       val payment1 = paymentQueries.insertPayment(
         userId = user1,
         amount = 10.money.toCents(),
@@ -173,7 +173,7 @@ private object Schema : SqlSchema<QueryResult.Value<Unit>> by TalabiyaDatabase.S
         price = 10.money.toCents(),
         datetime = Instant.now(),
       ).id()
-      orderQueries.insertOrderItem(customerId = user2, quantity = 2, orderItemPriceId = item5)
+      orderQueries.insertOrderItem(customerId = user2, quantity = 2, orderItemPriceId = item5, "")
       val payment3 = paymentQueries.insertPayment(
         userId = user1,
         amount = 10.money.toCents(),
@@ -196,7 +196,7 @@ private object Schema : SqlSchema<QueryResult.Value<Unit>> by TalabiyaDatabase.S
         price = 10.money.toCents(),
         datetime = Instant.now(),
       ).id()
-      orderQueries.insertOrderItem(customerId = user2, quantity = 4, orderItemPriceId = item6)
+      orderQueries.insertOrderItem(customerId = user2, quantity = 4, orderItemPriceId = item6, "")
       val payment4 = paymentQueries.insertPayment(
         userId = user1,
         amount = 40.money.toCents(),
