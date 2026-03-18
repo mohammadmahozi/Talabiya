@@ -4,19 +4,15 @@ import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mahozi.sayed.talabiya.R
@@ -39,48 +35,45 @@ private fun PreviewDrawer() {
     }
   }
 }
+
 @SuppressLint("ComposeModifierMissing")
-@Composable fun ColumnScope.Drawer(
+@Composable
+fun ColumnScope.Drawer(
   onOrdersClicked: () -> Unit,
   onRestaurantsClicked: () -> Unit,
   onUsersClicked: () -> Unit,
   modifier: Modifier = Modifier
 ) {
-    Column(
-      modifier = modifier
-        .background(AppTheme.colors.material.primary)
-        .fillMaxWidth()
-        .padding(16.dp)
-        .height(160.dp),
-    ) {
-      Icon(painter = painterResource(R.drawable.ic_payer), contentDescription = null)
-
-      Spacer(modifier = Modifier.height(8.dp))
-
-      Text(text = string(R.string.app_name), color = AppTheme.colors.material.onPrimary)
-    }
-
-    Column(
-      modifier = Modifier
-        .padding(vertical = 16.dp)
-    ) {
-
-      DrawerItem(
-        title = R.string.orders,
-        onClick = onOrdersClicked
-      )
-
-      DrawerItem(
-        title = R.string.restaurants,
-        onClick = onRestaurantsClicked
-      )
-
-      DrawerItem(
-        title = R.string.users,
-        onClick = onUsersClicked
-      )
-    }
+  Column(
+    modifier = modifier
+      .background(AppTheme.colors.material.primary)
+      .fillMaxWidth()
+      .padding(16.dp)
+      .height(160.dp),
+  ) {
+    Text(text = string(R.string.app_name), color = AppTheme.colors.material.onPrimary)
   }
+
+  Column(
+    modifier = Modifier
+      .padding(vertical = 16.dp)
+  ) {
+    DrawerItem(
+      title = R.string.orders,
+      onClick = onOrdersClicked
+    )
+
+    DrawerItem(
+      title = R.string.restaurants,
+      onClick = onRestaurantsClicked
+    )
+
+    DrawerItem(
+      title = R.string.users,
+      onClick = onUsersClicked
+    )
+  }
+}
 
 @Composable
 private fun DrawerItem(
@@ -92,7 +85,6 @@ private fun DrawerItem(
     modifier = Modifier
       .fillMaxWidth()
       .clickable { onClick() }
-
       .padding(16.dp)
   )
 }
