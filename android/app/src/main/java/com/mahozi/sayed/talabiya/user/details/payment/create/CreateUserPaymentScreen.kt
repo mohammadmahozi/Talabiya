@@ -14,6 +14,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,10 +31,14 @@ import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.datetime.ProvideDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.extensions.locale
 import com.mahozi.sayed.talabiya.core.money
+import com.mahozi.sayed.talabiya.core.ui.ConfirmDialog
+import com.mahozi.sayed.talabiya.core.ui.ConfirmState
 import com.mahozi.sayed.talabiya.core.ui.components.HorizontalSpacer
 import com.mahozi.sayed.talabiya.core.ui.components.TlbButton
 import com.mahozi.sayed.talabiya.core.ui.components.TlbCard
 import com.mahozi.sayed.talabiya.core.ui.components.VerticalSpacer
+import com.mahozi.sayed.talabiya.core.ui.localize
+import com.mahozi.sayed.talabiya.core.ui.rememberConfirmState
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.user.details.order.list.SelectUnpaidOrdersDialog
 import java.time.Instant
@@ -74,9 +80,18 @@ fun CreateUserPaymentScreen(
     VerticalSpacer(1F)
 
     if (state.showPay) {
+      var confirmState by rememberConfirmState()
+      if (confirmState != null) ConfirmDialog(confirmState!!)
+
       TlbButton(
         text = stringResource(R.string.pay),
-        onClick = { onEvent(CreateUserPaymentEvent.Pay) },
+        onClick = {
+          confirmState = ConfirmState(
+            text = R.string.are_you_sure_you_want_to_create_payment.localize,
+            onConfirm = { onEvent(CreateUserPaymentEvent.Pay) },
+            onDismiss = { confirmState = null }
+          )
+        },
         modifier = Modifier.fillMaxWidth()
       )
     }

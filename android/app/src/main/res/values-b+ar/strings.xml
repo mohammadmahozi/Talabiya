@@ -157,6 +157,7 @@
     <string name="are_you_sure_you_want_to_delete_order">Are you sure you want to delete %s order?</string>
     <string name="increase_quantity">Increase quantity</string>
     <string name="decrease_quantity">Decrease quantity</string>
+    <string name="are_you_sure_you_want_to_create_payment">Are you sure you want to create payment?</string>
 
 
 </resources>

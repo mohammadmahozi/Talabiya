@@ -20,6 +20,7 @@ private fun PreviewConfirmDialog() {
   )
 }
 
+//TODO delete old dialog
 @Composable
 fun ConfirmDialog(
   onConfirm: () -> Unit,
