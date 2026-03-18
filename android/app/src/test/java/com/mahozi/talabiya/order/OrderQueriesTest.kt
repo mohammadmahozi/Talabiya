@@ -43,6 +43,7 @@ class OrderQueriesTest {
       customerId = 1,
       quantity = 1,
       orderItemPriceId = 1,
+      note = "",
     )
     val order = orderQueries.selectById(1).executeAsOne()
     println(order)
@@ -80,11 +81,11 @@ class OrderQueriesTest {
     )
 
     database.userQueries.insert("Customer 1")
-    orderQueries.insertOrderItem(1, 1, 1)
-    orderQueries.insertOrderItem(1, 5, 2)
+    orderQueries.insertOrderItem(customerId = 1, quantity = 1, orderItemPriceId = 1, note = "")
+    orderQueries.insertOrderItem(customerId = 1, quantity = 5, orderItemPriceId = 2, note = "")
 
     database.userQueries.insert("Customer 2")
-    orderQueries.insertOrderItem(2, 10, 1)
+    orderQueries.insertOrderItem(customerId = 2, quantity = 10, orderItemPriceId = 1, note = "")
 
     orderQueries.selectAllOrderItems(1).executeAsList().forEach(::println)
   }

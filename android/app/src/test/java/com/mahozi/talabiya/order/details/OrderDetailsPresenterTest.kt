@@ -212,12 +212,24 @@ class OrderDetailsPresenterTest {
     suborders: List<Suborder> = listOf(
       Suborder(
         id = 1, userId = 1, user = "User",
-        items = listOf(OrderItem(1, 1, "Item", 5, 50.money)),
+        items = listOf(OrderItem(
+          id = 1,
+          menuItemId = 1,
+          name = "Item",
+          quantity = 5,
+          total = 50.money,
+          note = ""
+        )),
         total = 50.money
       )
     ),
     users: List<UserEntity> = listOf(UserEntity(1, "User")),
-    fullOrderItems: List<FullOrderItem> = listOf(FullOrderItem(1, "Item", 5)),
+    fullOrderItems: List<FullOrderItem> = listOf(FullOrderItem(
+      id = 1,
+      name = "Item",
+      quantity = 5,
+      note = ""
+    )),
   ) = OrderDetailsState(
     orderId = 1,
     info = OrderInfoState(

@@ -98,7 +98,6 @@ class UserDetailsPresenterTest {
         orders = listOf()
       )
       assertThat(awaitItem()).isEqualTo(state)
-      println(awaitItem())
     }
   }
 
@@ -128,8 +127,8 @@ class UserDetailsPresenterTest {
       price = 10.money.toCents(),
       datetime = Instant.now(clock)
     ).id()
-    orderQueries.insertOrderItem(customerId = user1, quantity = 5, orderItemPriceId = orderItem)
-    orderQueries.insertOrderItem(customerId = user2, quantity = 1, orderItemPriceId = orderItem)
+    orderQueries.insertOrderItem(customerId = user1, quantity = 5, orderItemPriceId = orderItem, note = "")
+    orderQueries.insertOrderItem(customerId = user2, quantity = 1, orderItemPriceId = orderItem, note = "")
 
     val payment = paymentQueries.insertPayment(
       userId = user1,

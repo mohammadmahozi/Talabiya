@@ -50,5 +50,5 @@ fun TalabiyaDatabase.seedOrder(
     price = 10.money.toCents(),
     datetime = Instant.now(clock)
   ).id()
-  orderQueries.insertOrderItem(customerId = user, quantity = 5, orderItemPriceId = orderItem)
+  orderQueries.insertOrderItem(customerId = user, quantity = 5, orderItemPriceId = orderItem, note = "")
 }

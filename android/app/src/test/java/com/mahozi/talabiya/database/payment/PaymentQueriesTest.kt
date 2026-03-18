@@ -60,9 +60,9 @@ class PaymentQueriesTest {
     )
     val firstOrderItem2 = orderQueries.lastInsertRowId().executeAsOne()
 
-    orderQueries.insertOrderItem(customerId = user1Id, quantity = 1, orderItemPriceId = firstOrderItem1)
-    orderQueries.insertOrderItem(customerId = user1Id, quantity = 2, orderItemPriceId = firstOrderItem2)
-    orderQueries.insertOrderItem(customerId = user2Id, quantity = 1, orderItemPriceId = firstOrderItem1)
+    orderQueries.insertOrderItem(customerId = user1Id, quantity = 1, orderItemPriceId = firstOrderItem1, note = "")
+    orderQueries.insertOrderItem(customerId = user1Id, quantity = 2, orderItemPriceId = firstOrderItem2, note = "")
+    orderQueries.insertOrderItem(customerId = user2Id, quantity = 1, orderItemPriceId = firstOrderItem1, note = "")
 
 
     orderQueries.insert(restaurantId = restaurantId, createdAt = Instant.now())
@@ -74,8 +74,8 @@ class PaymentQueriesTest {
       datetime = Instant.now()
     )
     val secondOrderItem1 = orderQueries.lastInsertRowId().executeAsOne()
-    orderQueries.insertOrderItem(customerId = user1Id, quantity = 1, orderItemPriceId = secondOrderItem1)
-    orderQueries.insertOrderItem(customerId = user2Id, quantity = 2, orderItemPriceId = secondOrderItem1)
+    orderQueries.insertOrderItem(customerId = user1Id, quantity = 1, orderItemPriceId = secondOrderItem1, note = "")
+    orderQueries.insertOrderItem(customerId = user2Id, quantity = 2, orderItemPriceId = secondOrderItem1, note = "")
 
     orderQueries.insert(restaurantId = restaurantId, createdAt = Instant.now())
     val thirdOrderId = orderQueries.lastInsertRowId().executeAsOne()
@@ -86,8 +86,8 @@ class PaymentQueriesTest {
       datetime = Instant.now()
     )
     val thirdOrderItem1 = orderQueries.lastInsertRowId().executeAsOne()
-    orderQueries.insertOrderItem(customerId = user1Id, quantity = 1, orderItemPriceId = thirdOrderItem1)
-    orderQueries.insertOrderItem(customerId = user2Id, quantity = 1, orderItemPriceId = thirdOrderItem1)
+    orderQueries.insertOrderItem(customerId = user1Id, quantity = 1, orderItemPriceId = thirdOrderItem1, note = "")
+    orderQueries.insertOrderItem(customerId = user2Id, quantity = 1, orderItemPriceId = thirdOrderItem1, note = "")
     paymentQueries.insertPayment(
       user1Id,
       amount = 1000,
