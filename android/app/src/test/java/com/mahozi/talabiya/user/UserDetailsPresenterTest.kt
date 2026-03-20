@@ -5,6 +5,7 @@ import assertk.assertions.isEqualTo
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
 import com.mahozi.sayed.talabiya.order.store.OrderStore
+import com.mahozi.sayed.talabiya.payment.Payment
 import com.mahozi.sayed.talabiya.payment.PaymentDirection
 import com.mahozi.sayed.talabiya.payment.PaymentStatus
 import com.mahozi.sayed.talabiya.payment.PaymentStore
@@ -14,6 +15,7 @@ import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentPr
 import com.mahozi.sayed.talabiya.user.details.payment.create.CreateUserPaymentState
 import com.mahozi.sayed.talabiya.user.details.payment.create.PaymentSummary
 import com.mahozi.sayed.talabiya.user.details.payment.create.PaymentTotals
+import com.mahozi.sayed.talabiya.user.details.payment.create.UnpaidOrder
 import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsEvent
 import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsPresenter
 import com.mahozi.sayed.talabiya.user.details.ui.UserDetailsState
@@ -25,6 +27,7 @@ import com.mahozi.talabiya.clock
 import com.mahozi.talabiya.database.createDatabase
 import com.mahozi.talabiya.database.orderStore
 import com.mahozi.talabiya.database.paymentStore
+import com.mahozi.talabiya.database.seedRestaurant
 import com.mahozi.talabiya.test
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -105,30 +108,21 @@ class UserDetailsPresenterTest {
     fun Any.id() = orderQueries.lastInsertRowId().executeAsOne()
 
     val user1 = userQueries.insert("User1").id()
-    val user2 = userQueries.insert("User2").id()
-    val user3 = userQueries.insert("User3").id()
 
-    val restaurant = restaurantQueries.insert("Restaurant").id()
-    val menuItem = menuItemQueries.insert(restaurantId = restaurant, name = "Item", category = "Pastry").id()
-    menuItemQueries.insertPrice(
-      menuItemId = menuItem,
-      datetime = Instant.now(clock),
-      price = 10.money.toCents()
-    )
+    val restaurant = seedRestaurant()
 
     val order1 = orderQueries.insert(
-      restaurantId = restaurant,
+      restaurantId = restaurant.id,
       createdAt = Instant.now(clock).truncatedTo(ChronoUnit.SECONDS)
     ).id()
     orderQueries.updatePayer(payerId = user1, id = order1)
     val orderItem = orderQueries.insertOrderItemPrice(
       orderId = order1,
-      menuItemId = menuItem,
+      menuItemId = restaurant.menuItem1.id,
       price = 10.money.toCents(),
       datetime = Instant.now(clock)
     ).id()
     orderQueries.insertOrderItem(customerId = user1, quantity = 5, orderItemPriceId = orderItem, note = "")
-    orderQueries.insertOrderItem(customerId = user2, quantity = 1, orderItemPriceId = orderItem, note = "")
 
     val payment = paymentQueries.insertPayment(
       userId = user1,

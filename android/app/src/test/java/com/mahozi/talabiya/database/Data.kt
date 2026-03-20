@@ -1,7 +1,9 @@
 package com.mahozi.talabiya.database
 
+import com.mahozi.sayed.talabiya.core.Money
 import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.talabiya.TalabiyaDatabase
+import com.mahozi.talabiya.clock
 import java.time.Clock
 import java.time.Instant
 import java.time.LocalDate
@@ -9,6 +11,7 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+
 
 data class TestOrder(
   val date: LocalDate,
@@ -51,4 +54,56 @@ fun TalabiyaDatabase.seedOrder(
     datetime = Instant.now(clock)
   ).id()
   orderQueries.insertOrderItem(customerId = user, quantity = 5, orderItemPriceId = orderItem, note = "")
+}
+
+data class TestRestaurant(
+  val id: Long,
+  val name: String,
+  val menuItem1: TestMenuItem,
+  val menuItem2: TestMenuItem,
+)
+
+data class TestMenuItem(
+  val id: Long = 0L,
+  val name: String,
+  val price: Money,
+)
+
+fun TalabiyaDatabase.seedRestaurant(
+  name: String = "Restaurant",
+  menuItem1: TestMenuItem = TestMenuItem(name = "Item 1", price = 10.money),
+  menuItem2: TestMenuItem = TestMenuItem(name = "Item 2", price = 5.money),
+): TestRestaurant {
+  fun Any.id() = restaurantQueries.lastInsertRowId().executeAsOne()
+
+  val restaurantId = restaurantQueries.insert(name).id()
+
+  val menuItem1Id = menuItemQueries.insert(
+    restaurantId = restaurantId,
+    name = menuItem1.name,
+    category = "Pastry"
+  ).id()
+  menuItemQueries.insertPrice(
+    menuItemId = menuItem1Id,
+    datetime = Instant.now(clock),
+    price = menuItem1.price.toCents()
+  )
+
+  val menuItem2Id = menuItemQueries.insert(
+    restaurantId = restaurantId,
+    name = menuItem2.name,
+    category = "Pastry"
+  ).id()
+  menuItemQueries.insertPrice(
+    menuItemId = menuItem2Id,
+    datetime = Instant.now(clock),
+    price = menuItem2.price.toCents()
+  )
+
+  return TestRestaurant(
+    id = restaurantId,
+    name = name,
+    menuItem1 = menuItem1.copy(id = menuItem1Id),
+    menuItem2 = menuItem2.copy(id = menuItem2Id),
+  )
 }
