@@ -20,7 +20,7 @@ private val LocalTypes = staticCompositionLocalOf { TlbType() }
 
 @Composable
 fun AppTheme(
-  darkTheme: Boolean = isSystemInDarkTheme(),
+  darkTheme: Boolean = false,//isSystemInDarkTheme(),
   content: @Composable () -> Unit,
 ) {
   val colors = if (darkTheme) darkColors else lightColors
