@@ -62,7 +62,8 @@ FROM MenuItemEntity
 JOIN MenuItemPriceEntity ON MenuItemEntity.id = MenuItemPriceEntity.menuItemId
 JOIN CategoryEntity ON MenuItemEntity.category = CategoryEntity.name
 WHERE MenuItemEntity.restaurantId = :restaurantId AND instr(MenuItemEntity.name, :query) > 0
-GROUP BY MenuItemEntity.id;
+GROUP BY MenuItemEntity.id
+ORDER BY MenuItemEntity.name;
 
 selectAllCategories:
 SELECT name
