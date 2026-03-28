@@ -90,7 +90,7 @@ private fun PreviewDatePickerDialog() {
 
 data class TlbDatePickerState(
   val initial: LocalDate = LocalDate.now(),
-  val minDate: LocalDate = LocalDate.now(),
+  val minDate: LocalDate = LocalDate.MIN,
   val maxDate: LocalDate = LocalDate.MAX,
 )
 sealed interface TlbDatePickerEvent {
@@ -121,7 +121,7 @@ fun TlbDatePickerDialog(
   onDateSelected: (LocalDate) -> Unit,
   onDismissRequest: () -> Unit,
   modifier: Modifier = Modifier,
-  minDate: LocalDate = LocalDate.now(),
+  minDate: LocalDate = LocalDate.MIN,
   maxDate: LocalDate = LocalDate.MAX,
 ) {
   val initialOrMin = if (initial.isBefore(minDate)) minDate else initial
