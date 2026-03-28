@@ -28,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
+import com.mahozi.sayed.talabiya.BuildConfig
 import com.mahozi.sayed.talabiya.R
 import java.io.File
 
@@ -168,7 +169,7 @@ private fun Option(
 }
 
 internal val authority: String
-  get() = "com.mahozi.talabiya.fileprovider"
+  get() = "${BuildConfig.APPLICATION_ID}.fileprovider"
 
 internal fun Context.createImageUri(
   fileName: String = "img_${System.currentTimeMillis()}.png"

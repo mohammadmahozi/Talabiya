@@ -28,7 +28,7 @@
 
         <provider
             android:name=".core.TlbFileProvider"
-            android:authorities="com.mahozi.talabiya.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
