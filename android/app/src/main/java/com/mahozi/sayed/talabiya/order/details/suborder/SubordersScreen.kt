@@ -226,7 +226,6 @@ private fun Suborder(
       Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-          .clickable(onClick = { expanded = !expanded })
           .combinedClickable(
             onClick = { expanded = !expanded },
             onLongClick = { showMenu = true }
