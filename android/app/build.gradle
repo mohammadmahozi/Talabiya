@@ -8,7 +8,7 @@ apply plugin: "app.cash.sqldelight"
 apply plugin: "dev.zacsweers.metro"
 
 android {
-    compileSdk 36
+    compileSdk = 36
     defaultConfig {
         applicationId "com.mahozi.sayed.talabiya"
         minSdkVersion 23
@@ -21,7 +21,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
