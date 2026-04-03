@@ -77,6 +77,14 @@ private fun TalabiyaDatabase.seed() {
   val user1 = userQueries.insert(name = "User 1").id()
   val user2 = userQueries.insert(name = "User 2").id()
   val user3 =  userQueries.insert(name = "User 3").id()
+  userQueries.insert(name = "User 4").id()
+  userQueries.insert(name = "User 5").id()
+  userQueries.insert(name = "User 6").id()
+  userQueries.insert(name = "User 7").id()
+  userQueries.insert(name = "User 8").id()
+  userQueries.insert(name = "User 9").id()
+  userQueries.insert(name = "User 10").id()
+
 
   restaurantQueries.insert(name = "Restaurant 1")
 
