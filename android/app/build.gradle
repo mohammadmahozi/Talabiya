@@ -60,10 +60,8 @@ android {
 
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.17.0'
-    implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.google.android.material:material:1.13.0'
+    implementation libs.core.ktx
+    implementation libs.appcompat
 
     def composeBom = platform(libs.compose.bom)
     implementation(composeBom)
@@ -78,16 +76,15 @@ dependencies {
     testImplementation(libs.assertk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    testImplementation libs.junit
+    androidTestImplementation libs.runner
+    androidTestImplementation libs.ext.junit
 
     implementation "cafe.adriel.voyager:voyager-navigator:1.0.0-rc03"
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    coreLibraryDesugaring libs.desugar.jdk.libs
 
-    lintChecks("com.slack.lint.compose:compose-lint-checks:1.4.2")
+    lintChecks(libs.compose.lint.checks)
 
     implementation(libs.sqldelight.driver.android)
     implementation(libs.sqldelight.coroutines)
