@@ -212,16 +212,14 @@ private fun Suborder(
 
   TlbCard(
     title = {
-      if (showMenu) {
-        DropdownMenu(
-          expanded = showMenu,
-          onDismissRequest = { showMenu = false }
-        ) {
-          DropdownMenuItem(
-            text = { Text(stringResource(R.string.delete))},
-            onClick = { onDeleteOrderClicked(); showMenu = false }
-          )
-        }
+      DropdownMenu(
+        expanded = showMenu,
+        onDismissRequest = { showMenu = false }
+      ) {
+        DropdownMenuItem(
+          text = { Text(stringResource(R.string.delete)) },
+          onClick = { onDeleteOrderClicked(); showMenu = false }
+        )
       }
       Row(
         verticalAlignment = Alignment.CenterVertically,
