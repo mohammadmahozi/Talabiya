@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import app.cash.molecule.AndroidUiDispatcher
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.launchMolecule
 import cafe.adriel.voyager.core.model.ScreenModel
@@ -38,7 +39,6 @@ import com.mahozi.sayed.talabiya.resturant.list.RestaurantsScreen
 import com.mahozi.sayed.talabiya.user.list.UsersScreen
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -162,7 +162,7 @@ private val ScreenModel.moleculeScope: CoroutineScope
     screenModel = this,
     name = "ScreenModelMoleculeScope",
     factory = { key ->
-      CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate) + CoroutineName(
+      CoroutineScope(SupervisorJob() + AndroidUiDispatcher.Main) + CoroutineName(
         key
       )
     },
