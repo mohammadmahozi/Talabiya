@@ -3,10 +3,11 @@ import java.time.Instant;
 CREATE TABLE MenuItemEntity(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     restaurantId INTEGER NOT NULL,
-    name TEXT NOT NULL UNIQUE,
+    name TEXT NOT NULL,
     category TEXT NOT NULL,
     FOREIGN KEY (restaurantId) REFERENCES RestaurantEntity(id),
-    FOREIGN KEY (category) REFERENCES CategoryEntity(name)
+    FOREIGN KEY (category) REFERENCES CategoryEntity(name),
+    UNIQUE(restaurantId, name)
 );
 
 CREATE TABLE MenuItemPriceEntity(

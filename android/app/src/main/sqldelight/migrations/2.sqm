@@ -1,0 +1,16 @@
+CREATE TABLE MenuItemEntity2(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    restaurantId INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    FOREIGN KEY (restaurantId) REFERENCES RestaurantEntity(id),
+    FOREIGN KEY (category) REFERENCES CategoryEntity(name),
+    UNIQUE(restaurantId, name)
+);
+
+INSERT INTO MenuItemEntity2(id, restaurantId, name, category)
+SELECT id, restaurantId, name, category FROM MenuItemEntity;
+
+DROP TABLE MenuItemEntity;
+
+ALTER TABLE MenuItemEntity2 RENAME TO MenuItemEntity;
