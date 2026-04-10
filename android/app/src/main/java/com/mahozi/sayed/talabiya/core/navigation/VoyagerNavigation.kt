@@ -154,7 +154,7 @@ private class MoleculeScreenModel<Event, State>(
 ) : ScreenModel {
   val events = MutableSharedFlow<Event>(extraBufferCapacity = 1)
   val states =
-    moleculeScope.launchMolecule(RecompositionMode.Immediate) { presenter.start(events) }
+    moleculeScope.launchMolecule(RecompositionMode.ContextClock) { presenter.start(events) }
 }
 
 private val ScreenModel.moleculeScope: CoroutineScope
