@@ -11,18 +11,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import app.cash.molecule.AndroidUiDispatcher
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.launchMolecule
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.ScreenModelStore
 import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.ScreenKey
@@ -37,13 +33,8 @@ import com.mahozi.sayed.talabiya.core.extensions.getActivity
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
 import com.mahozi.sayed.talabiya.resturant.list.RestaurantsScreen
 import com.mahozi.sayed.talabiya.user.list.UsersScreen
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
 import kotlinx.parcelize.Parcelize
 import cafe.adriel.voyager.core.screen.Screen as VoyagerScreen
 import cafe.adriel.voyager.navigator.Navigator as VoyagerNavigator
@@ -108,7 +99,7 @@ private data class DelegatingVoyagerScreen(
 
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val state by screenModel.states.collectAsState()
+    val state = screenModel.states()
     val ui = Uis(
       screen = screen,
       onBack = { navigator.back() },
@@ -149,23 +140,11 @@ private data class DelegatingVoyagerScreen(
 /**
  * Similar to Voyager's [StateScreenModel], except using Molecule to handle state generation.
  */
+@Stable
 private class MoleculeScreenModel<Event, State>(
-  presenter: Presenter<Event, State>,
+  private val presenter: Presenter<Event, State>,
 ) : ScreenModel {
   val events = MutableSharedFlow<Event>(extraBufferCapacity = 1)
-  val states =
-    moleculeScope.launchMolecule(RecompositionMode.ContextClock) { presenter.start(events) }
+  @Composable fun states() = presenter.start(events)
 }
-
-private val ScreenModel.moleculeScope: CoroutineScope
-  get() = ScreenModelStore.getOrPutDependency(
-    screenModel = this,
-    name = "ScreenModelMoleculeScope",
-    factory = { key ->
-      CoroutineScope(SupervisorJob() + AndroidUiDispatcher.Main) + CoroutineName(
-        key
-      )
-    },
-    onDispose = { scope -> scope.cancel() }
-  )
 
