@@ -74,7 +74,8 @@ WHERE (OrderEntity.payerId = :userId OR OrderItemView.userId = :userId)
       WHERE InvoicePaymentView.orderId = OrderEntity.id
         AND InvoicePaymentView.status = 'Completed'
   )
-GROUP BY OrderEntity.id;
+GROUP BY OrderEntity.id
+ORDER BY OrderEntity.createdAt DESC;
 
 lastInsertRowId:
 SELECT last_insert_rowid();
