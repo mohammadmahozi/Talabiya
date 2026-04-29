@@ -34,7 +34,7 @@ interface DataModule {
     val driver = AndroidSqliteDriver(
       schema = Schema,
       context = context,
-      name = "main",
+      name = DB_NAME,
       callback = object : AndroidSqliteDriver.Callback(Schema) {
         override fun onOpen(db: SupportSQLiteDatabase) {
           db.execSQL("PRAGMA foreign_keys=ON;");
@@ -52,6 +52,10 @@ interface DataModule {
 
   @Provides
   fun provideDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+  companion object {
+    const val DB_NAME = "main"
+  }
 }
 
 private object Schema : SqlSchema<QueryResult.Value<Unit>> by TalabiyaDatabase.Schema {

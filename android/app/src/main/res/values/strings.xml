@@ -165,5 +165,6 @@
     <string name="increase_quantity">Increase quantity</string>
     <string name="decrease_quantity">Decrease quantity</string>
     <string name="are_you_sure_you_want_to_create_payment">Are you sure you want to create payment?</string>
+    <string name="create_backup">Create backup</string>
 
 </resources>

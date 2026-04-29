@@ -1,7 +1,10 @@
 package com.mahozi.sayed.talabiya.core.navigation
 
 import android.content.Context
+import android.content.Intent
 import android.os.Parcelable
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
@@ -24,12 +27,15 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.mahozi.sayed.talabiya.core.CollectActions
 import com.mahozi.sayed.talabiya.core.Presenter
 import com.mahozi.sayed.talabiya.core.TalabiyaApp
 import com.mahozi.sayed.talabiya.core.Ui
 import com.mahozi.sayed.talabiya.core.Uis
 import com.mahozi.sayed.talabiya.core.datetime.LocalDateTimeFormatter
 import com.mahozi.sayed.talabiya.core.extensions.getActivity
+import com.mahozi.sayed.talabiya.core.main.MainAction
+import com.mahozi.sayed.talabiya.core.main.MainEvent
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
 import com.mahozi.sayed.talabiya.resturant.list.RestaurantsScreen
 import com.mahozi.sayed.talabiya.user.list.UsersScreen
@@ -90,6 +96,26 @@ private data class DelegatingVoyagerScreen(
       mutableStateOf(appGraph.mainGraph().create(navigator, context.getActivity()!!))
     }
 
+    val mainScreenModel = remember { MoleculeScreenModel(mainGraph.mainPresenter()) }
+    val mainState = mainScreenModel.states()
+    val dirPickerLauncher = rememberLauncherForActivityResult(
+      ActivityResultContracts.OpenDocumentTree()
+    ) { uri ->
+      if (uri != null) {
+        context.contentResolver.takePersistableUriPermission(
+          uri,
+          Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        )
+        mainScreenModel.events.tryEmit(MainEvent.SaveBackupDir(uri.toString()))
+      }
+    }
+
+    CollectActions(mainState.actions) { action ->
+      when(action) {
+        MainAction.OpenDirectoryPicker -> dirPickerLauncher.launch(null)
+      }
+    }
+
     val presenterFactories = mainGraph.presenterFactories()
     val presenter = presenterFactories.create(screen) as Presenter<Any?, Any?>
 
@@ -116,7 +142,9 @@ private data class DelegatingVoyagerScreen(
             Drawer(
               onOrdersClicked = { navigator.replaceAll(OrdersScreen) },
               onRestaurantsClicked = { navigator.replaceAll(RestaurantsScreen) },
-              onUsersClicked = { navigator.replaceAll(UsersScreen) }
+              onUsersClicked = { navigator.replaceAll(UsersScreen) },
+              creatingBackup = mainState.creatingBackup,
+              onCreateBackupClicked = { mainScreenModel.events.tryEmit(MainEvent.CreateBackup) }
             )
           }
         }

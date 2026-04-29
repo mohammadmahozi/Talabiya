@@ -4,14 +4,20 @@ import android.annotation.SuppressLint
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +36,9 @@ private fun PreviewDrawer() {
       Drawer(
         onOrdersClicked = {},
         onRestaurantsClicked = {},
-        onUsersClicked = {}
+        onUsersClicked = {},
+        creatingBackup = true,
+        onCreateBackupClicked = {}
       )
     }
   }
@@ -42,6 +50,8 @@ fun ColumnScope.Drawer(
   onOrdersClicked: () -> Unit,
   onRestaurantsClicked: () -> Unit,
   onUsersClicked: () -> Unit,
+  creatingBackup: Boolean,
+  onCreateBackupClicked: () -> Unit,
   modifier: Modifier = Modifier
 ) {
   Column(
@@ -56,35 +66,61 @@ fun ColumnScope.Drawer(
 
   Column(
     modifier = Modifier
-      .padding(vertical = 16.dp)
+      .padding(16.dp)
   ) {
     DrawerItem(
       title = R.string.orders,
-      onClick = onOrdersClicked
+      onClick = onOrdersClicked,
+      modifier = Modifier.fillMaxWidth(),
     )
 
     DrawerItem(
       title = R.string.restaurants,
-      onClick = onRestaurantsClicked
+      onClick = onRestaurantsClicked,
+      modifier = Modifier.fillMaxWidth(),
     )
 
     DrawerItem(
       title = R.string.users,
-      onClick = onUsersClicked
+      onClick = onUsersClicked,
+      modifier = Modifier.fillMaxWidth(),
     )
+
+    HorizontalDivider()
+
+    Row(
+      verticalAlignment = Alignment.CenterVertically,
+      horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+      DrawerItem(
+        title = R.string.create_backup,
+        onClick = onCreateBackupClicked,
+        enabled = !creatingBackup
+      )
+
+      if (creatingBackup) {
+        CircularProgressIndicator(
+          strokeWidth = 2.dp,
+          modifier = Modifier.size(16.dp)
+        )
+      }
+    }
   }
 }
 
 @Composable
 private fun DrawerItem(
   @StringRes title: Int,
-  onClick: () -> Unit
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
+  enabled: Boolean = true
 ) {
   Text(
     text = string(title),
-    modifier = Modifier
-      .fillMaxWidth()
-      .clickable { onClick() }
-      .padding(16.dp)
+    modifier = modifier
+      .clickable(
+        enabled = enabled,
+        onClick = onClick
+      ).padding(vertical = 16.dp)
   )
 }

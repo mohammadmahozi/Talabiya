@@ -11,6 +11,8 @@ import dev.zacsweers.metro.Scope
 @GraphExtension(MainScope::class)
 interface MainGraph {
 
+  fun mainPresenter(): MainPresenter
+
   fun presenterFactories(): Presenters
 
   fun formatter(): AppDateTimeFormatter
