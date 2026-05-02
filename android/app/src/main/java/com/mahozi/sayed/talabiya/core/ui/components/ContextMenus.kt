@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.mahozi.sayed.talabiya.R
 
-
+//TODO replace by delete menu item
 @Composable
 fun DeleteContextMenu(
   expanded: Boolean,
@@ -42,6 +42,38 @@ fun DeleteContextMenu(
       onConfirm = {
         confirm = false
         onDelete()
+      },
+      onDismiss = {
+        confirm = false
+        onDismiss()
+      }
+    )
+  }
+}
+
+@Composable
+fun DeleteMenuItem(
+  onDelete: () -> Unit,
+  onDismiss: () -> Unit,
+  modifier: Modifier = Modifier,
+) {
+  var confirm by remember { mutableStateOf(false) }
+
+  DropdownMenuItem(
+    text = { Text(stringResource(R.string.delete)) },
+    onClick = {
+      confirm = true
+    },
+    modifier = modifier,
+  )
+
+  if (confirm) {
+    ConfirmDialog(
+      title = stringResource(R.string.are_you_sure),
+      onConfirm = {
+        confirm = false
+        onDelete()
+        onDismiss()
       },
       onDismiss = {
         confirm = false

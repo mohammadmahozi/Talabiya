@@ -59,6 +59,12 @@ class OrderStore @Inject constructor(
       .mapToOne(dispatcher)
   }
 
+  suspend fun deleteOrder(id: Long) {
+    withContext(dispatcher) {
+      orderQueries.delete(id)
+    }
+  }
+
   fun getUserOrders(userId: Long): Flow<List<UserOrder>> {
     return orderQueries.selectUserOrders(
       userId = userId,

@@ -1,0 +1,39 @@
+import java.time.Instant;
+
+CREATE TABLE OrderItemPriceEntity2 (
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    orderId INTEGER NOT NULL,
+    price INTEGER NOT NULL,
+    menuItemId INTEGER NOT NULL,
+    datetime INTEGER AS Instant NOT NULL,
+    FOREIGN KEY (orderId) REFERENCES OrderEntity(id) ON DELETE CASCADE,
+    FOREIGN KEY (menuItemId) REFERENCES MenuItemEntity(id) ON DELETE RESTRICT,
+    UNIQUE(orderId, menuItemId)
+);
+
+INSERT INTO OrderItemPriceEntity2(id, orderId, price, menuItemId, datetime)
+SELECT id, orderId, price, menuItemId, datetime FROM OrderItemPriceEntity;
+
+DROP TABLE OrderItemPriceEntity;
+
+ALTER TABLE OrderItemPriceEntity2 RENAME TO OrderItemPriceEntity;
+
+
+CREATE TABLE OrderItemEntity2(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    customerId INTEGER NOT NULL,
+    quantity INTEGER NOT NULL,
+    orderItemPriceId INTEGER NOT NULL,
+    note TEXT NOT NULL DEFAULT '',
+    FOREIGN KEY (customerId) REFERENCES UserEntity(id) ON DELETE RESTRICT,
+    FOREIGN KEY (orderItemPriceId) REFERENCES OrderItemPriceEntity(id) ON DELETE CASCADE,
+    UNIQUE(customerId, orderItemPriceId)
+);
+
+INSERT INTO OrderItemEntity2(id, customerId, quantity, orderItemPriceId, note)
+SELECT id, customerId, quantity, orderItemPriceId, note FROM OrderItemEntity;
+
+DROP TABLE OrderItemEntity;
+
+ALTER TABLE OrderItemEntity2 RENAME TO OrderItemEntity;
+

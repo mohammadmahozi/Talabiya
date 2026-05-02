@@ -17,8 +17,8 @@ CREATE TABLE OrderItemPriceEntity (
     price INTEGER NOT NULL,
     menuItemId INTEGER NOT NULL,
     datetime INTEGER AS Instant NOT NULL,
-    FOREIGN KEY (orderId) REFERENCES OrderEntity(id),
-    FOREIGN KEY (menuItemId) REFERENCES MenuItemEntity(id),
+    FOREIGN KEY (orderId) REFERENCES OrderEntity(id) ON DELETE CASCADE,
+    FOREIGN KEY (menuItemId) REFERENCES MenuItemEntity(id) ON DELETE RESTRICT,
     UNIQUE(orderId, menuItemId)
 );
 
@@ -28,8 +28,8 @@ CREATE TABLE OrderItemEntity(
     quantity INTEGER NOT NULL,
     orderItemPriceId INTEGER NOT NULL,
     note TEXT NOT NULL DEFAULT '',
-    FOREIGN KEY (customerId) REFERENCES UserEntity(id),
-    FOREIGN KEY (orderItemPriceId) REFERENCES OrderItemPriceEntity(id),
+    FOREIGN KEY (customerId) REFERENCES UserEntity(id) ON DELETE RESTRICT,
+    FOREIGN KEY (orderItemPriceId) REFERENCES OrderItemPriceEntity(id) ON DELETE CASCADE,
     UNIQUE(customerId, orderItemPriceId)
 );
 
@@ -72,6 +72,9 @@ GROUP BY OrderEntity.id, OrderItemEntity.customerId;
 insert:
 INSERT INTO OrderEntity(restaurantId, createdAt)
 VALUES (?, ?);
+
+delete:
+DELETE FROM OrderEntity WHERE id = :id;
 
 selectAll:
 SELECT OrderEntity.id, OrderEntity.createdAt, RestaurantEntity.name
