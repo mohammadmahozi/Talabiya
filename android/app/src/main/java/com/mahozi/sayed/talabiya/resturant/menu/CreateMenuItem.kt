@@ -58,7 +58,7 @@ sealed interface CreateMenuItemEvent {
 }
 
 class CreateMenuItemPresenter @AssistedInject constructor(
-  @Assisted private val restaurantId: Long,
+  @Assisted private val screen: CreateMenuItemScreen,
   private val navigator: Navigator,
   private val restaurantStore: RestaurantStore,
 ) : Presenter<CreateMenuItemEvent, CreateMenuItemState> {
@@ -68,6 +68,15 @@ class CreateMenuItemPresenter @AssistedInject constructor(
     var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+      if (screen.menuItemId != null) {
+        val item = restaurantStore.getMenuItem(screen.menuItemId)
+        name = item.name
+        price = item.price.format()
+        selectedCategory = item.category
+      }
+    }
 
     val categories by produceState(listOf<String>()) { value = restaurantStore.getCategories() }
 
@@ -89,10 +98,10 @@ class CreateMenuItemPresenter @AssistedInject constructor(
         CreateMenuItemEvent.SaveClicked -> {
           launch {
             restaurantStore.createMenuItem(
-              restaurantId,
-              name,
-              price.money,
-              selectedCategory!!,
+              restaurantId = screen.restaurantId,
+              name = name,
+              price = price.money,
+              category = selectedCategory!!,
             )
             navigator.back()
           }
@@ -104,12 +113,15 @@ class CreateMenuItemPresenter @AssistedInject constructor(
   }
 
   @AssistedFactory interface Factory {
-    fun create(restaurantId: Long): CreateMenuItemPresenter
+    fun create(restaurantId: CreateMenuItemScreen): CreateMenuItemPresenter
   }
 }
 
 @Parcelize
-data class CreateMenuItemScreen(val restaurantId: Long) : Screen
+data class CreateMenuItemScreen(
+  val restaurantId: Long,
+  val menuItemId: Long? = null
+) : Screen
 
 @Preview
 @Composable

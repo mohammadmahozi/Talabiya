@@ -49,8 +49,14 @@ VALUES
     ("Drink", 6);
 
 insert:
-INSERT INTO MenuItemEntity(restaurantId, name, category)
+INSERT OR IGNORE INTO MenuItemEntity(restaurantId, name, category)
 VALUES (?, ?, ?);
+
+delete:
+DELETE FROM MenuItemEntity WHERE id = ?;
+
+deletePrice:
+DELETE FROM MenuItemPriceEntity WHERE menuItemId = ?;
 
 insertPrice:
 INSERT INTO MenuItemPriceEntity(menuItemId, datetime, price)
@@ -65,6 +71,14 @@ JOIN CategoryEntity ON MenuItemEntity.category = CategoryEntity.name
 WHERE MenuItemEntity.restaurantId = :restaurantId AND instr(MenuItemEntity.name, :query) > 0
 GROUP BY MenuItemEntity.id
 ORDER BY MenuItemEntity.name;
+
+menuItem:
+SELECT MenuItemEntity.id, MenuItemEntity.name, MenuItemPriceEntity.price, max(MenuItemPriceEntity.datetime),
+MenuItemPriceEntity.id, CategoryEntity.name
+FROM MenuItemEntity
+JOIN MenuItemPriceEntity ON MenuItemEntity.id = MenuItemPriceEntity.menuItemId
+JOIN CategoryEntity ON MenuItemEntity.category = CategoryEntity.name
+WHERE MenuItemEntity.id = :id;
 
 selectAllCategories:
 SELECT name

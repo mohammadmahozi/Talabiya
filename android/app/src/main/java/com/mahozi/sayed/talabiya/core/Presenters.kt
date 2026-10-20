@@ -3,10 +3,10 @@ package com.mahozi.sayed.talabiya.core
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.order.create.CreateOrderPresenter
 import com.mahozi.sayed.talabiya.order.create.CreateOrderScreen
-import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesPresenter
-import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesScreen
 import com.mahozi.sayed.talabiya.order.details.OrderDetailsPresenter
 import com.mahozi.sayed.talabiya.order.details.OrderDetailsScreen
+import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesPresenter
+import com.mahozi.sayed.talabiya.order.details.edit.EditOrderPricesScreen
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersPresenter
 import com.mahozi.sayed.talabiya.order.list.ui.OrdersScreen
 import com.mahozi.sayed.talabiya.order.suborder.CreateSuborderPresenter
@@ -60,7 +60,7 @@ class Presenters @Inject constructor(
       is RestaurantsScreen -> restaurantsPresenter.invoke()
       is CreateRestaurantScreen -> createRestaurantPresenter.invoke()
       is MenuItemsScreen -> menuItemPresenter.create(screen.restaurantId)
-      is CreateMenuItemScreen -> createMenuItemPresenter.create(screen.restaurantId)
+      is CreateMenuItemScreen -> createMenuItemPresenter.create(screen)
       is UsersScreen -> usersPresenter.invoke()
       is CreateUserScreen -> createUserPresenter.invoke()
       is CreateSuborderScreen -> createSuborderPresenter.create(screen)

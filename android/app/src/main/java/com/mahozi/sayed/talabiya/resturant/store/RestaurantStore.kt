@@ -1,5 +1,6 @@
 package com.mahozi.sayed.talabiya.resturant.store
 
+import android.database.sqlite.SQLiteConstraintException
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.mahozi.sayed.talabiya.core.Money
@@ -29,7 +30,7 @@ class RestaurantStore @Inject constructor(
   fun menuItems(restaurantId: Long, query: String = ""): Flow<List<MenuItem>> = menuItemQueries
     .menuItemsEntity(
       restaurantId = restaurantId,
-      query,
+      query = query,
       mapper = { id, name, price, _, priceId, category ->
         MenuItem(
           id = id,
@@ -41,6 +42,19 @@ class RestaurantStore @Inject constructor(
       }
     ).asFlow()
     .mapToList(dispatcher)
+
+  suspend fun getMenuItem(id: Long): MenuItem = withContext(dispatcher) {
+    menuItemQueries
+      .menuItem(id = id, mapper = { id, name, price, _, priceId, category ->
+        MenuItem(
+          id = id,
+          name = name,
+          category = category,
+          priceId = priceId,
+          price = price.cents
+        )
+      }).executeAsOne()
+  }
 
   suspend fun createRestaurant(name: String) {
     withContext(dispatcher) {
@@ -101,5 +115,19 @@ class RestaurantStore @Inject constructor(
 
   fun deleteRestaurant(restaurantId: Long) {
     restaurantQueries.delete(restaurantId)
+  }
+
+  suspend fun deleteMenuItem(id: Long): Result<Unit> {
+    return withContext(dispatcher) {
+      try {
+        menuItemQueries.transaction {
+          menuItemQueries.deletePrice(id)
+          menuItemQueries.delete(id)
+        }
+        Result.success(Unit)
+      } catch (e: SQLiteConstraintException) {
+        Result.failure(e)
+      }
+    }
   }
 }

@@ -1,6 +1,7 @@
 package com.mahozi.sayed.talabiya.resturant.menu
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,14 +10,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +34,7 @@ import com.mahozi.sayed.talabiya.core.money
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.core.navigation.Screen
 import com.mahozi.sayed.talabiya.core.ui.components.AddFab
+import com.mahozi.sayed.talabiya.core.ui.components.DeleteMenuItem
 import com.mahozi.sayed.talabiya.core.ui.components.TalabiyaBar
 import com.mahozi.sayed.talabiya.core.ui.theme.AppTheme
 import com.mahozi.sayed.talabiya.resturant.option.OptionsScreen
@@ -38,6 +43,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 data class MenuItemsState(
@@ -46,6 +52,8 @@ data class MenuItemsState(
 
 sealed interface MenuItemsEvent {
   data class MenuItemClicked(val item: MenuItem) : MenuItemsEvent
+  data class EditMenuItem(val item: MenuItem) : MenuItemsEvent
+  data class DeleteMenuItem(val item: MenuItem): MenuItemsEvent
   object AddMenuItemClicked : MenuItemsEvent
   object OptionsClicked: MenuItemsEvent
 }
@@ -63,7 +71,18 @@ class MenuItemsPresenter @AssistedInject constructor(
     CollectEvents(events) { event ->
       when(event) {
         MenuItemsEvent.AddMenuItemClicked -> navigator.goto(CreateMenuItemScreen(restaurantId))
-        is MenuItemsEvent.MenuItemClicked -> TODO()
+        is MenuItemsEvent.EditMenuItem -> navigator.goto(CreateMenuItemScreen(
+          restaurantId = restaurantId,
+          menuItemId = event.item.id
+        ))
+        is MenuItemsEvent.DeleteMenuItem -> {
+          launch {
+            restaurantStore.deleteMenuItem(event.item.id)
+          }
+        }
+        is MenuItemsEvent.MenuItemClicked -> {
+          navigator.goto(CreateMenuItemScreen(restaurantId, event.item.id))
+        }
         MenuItemsEvent.OptionsClicked -> navigator.goto(OptionsScreen(restaurantId))
       }
     }
@@ -121,10 +140,12 @@ fun MenuItemsScreen(
     ) {
       items(state.menuItems) { menuItem ->
         MenuItem(
-          menuItem,
-          onClick = { onEvent(MenuItemsEvent.MenuItemClicked(menuItem))}
+          menuItem = menuItem,
+          onClick = { onEvent(MenuItemsEvent.MenuItemClicked(menuItem)) },
+          onEdit = { onEvent(MenuItemsEvent.EditMenuItem(menuItem)) },
+          onDelete = { onEvent(MenuItemsEvent.DeleteMenuItem(menuItem)) }
         )
-        Divider()
+        HorizontalDivider()
       }
     }
   }
@@ -135,45 +156,67 @@ fun MenuItemsScreen(
 private fun PreviewMenuItem() {
   AppTheme {
     MenuItem(
-      MenuItem(
-        0L,
-        "Pizza",
-        "Pastry",
-        0L,
-        15.0.money,
-      )
-    ){}
+      menuItem = MenuItem(
+        id = 0L,
+        name = "Pizza",
+        category = "Pastry",
+        priceId = 0L,
+        price = 15.0.money,
+      ),
+      onClick = {},
+      onEdit = {},
+      onDelete = {}
+    )
   }
 }
 
 @Composable
 private fun MenuItem(
   menuItem: MenuItem,
-  onClick: (MenuItem) -> Unit,
+  onClick: () -> Unit,
+  onEdit: () -> Unit,
+  onDelete: () -> Unit,
 ) {
-  Column(
-    modifier = Modifier
-      .fillMaxWidth()
-      .clickable { onClick(menuItem) }
-      .padding(vertical = 8.dp)
-  ) {
+  Box {
+    var showMenu by remember { mutableStateOf(false) }
+    DropdownMenu(
+      expanded = false,
+      onDismissRequest = { showMenu = false }
+    ) {
+      DropdownMenuItem(
+        text = { Text(stringResource(R.string.edit)) },
+        onClick = { onEdit(); showMenu = false },
+      )
 
-    Row {
-      Text(text = menuItem.name)
-
-      Spacer(modifier = Modifier.weight(1F))
-
-      Text(text = menuItem.price.format())
-
+      DeleteMenuItem(
+        onDelete = onDelete,
+        onDismiss = { showMenu = false },
+      )
     }
 
-    Spacer(modifier = Modifier.height(8.dp))
+    Column(
+      modifier = Modifier
+        .fillMaxWidth()
+        .combinedClickable(
+          onClick = { onClick() },
+          onLongClick = { showMenu = true }
+        )
+        .padding(vertical = 8.dp)
+    ) {
+      Row {
+        Text(text = menuItem.name)
+        Spacer(modifier = Modifier.weight(1F))
+        Text(text = menuItem.price.format())
+      }
 
-    Text(
-      text = menuItem.category,
-      fontSize = 12.sp,
-      color = AppTheme.colors.onSurfaceVariant
-    )
+      Spacer(modifier = Modifier.height(8.dp))
+
+      Text(
+        text = menuItem.category,
+        fontSize = 12.sp,
+        color = AppTheme.colors.onSurfaceVariant
+      )
+    }
   }
 }
 
