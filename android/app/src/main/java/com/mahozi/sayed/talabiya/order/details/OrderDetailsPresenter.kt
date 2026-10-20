@@ -1,8 +1,15 @@
 package com.mahozi.sayed.talabiya.order.details
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
+import com.mahozi.sayed.talabiya.core.SettingsStore
 import com.mahozi.sayed.talabiya.core.navigation.Navigator
 import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerEvent
 import com.mahozi.sayed.talabiya.core.ui.components.TlbDatePickerState
@@ -19,7 +26,9 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.time.Clock
 import java.time.LocalDate
 import java.time.LocalTime
@@ -29,12 +38,15 @@ class OrderDetailsPresenter @AssistedInject constructor(
   @Assisted private val orderId: Long,
   private val orderStore: OrderStore,
   private val userStore: UserStore,
+  private val settingsStore: SettingsStore,
   private val navigator: Navigator,
   private val clock: Clock,
 ) : Presenter<OrderDetailsEvent, OrderDetailsState> {
 
   @Composable
   override fun start(events: Flow<OrderDetailsEvent>): OrderDetailsState {
+    val tab by settingsStore.orderDetailsTab.collectAsState(runBlocking { settingsStore.orderDetailsTab.first() })
+
     val info by remember { orderStore.getOrderDetails(orderId) }.collectAsState(initial = null)
     val suborders by remember { orderStore.getSuborders(orderId) }.collectAsState(initial = emptyList())
     val fullOrderItems by remember { orderStore.getFullOrderItems(orderId) }.collectAsState(initial = emptyList())
@@ -50,6 +62,9 @@ class OrderDetailsPresenter @AssistedInject constructor(
 
     CollectEvents(events) { event ->
       when (event) {
+        is OrderDetailsEvent.ChangeTab -> launch {
+          settingsStore.setOrderDetailsTab(event.tab)
+        }
         OrderInfoEvent.DateClicked -> {
           datePickerState = TlbDatePickerState(
             initial = LocalDate.now(clock),
@@ -129,12 +144,14 @@ class OrderDetailsPresenter @AssistedInject constructor(
     return when (order) {
       null -> OrderDetailsState(
         orderId = orderId,
+        tab = tab,
         info = null,
         subordersState = null,
         fullOrderItems = listOf()
       )
       else -> OrderDetailsState(
         orderId = orderId,
+        tab = tab,
         info = OrderInfoState(
           datetime = order.createdAt,
           total = order.total,

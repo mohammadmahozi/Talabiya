@@ -7,11 +7,11 @@ import com.mahozi.sayed.talabiya.order.OrderStatus
 import com.mahozi.sayed.talabiya.order.details.full.FullOrderItem
 import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
 import user.UserEntity
-import java.lang.IllegalArgumentException
 import java.time.Instant
 
 data class OrderDetailsState(
   val orderId: Long,
+  val tab: OrderDetailsTab,
   val info: OrderInfoState?,
   val subordersState: SubordersState?,
   val fullOrderItems: List<FullOrderItem>
@@ -46,5 +46,18 @@ enum class OrderDetailsTab {
         2 -> Full
         else -> throw IllegalArgumentException("Max tab index is 2 but got $index")
       }
+
+    fun from(key: String) = when (key) {
+      "info" -> Info
+      "suborders" -> Suborders
+      "full" -> Full
+      else -> throw IllegalArgumentException("Unknown tab key $key")
+    }
   }
+}
+
+val OrderDetailsTab.key: String get() = when (this) {
+  OrderDetailsTab.Info -> "info"
+  OrderDetailsTab.Suborders -> "suborders"
+  OrderDetailsTab.Full -> "full"
 }

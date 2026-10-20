@@ -6,6 +6,7 @@ import com.mahozi.sayed.talabiya.order.details.suborder.Suborder
 import user.UserEntity
 
 sealed interface OrderDetailsEvent {
+  data class ChangeTab(val tab: OrderDetailsTab) : OrderDetailsEvent
   object EditPricesClicked : OrderDetailsEvent
 
   sealed interface OrderInfoEvent : OrderDetailsEvent {
