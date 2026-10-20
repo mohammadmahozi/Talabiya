@@ -5,9 +5,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.mahozi.sayed.talabiya.core.CollectEvents
 import com.mahozi.sayed.talabiya.core.Presenter
+import com.mahozi.sayed.talabiya.core.navigation.Navigator
+import com.mahozi.sayed.talabiya.order.details.OrderDetailsScreen
 import com.mahozi.sayed.talabiya.order.store.OrderStore
 import com.mahozi.sayed.talabiya.payment.PaymentStore
 import com.mahozi.sayed.talabiya.user.details.UserDetailsScreen
@@ -25,6 +28,7 @@ class UserDetailsPresenter @AssistedInject constructor(
   @Assisted private val screen: UserDetailsScreen,
   private val orderStore: OrderStore,
   private val paymentStore: PaymentStore,
+  private val navigator: Navigator,
   createUserPaymentPresenterFactory: CreateUserPaymentPresenter.Factory,
 ) : Presenter<UserDetailsEvent, UserDetailsState> {
 
@@ -32,7 +36,7 @@ class UserDetailsPresenter @AssistedInject constructor(
 
   @Composable
   override fun start(events: Flow<UserDetailsEvent>): UserDetailsState {
-    var tab by remember { mutableStateOf(UserDetailsTab.CreatePayment) }
+    var tab by rememberSaveable { mutableStateOf(UserDetailsTab.CreatePayment) }
     val payments by paymentStore.getUserPayments(screen.userId).collectAsState(listOf())
     val orders by orderStore.getUserOrders(screen.userId).collectAsState(listOf())
 
@@ -44,6 +48,9 @@ class UserDetailsPresenter @AssistedInject constructor(
         is UserDetailsEvent.SelectTab -> tab = event.tab
         is UserDetailsEvent.CreatePaymentEvent -> {
           launch { createPaymentEvents.emit(event.event) }
+        }
+        is UserDetailsEvent.OpenOrder -> {
+          navigator.goto(OrderDetailsScreen(event.order.orderId))
         }
       }
     }

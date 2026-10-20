@@ -22,6 +22,7 @@ enum class UserDetailsTab {
 sealed interface UserDetailsEvent {
   data class SelectTab(val tab: UserDetailsTab): UserDetailsEvent
   data class CreatePaymentEvent(val event: CreateUserPaymentEvent): UserDetailsEvent
+  data class OpenOrder(val order: UserOrder): UserDetailsEvent
 }
 
 

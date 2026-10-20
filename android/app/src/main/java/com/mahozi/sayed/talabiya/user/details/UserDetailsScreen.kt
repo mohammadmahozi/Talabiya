@@ -1,6 +1,7 @@
 package com.mahozi.sayed.talabiya.user.details
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -109,7 +110,10 @@ fun UserDetailsScreen(
             Payments(state.payments)
           }
           UserDetailsTab.Orders -> {
-            UserOrders(state.orders)
+            UserOrders(
+              orders = state.orders,
+              onClick = { onEvent(UserDetailsEvent.OpenOrder(it)) }
+            )
           }
         }
       }
@@ -193,20 +197,24 @@ private fun PreviewPayment() {
 
 @Composable
 private fun UserOrders(
-  orders: List<UserOrder>
+  orders: List<UserOrder>,
+  onClick: (UserOrder) -> Unit,
 ) {
   LazyColumn(
     verticalArrangement = Arrangement.spacedBy(8.dp)
   ) {
     items(orders) { order ->
-      UserOrder(order)
+      UserOrder(order, { onClick(order) })
     }
   }
 }
 
 @Composable
-private fun UserOrder(order: UserOrder) {
-  TlbCard {
+private fun UserOrder(order: UserOrder, onClick: () -> Unit) {
+  TlbCard(
+    modifier = Modifier
+      .clickable { onClick() }
+  ) {
     Row(
       horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
