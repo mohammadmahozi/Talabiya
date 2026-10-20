@@ -73,6 +73,7 @@ WHERE (OrderEntity.payerId = :userId OR OrderItemView.userId = :userId)
       FROM InvoicePaymentView
       WHERE InvoicePaymentView.orderId = OrderEntity.id
         AND InvoicePaymentView.status = 'Completed'
+        AND InvoicePaymentView.userId = :userId
   )
 GROUP BY OrderEntity.id
 ORDER BY OrderEntity.createdAt DESC;
